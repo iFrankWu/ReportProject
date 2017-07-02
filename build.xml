@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AngularJS" default="compile" basedir=".">
+	<property name="src" value="src" />
+	<property name="build" value="build" />
+	<property name="lib" value="lib" />
+	<property name="work" value="work" />
+	<property name="classes" value="${work}/classes/" />
+	<property name="env.ANT_OPTS" value="-Xms256m -Xmx512m"/>
+	<property name="compile.encoding"    value="UTF-8"/>
+	<!--
+	<property name="jars" value="../jar" />
+	-->
+	  <property file="${basedir}/user.properties"/>
+
+	 <property name="out-jar.name" value="${env.OUT_JAR_NAME}"/>
+	 <property name="out-jar.dir" value="${basedir}/jar"/>
+	 <property name="to.dir" value="${env.TO_DIR}"/>
+	 <property name="war.name" value="${env.WAR_NAME}"/>
+	
+	<path id="classpath">
+		<pathelement location="${classes}" />
+		<fileset dir="${lib}" includes="**/*.jar" />
+		 
+		<fileset dir="${lib}s" includes="**/*.jar" />
+		 
+	</path>
+
+	<target name="clean">
+		<delete dir="${work}" />
+		<delete>
+			<fileset dir="${src}">
+				<include name="**/*.class" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="prepare" depends="clean">
+		<mkdir dir="${classes}" />
+	</target>
+
+	<target name="compile" depends="prepare">
+		<javac encoding="utf-8" srcdir="${src}" destdir="${classes}" deprecation="on"
+			debug="on">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="recompile" >
+		<javac encoding="utf-8" srcdir="${src}" destdir="${classes}" deprecation="on"
+				debug="on">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+
+	<target name="run" depends="compile">
+		<property name="myclasspath" refid="classpath"/>
+					<echo message="Classpath = ${myclasspath}"/>
+
+		<java classname="com.tibco.test.Jetty" fork="true">
+			<classpath refid="classpath" />
+		</java>
+	</target>
+
+    <target name="compile-jar" depends="compile">
+    	<delete file="${out-jar.dir}/${out-jar.name}"></delete>
+    	
+            <jar destfile="${out-jar.dir}/${out-jar.name}">
+            	   <fileset dir="${work}/classes">
+            	            <include name="**"/>
+            	            <!-- <exclude name="com/tibco/ax/fw/impl/**/*.*"/>  -->
+            	    </fileset>
+            </jar>
+     <!--
+            <copy todir="${to.dir}" filtering="true" overwrite="true">
+                                    <fileset dir="${out-jar.dir}" />
+            </copy>
+            -->
+    </target>
+	
+	
+	 <target name="compile-gui" depends="compile-jar">
+	   		<delete file="${basedir}/${war.name}"></delete>
+	 		<delete dir="${basedir}/web/WEB-INF/lib"></delete>
+	 		<mkdir dir="${basedir}/web/WEB-INF/lib" />
+	 	
+	 	    <copy todir="${basedir}/web/WEB-INF/lib" filtering="true" overwrite="true">
+		 		<fileset dir="${out-jar.dir}/">
+		 					<include name="**/*.*"/>
+		 		</fileset>
+				
+				<fileset dir="${basedir}/lib">
+						 	<include name="**/*.*"/>
+				</fileset>
+			</copy>
+	 	
+			<war destfile="${basedir}/${war.name}" manifestencoding="UTF-8" webxml="${basedir}/web/WEB-INF/web.xml" >
+			 	<!--
+				 <lib dir="${basedir}/web/WEB-INF/lib"/>  
+				-->
+				<fileset dir="${basedir}/web">
+					<include name="**/*.*"/>
+					<exclude name="**/web.xml"/>
+				</fileset>
+		 
+			</war>
+	 	<delete file="${to.dir}/${war.name}"/> 
+	 	<delete dir="${to.dir}/demo-rest"/>
+	 	<!--
+		<copy todir="${to.dir}" filtering="true" overwrite="true">
+		 	           <fileset dir="${basedir}" >
+		 	           <include name="**/*.war"/>
+						</fileset>
+		 </copy>
+		 -->
+		</target>
+	
+	<target name="copy-jar-2-tomcat" depends="compile-jar">
+		 <copy todir="${to.dir}/demo-rest/WEB-INF/lib" filtering="true" overwrite="true">
+		                                    <fileset dir="${out-jar.dir}" />
+		            </copy>
+	</target>
+	<target name="copy-js" >
+			 <copy todir="${to.dir}/demo-rest/js/ui" filtering="true" overwrite="true">
+			                                    <fileset dir="d:\workspace\AngularJS\web\js\ui" />
+			            </copy>
+		</target>
+	<target name="copy-html" >
+				 <copy todir="${to.dir}/demo-rest/partials" filtering="true" overwrite="true">
+				                                    <fileset dir="d:\workspace\AngularJS\web\partials" />
+				            </copy>
+			</target>
+</project>

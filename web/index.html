@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="userControl">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="main.css">
+    <script src="js/jquery/require-jquery.js" data-main="main"></script>
+    <script src="js/ui/Controller.js"></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="container" class="onzichtbaar" ng-controller="MainController">
+    <div class="row hero-unit" style="padding-top:0px;padding-bottom:10px;background-color:white">
+    
+        <img ng-src="{{logoImage}}"   style="float: left; margin-right:0px;margin-top:30px"  width="{{width}}" height="{{height}}" class="offset1">
+       <!--   <img src="images/cptp.jpg"   style="float: left; height: 96px; width: 570px;">-->
+        <h1 class="span2"  class="offset1" style="width: 500px;text-align:left">报告单管理系统</h1>
+    </div>
+<div id="navigation"  class="offset1">
+		<ul>
+		  <li id="systemsetting" style="display:none"><a href="#/truscreen/hospital"  class="btn">系统设置</a></li>
+    	 <li id="reportLink" style="display:none"><a href="#/truscreen/reports"  class="btn">报告单</a></li>
+	     <li id="doctorLink" style="display:none"><a href="#/truscreen/doctors"  class="btn">医生</a></li>
+	     <li id="mypageLink" style="display:none"><a href="#/truscreen/mypage"  class="btn">我的账户</a></li>
+	    </ul>
+	     <a  id="logout"  href=""  style="display:none;position:relative;left:650px;" class="btn" onclick="logout()">退出</a>
+</div>
+   
+    <div class="row offset1" ng-view>
+
+    </div>
+    <div style="height:15px"></div>
+    <!--
+    <div class="row offset1">
+        <blockquote>
+            <p>Copyright ©2013 <a href="http://www.truscreen.net">北京四维祥泰科技有限公司</a>, All Rights Reserved</p>
+        </blockquote>
+    </div>
+-->
+</div>
+<div id="wait" class="offset5 span1">
+    <img src="images/animated.gif">
+</div>
+<iframe src="about:blank" id="printframe"  width="10" height="10" style="border:0"></iframe>
+</body>
+</html>

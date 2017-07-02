@@ -1,0 +1,121 @@
+/*@import url(http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css);*/
+@import url(angular/angular-ui.css);
+@import url(js/bootstrap/css/bootstrap.css);
+@import url(js/bootstrap/css/bootstrap-responsive.css);
+@import url(jquery-ui.css);
+
+.onzichtbaar {
+    display: none;
+    background-color: white
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
+   font-family:Simsun;
+}
+.offset1{
+	margin-right: 130px;
+}
+
+
+/*
+#navigation ul,#stundetList ul,ul{
+	list-style-type:none;
+	margin:0px;
+	padding:3px 6px 3px 6px;
+}
+#navigation li,#stundetList li,li{
+	float:left;
+	padding:0px;
+	text-decoration:underline;
+	border:1px 2px 3px 4px;
+	margin:2px
+	display: table-cell;
+	cursor: pointer;
+}
+ul{width:100%;list-style:none;}*/
+fieldset{
+	display: block;
+-webkit-margin-start: 2px;
+-webkit-margin-end: 2px;
+-webkit-padding-before: 0.35em;
+-webkit-padding-start: 0.75em;
+-webkit-padding-end: 0.75em;
+-webkit-padding-after: 0.625em;
+border: 2px groove threedface;
+border-image: initial;
+margin: 5px;
+}
+
+ul li{
+	float:left;
+	margin-right:15px;
+	list-style-type:none;
+	border:1px;
+	/*width:50px;
+	height:30px;*/
+	line-height:30px;
+	text-align:center;
+	margin-left:1px;
+	margin-bottom:1px;
+	background:#ccc;
+}
+ul{
+	clear:left
+}
+
+}
+.hint{
+	color:red
+}
+
+table{
+	text-align:center
+}
+table tbody > tr:hover{
+	background-color:#c4e4ff
+}
+td{
+	text-align:left
+}
+th{
+	text-align:left
+}
+#reportListTable {
+	text-align:center;
+	font-color:red;
+}
+.even{
+	background-color:#FFF38F;
+}
+.odd{
+	background-color:#FFFFEF;
+}
+#createbtn{
+	margin-top: -54px;
+	margin-left: 212px;
+}
+.td{
+	text-align:left;
+}
+input
+{	
+	text-align:left;
+	width: 140px;
+}
+td > input {
+	/*width: 40px */
+}
+body{
+	/*
+	font-family:"Microsoft YaHei",微软雅黑,"Microsoft JhengHei",华文细黑,STHeiti,MingLiu
+	*/
+}
+.resultTr{
+font-family:"黑体",Times New Roman", Times, serif;
+font:bold 20px arial,serif;
+}

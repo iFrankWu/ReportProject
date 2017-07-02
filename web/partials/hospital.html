@@ -1,0 +1,46 @@
+<div>
+<fieldset >
+	<legend>系统信息</legend>
+	 
+	<form action="truscreen/hospital" method="POST" enctype="multipart/form-data" target="if" style="float:left">
+		<input name="hospitalId" ng-model="hospital.hospitalId" hidden="true"/>
+		<table style="text-align:center">
+			<tbody>
+			
+				<tr>
+					<td>医院名称:</td><td style="text-align:center"><input type="text" ng-model="hospital.name" ng-readonly="readonly" name="name"/></td></tr><tr>
+					<td>科室:</td><td style="text-align:center"><input type="text" ng-model="hospital.department" ng-readonly="readonly" name="department" /></td></tr><tr>
+					<td>主机序列号:</td><td style="text-align:center"><input type="text" ng-model="hospital.machineNumber" ng-readonly="readonly" name="machineNumber"/></td></tr><tr>
+					<td>手控器序列号:</td><td style="text-align:center"><input type="text" ng-model="hospital.handController" ng-readonly="readonly"name="handController"/></td></tr><tr>
+					<td>韧体版本:</td><td style="text-align:center"><input type="text" ng-model="hospital.firmwareVersion" ng-readonly="readonly" name="firmwareVersion"/></td></tr><tr>
+
+					
+
+					<td>医院Logo:</td><td><img src="{{hospital.hospitalLogo}}" width="200px" height="160px"></img></td></tr><tr>
+					<td>上传新Logo:</td><td style="text-align:center"><input class="btn" type="file" ng-model="hospital.hospitalLogo" ng-readonly="readonly" name="file" multiple accept='image/*' onChange="isImage(event,this)"/></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align:center">
+					<!--  <button class="btn" ng-click="activeModify(event)" ng-show="!isModify">激活修改</button>-->
+					<input type="button" class="btn" ng-click="activeModify(event)" ng-show="!isModify" value="激活修改"/>
+					<!-- <button  class="btn" ng-click="updateHospital()" ng-show="isModify">保存修改</button> -->
+					<input type="submit"  class="btn" name="" value="保存修改" ng-show="isModify" />
+					<!--  <button  class="btn" ng-click="cancelModify($event)" ng-show="isModify">取消修改</button></td>-->
+					<input type="button" class="btn" ng-click="cancelModify($event)" ng-show="isModify" value="取消修改"/>
+					<input ng-show="hospital.hospitalLogo!=null" type="buttom"  class="btn" ng-click="deleteLogo()" value="删除Logo"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	 
+	 <div style="display:none;margin-top: 160px;margin-left: 50px;" id="preveiwLogo"  >
+	 	新Logo预览：
+		<img id="blah" src="#" alt="your image" width="200px" height="160px" />
+	</div>
+	<IFRAME id="if" name="if" src="about:blank" frameborder='0' style="width: 100%;height: 75px">
+	
+	</IFRAME>
+</fieldset>
+
+</div>

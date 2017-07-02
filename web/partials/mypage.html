@@ -1,0 +1,154 @@
+<fieldset ng-show="!modifys"  style="clear:left">
+ <legend>我的信息</legend>
+<table id="list"  width="100%">
+			<thead>
+				<tr>
+					<th>姓名</th> <th>用户类型</th><th>用户状态</th><th>创建日期</th><th>修改日期</th><th>更新</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{currentDoctor.doctorName}}</td>
+					<td>{{currentDoctor.type}}</td>
+					<td>{{currentDoctor.status}}</td>
+					<td>{{formatTime(currentDoctor.createDate)}}</td>
+					<td>{{formatTime(currentDoctor.modifyDate)}}</td>
+					<td><button  class="btn" ng-click="modify(currentDoctor)">修改</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>	
+
+<fieldset border="1" ng-show="modifys" style="clear:left">
+ 
+  <legend>更新医生</legend>
+             <table>
+            	<tr>
+            		<td>医生名:</td>
+            		<td style="text-align:left"> <input id="aantalUren" type="text" class="span4" placeholder="Doctor Name" required="required" ng-model="doctorName"></td>
+            		<td></td>
+            	</tr>
+            	<tr>
+            		<td>密码: </td>
+            		<td style="text-align:left">   <input id="activiteit" type="Password" class="span4" ng-model="password"> </td>
+            		<td>如果不修改密码，请不要填写这个字段</td>
+            	</tr>
+            	<tr>
+            		<td>医生类型:</td><!--
+            		<td id="type4System" style="text-align:left">
+            			  <select ng-model="type" id="type">
+	                	 <option ng-repeat="t in types" value="{{t.name}}">{{t.name}}</option>
+	                </select>
+                	</td>
+                -->
+
+                	<td style="text-align:left">
+            			<!--
+            			<select ng-model="type">
+                	 		<option ng-repeat="t in types" value="{{t.name}}" >{{t.name}}</option>
+                		</select> -->
+                		<select ng-model="type" ng-options="v for v in types.values" class="span4"></select>
+<!--
+                		<select style="width:154px" ng-model="report.prescribingDoctorName" ng-options="v for v in hospital.prescribingDoctorName.split('，')">
+                		-->
+                	</td>
+                	<td></td>
+            	</tr>
+            	<tr>
+            		<td>医生状态:	</td>
+            		<td style="text-align:left">
+            			<select ng-model="status" ng-options="v for v in statuses.values" class="span4"></select>
+            			<!--
+            		  <select ng-model="status" id="status">
+                   
+                	 <option {{isSelected(t.name,'stutus',doctor)}} ng-repeat="t in statuses" value="{{t.name}}" >{{t.name}}</option>
+                	 
+                	</select>  -->
+                	</td>
+                	<td></td>
+            	</tr>
+            	<tr><td colspan="2" style="text-align:center"> <input class="btn" type="button" ng-click="updateDoctor()" value="更新医生">
+                 <input  class="btn" type="button" value="取消更新" ng-click="cancle()"></td><td></td></tr>
+            </table>
+ 
+</fieldset>
+
+
+
+<fieldset>
+	<legend>检查结果统计</legend>
+	<table>
+	<tr>
+		<td>设置查询日期区间：</td>
+		<td><input type="date" ng-model="date3"></td>
+		<td><input type="date" ng-model="date4"></td>
+		<td>医生名字：</td>
+		<td><input type="text" ng-model="doctorNames"/></td>
+		<td><a href="" class="btn" ng-click="statistic()">统计</a> </td>
+		</tr>
+	</table>
+	<table  width="100%" ng-show="statisticResult != null">
+		<thead>统计结果</thead>
+		<tr>
+			<th></th>
+			<th>正常数</th>
+			<th>异常数</th>
+			<th>正常所占比例</th>
+		</tr>
+		<tr>
+			<td></td>
+			<td>{{statisticResult.normal}}</td>
+			<td>{{statisticResult.exception}}</td>
+			<td> <font color="red">{{ percent()}}</font></td>
+		</tr>
+	</table>
+</fieldset>
+
+ 
+<fieldset ng-show="showExport">
+	<legend>导出数据</legend>
+	<form action="truscreen/record/exports" method="POST">
+		<table>
+			<tr>
+				<td>设置导出时间区间：</td>
+				<td><input type="date" ng-model="date5" name="date1" ng-change=exportData()></td>
+				<td><input type="date" ng-model="date6" name="date2" ng-change=exportData()></td>
+				<td><input id="exportBtn" type="submit" value="导出报告单" class="btn" ng-disabled="abletosummit" /></td>
+			</tr>
+		</table>
+		</form>
+</fieldset>
+ 
+<fieldset>
+<legend>用户操作记录查询  </legend>
+<table>
+<tr>
+<td>设置查询日期区间：</td>
+<td><input type="date" ng-model="date1"></td>
+<td><input type="date" ng-model="date2"></td>
+<td ng-show="showExport">医生：</td>
+<td ng-show="showExport"><input type="text" ng-model="logDoctor"/></td>
+<td>操作名：</td>
+<td><input type="text" ng-model="methodName"/></td>
+<td><a href="" class="btn" ng-click="getRecords()">查询</a> </td>
+</tr>
+</table>
+
+	<table width="100%" ng-show="records != null && records.length > 0">
+		<thead>操作记录</thead>
+		<tr>
+			<th>操作ID</th>
+			<th style="text-align:left">操作名称</th>
+			<th>操作IP</th>
+			<th>操作时间</th>
+		</tr>
+		<tbody>
+		<tr ng-repeat="record in records">
+		<td>{{record.recordId}}</td>
+		<td style="text-align:left">{{record.methodName}}</td>
+		<td>{{record.ip}}</td>
+		<td>{{formatTime(record.operateTime)}}</td>
+		</tr>
+		</tbody>
+	</table>
+</fieldset>

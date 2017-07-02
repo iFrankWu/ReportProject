@@ -1,0 +1,189 @@
+<div >
+<!--  
+<div ng-include src="'partials/navBar.html'"></div>-->
+<input type="checkbox" ng-model="confirmed1"  id="ng-change-example1" style="display:none" />
+
+
+<!-- 
+<input type="button" ng-click="getDoctorList()" style="size:10">getDoctorList</input>
+ -->
+<fieldset style="clear:left">
+<legend>医生查找</legend>
+<input ng-model="searchText">  <label class="btn">查找</label>
+</fieldset>
+ 	
+ <fieldset ng-show="doctors!=null && !modifys"  style="clear:left">
+ <legend>医生列表</legend>
+<table id="list"  width="100%">
+			<thead>
+				<tr>
+					<th>姓名</th> <th>医生类型</th><th>医生状态</th><th>创建日期</th><th>修改日期</th><th>更新</th><th>删除</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="doctor in doctors | filter:searchText">
+					<!--  <td>{{getChildStatus(child)}}</td>-->
+					<!--  <td><input type="text" value="{{doctor.doctorName}}"></input></td>
+					<td><input type="password" value="{{doctor.password}}"></input></td>
+					<td><input type="text" value="{{doctor.type}}"></input></td>
+					<td><input type="text" value="{{doctor.status}}"></input></td>
+					-->
+					<td>{{doctor.doctorName}}</td>
+					<!-- 
+					<td>{{seek(doctor.type,types)}}</td>
+					<td>{{seek(doctor.status,statuses)}}</td>
+					 -->
+					 <td>{{doctor.type}}</td>
+					 <td>{{doctor.status}}</td>
+						<!--  
+					<td>
+					 <select >
+                	 <option ng-repeat="t in types" value="{{t.value}}" selected=false>{{t.name}}</option>
+                	</select>
+                	</td>
+					
+					<td>
+					 <select>
+                	 <option ng-repeat="t in statuses" value="{{t.value}}" {{{isSelected(t.value,'stutus',doctor)}}}>{{t.name}}</option>
+                	</select>
+                	</td>
+                	-->
+					<td>{{formatTime(doctor.createDate)}}</td>
+					<td>{{formatTime(doctor.modifyDate)}}</td>
+					<td><button  class="btn" ng-click="modify(doctor)">修改</button></td>
+					<td><button  class="btn" ng-click="deleteDoctor(doctor)">删除</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>	
+<fieldset border="1" ng-show="!modifys" style="clear:left">
+  <legend>增加医生</legend>
+            <table>
+            	<tr>
+            		<td>医生名:</td>
+            		<td style="text-align:left"> <input id="aantalUren" type="text" class="span4" placeholder="Doctor Name" required="required" ng-model="doctorName"></td>
+            		<td></td>
+            	</tr>
+            	<tr>
+            		<td>密码: </td>
+            		<td style="text-align:left">  <input id="activiteit" type="password" class="span4" ng-model="password" required="required"></td>
+            		<td></td>
+            	</tr>
+            	<tr>
+            		<td>医生类型:</td>
+            		<td style="text-align:left">
+            			<!--
+            			<select ng-model="type">
+                	 		<option ng-repeat="t in types" value="{{t.name}}" >{{t.name}}</option>
+                		</select> -->
+                		<select ng-model="type" ng-options="v for v in types.values" class="span4"></select>
+<!--
+                		<select style="width:154px" ng-model="report.prescribingDoctorName" ng-options="v for v in hospital.prescribingDoctorName.split('，')">
+                		-->
+                	</td>
+                	<td></td>
+            	</tr>
+            	<tr>
+            		<td>医生状态:	</td>
+            		<td style="text-align:left">
+            			<select ng-model="status" ng-options="v for v in statuses.values" class="span4"></select>
+            			<!--
+            			<select ng-model="status">
+                			 <option ng-repeat="t in statuses" value="{{t.name}}">{{t.name}}</option>
+                		</select>
+                		-->
+                	</td>
+                	<td></td>
+            	</tr>
+             
+            	<tr><td colspan="2" style="text-align:center">  <input  class="btn" type="button" ng-click="addDoctor()" value="新增医生"></td></tr>
+            </table>
+ 
+</fieldset>		
+		
+<fieldset border="1" ng-show="modifys" style="clear:left">
+ 
+  <legend>更新医生</legend>
+             <table>
+            	<tr>
+            		<td>医生名:</td>
+            		<td style="text-align:left"> <input id="aantalUren" type="text" class="span4" placeholder="Doctor Name" required="required" ng-model="doctorName"></td>
+            		<td></td>
+            	</tr>
+            	<tr>
+            		<td>密码: </td>
+            		<td style="text-align:left">   <input id="activiteit" type="Password" class="span4" ng-model="password"> </td>
+            		<td>如果不修改密码，请不要填写这个字段</td>
+            	</tr>
+            	<tr>
+            		<td>医生类型:</td>
+            		<td id="type4System" style="text-align:left">
+            			 <!--
+            			 <select ng-model="type" id="type">
+	                	 <option ng-repeat="t in types" value="{{t.name}}">{{t.name}}</option>
+	                	</select> 
+	            		-->
+	                <select ng-model="type" ng-options="v for v in types.values"></select>
+                	</td>
+                	<td></td>
+            	</tr>
+            	<tr>
+            		<td>医生状态:	</td>
+            		<td style="text-align:left">
+            		  <!--<select ng-model="status" id="status">
+                   
+                	 <option {{isSelected(t.name,'stutus',doctor)}} ng-repeat="t in statuses" value="{{t.name}}" >{{t.name}}</option>
+                	 
+                	</select> -->
+                	<select ng-model="status" ng-options="v for v in statuses.values"></select>
+                	</td>
+                	<td></td>
+
+            	</tr>
+             
+            	<tr><td colspan="2" style="text-align:center"> <input class="btn" type="button" ng-click="updateDoctor()" value="更新医生">
+                 <input  class="btn" type="button" value="取消更新" ng-click="cancle()"></td><td></td></tr>
+            </table>
+ 
+</fieldset>
+<!--  
+<fieldset>
+<legend>医生收费记录查询    </legend>
+<lable>设置查询日期区间：</lable>
+<input type="date" ng-model="date1"><input type="date" ng-model="date2">
+<a href="" class="btn" ng-click="getPayments()">查询</a> 
+</fieldset>
+<fieldset ng-show="payments != null && payments.length > 0">
+	<legend>收费明细</legend>
+	<table width="100%">
+		<tr>
+			<th>付款学生</th>
+			<th>收款人</th>
+			<th>付款金额</th>
+			<th>付款目的</th>
+			<th>过期提醒设置</th>
+			<th>备注</th>
+			<th>生效日期</th>
+			<th>到期日期</th>
+			<th>付款日期</th>
+			<th>打印</th>
+		</tr>
+		<tbody>
+		<tr ng-repeat="payment in payments">
+			<td>{{payment.payer}}</td>
+			<td>{{payment.receiver}}</td>
+			<td>{{payment.payAmount}}</td>
+			<td>{{payment.purpose}}</td>
+			<td>{{doesReminder(minderpayment.doesNeedReminder)}}</td>
+			<td>{{payment.remark}}</td>
+			<td>{{formatDate(payment.startDate)}}</td>
+			<td>{{formatDate(payment.endDate)}}</td>
+			<td>{{formatDate(payment.payDate)}}</td>
+			<td><button class="btn" onclick="printFrame('printframe','{{payment.payAmount}}','{{payment.purpose}}','{{formatDate(payment.startDate)}}','{{formatDate(payment.endDate)}}','{{formatDate(payment.payDate)}}','{{payment.payer}}','{{payment.receiver}}')">打印收据</button></td>
+		</tr>
+		<tr><td colspan="5"><h4>金额合计</h4></td><td colspan="2"><h4>{{allMoney(payments)}}</h4></td></tr>
+		</tbody>
+	</table>
+</fieldset>-->
+</div>
+		
