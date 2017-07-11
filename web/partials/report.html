@@ -9,7 +9,11 @@
 <table style="width:100%">
 <tr>
 	<td><label>科室:</label></td>
-		<td  colspan="8"><input type="text" ng-model="hospital.department" required="required" style="width:150px"></td>
+		<td  colspan="1"><input type="text" ng-model="hospital.department" required="required" style="width:150px"></td>
+		<td>门诊号:</td>
+        <td><input type="text" ng-model="report.outpatientNo"></td>
+        <td>住院号:</td>
+        <td colspan="1" ><input type="text" ng-model="report.admissionNo"></td>
 	</tr>
 	<tr>
 		<td ><label>姓名:</label></td>
@@ -520,7 +524,11 @@
 <table style="width:100%">
 <tr>
 	<td><label>科室:</label></td>
-		<td colspan="9"><input type="text" ng-model="report.department" required="required" ng-readonly='readonly'  style="width:150px"></td>
+		<td colspan="1"><input type="text" ng-model="report.department" required="required" ng-readonly='readonly'  style="width:150px"></td>
+	    <td>门诊号:</td>
+        <td><input type="text" ng-model="report.outpatientNo"></td>
+        <td>住院号:</td>
+        <td colspan="1" ><input type="text" ng-model="report.admissionNo"></td>
 	</tr>
 	<tr>
 		<td ><label>姓名:</label></td>
@@ -878,9 +886,9 @@
 		<td style="width:10%"> 科室: </td>
 		<td><input type="text" ng-model="report.department"></td>
         <td>门诊号:</td>
-		<td><input type="text"></td>
+		<td><input type="text" ng-model="report.outpatientNo"></td>
         <td>住院号:</td>
-		<td colspan="3"><input type="text"></td>
+		<td colspan="3" ><input type="text" ng-model="report.admissionNo"></td>
 	</tr>
 	<tr>
 		<!--

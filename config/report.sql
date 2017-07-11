@@ -94,3 +94,5 @@ foreign key(doctorId) REFERENCES doctors(doctorId) on delete  CASCADE
 ALTER TABLE report ADD prescribingDoctorName VARCHAR(128); /** prescribingDoctorName varchar(128), add prescibing doctor name V1.2 2014.4.9 */
 ALTER TABLE report ADD COLUMN (lct VARCHAR(128), hpv VARCHAR(128) ,touchbleeding VARCHAR(128) );/** add lct hpv and touch bleeding V1.3 12/25/2015 */
 ALTER TABLE report ADD checkHpv boolean default false;/** add checkHpv suggestion V1.4 2016.12.25 */
+ALTER TABLE report ADD outpatientNo VARCHAR(128);/** add 门诊号 V1.5 2017.07.11 */
+ALTER TABLE report ADD admissionNo VARCHAR(128);/** add 住院号 suggestion V1.5 2017.07.11 */

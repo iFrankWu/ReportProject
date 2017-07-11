@@ -72,7 +72,11 @@ public class Report {
 	private String touchbleeding; //V1.3 added
 	
 	private Boolean checkHpv;//checkHpv v1.4 addded 建议进行HPV筛查
+	/**门诊号 v1.5 added for 301*/
+	private String outpatientNo;
 	
+    /**住院号 v1.5 added for 301*/
+	private String admissionNo;
 	
 	public Boolean getCheckHpv() {
 		return checkHpv;
@@ -624,32 +628,29 @@ public class Report {
 	public void setReason4doesNotComplete(String reason4doesNotComplete) {
 		this.reason4doesNotComplete = reason4doesNotComplete;
 	}
-	@Override
-	public String toString() {
-		return "Report [reportId=" + reportId + ", patientName=" + patientName
-				+ ", age=" + age + ", caseNumber=" + caseNumber
-				+ ", lastTimeMenstruation=" + lastTimeMenstruation
-				+ ", pregnancyNumber=" + pregnancyNumber
-				+ ", childbirthNumber=" + childbirthNumber + ", isMenopause="
-				+ isMenopause + ", department=" + department + ", phone="
-				+ phone + ", isLeucorrhea=" + isLeucorrhea + ", isBleed="
-				+ isBleed + ", unregularBleed=" + unregularBleed
-				+ ", otherComplaints=" + otherComplaints + ", isSmooth="
-				+ isSmooth + ", isAcuteInflammation=" + isAcuteInflammation
-				+ ", isHypertrophy=" + isHypertrophy + ", isPolyp=" + isPolyp
-				+ ", erosion=" + erosion + ", isTear=" + isTear
-				+ ", isNesslersGlandCyst=" + isNesslersGlandCyst + ", isWhite="
-				+ isWhite + ", isCancer=" + isCancer + ", otherClinical="
-				+ otherClinical + ", pointNumber=" + pointNumber
-				+ ", reason4doesNotComplete=" + reason4doesNotComplete
-				+ ", isComplete=" + isComplete + ", checkResult=" + checkResult
-				+ ", screening=" + screening + ", checking=" + checking
-				+ ", otherSuggestion=" + otherSuggestion + ", checkDate="
-				+ checkDate + ", modifyDate=" + modifyDate + ", doctorName="
-				+ doctorName + ", doctorId=" + doctorId + ", isDelete="
-				+ isDelete + ", address=" + address
-				+ ", prescribingDoctorName=" + prescribingDoctorName + "]";
-	}
+	public String getOutpatientNo() {
+        return outpatientNo;
+    }
+    public void setOutpatientNo(String outpatientNo) {
+        this.outpatientNo = outpatientNo;
+    }
+    public String getAdmissionNo() {
+        return admissionNo;
+    }
+    public void setAdmissionNo(String admissionNo) {
+        this.admissionNo = admissionNo;
+    }
+    @Override
+    public String toString() {
+        return "Report [reportId=" + reportId + ", patientName=" + patientName + ", age=" + age + ", caseNumber=" + caseNumber + ", lastTimeMenstruation=" + lastTimeMenstruation + ", pregnancyNumber="
+                + pregnancyNumber + ", childbirthNumber=" + childbirthNumber + ", isMenopause=" + isMenopause + ", department=" + department + ", phone=" + phone + ", isLeucorrhea=" + isLeucorrhea
+                + ", isBleed=" + isBleed + ", unregularBleed=" + unregularBleed + ", otherComplaints=" + otherComplaints + ", isSmooth=" + isSmooth + ", isAcuteInflammation=" + isAcuteInflammation
+                + ", isHypertrophy=" + isHypertrophy + ", isPolyp=" + isPolyp + ", erosion=" + erosion + ", isTear=" + isTear + ", isNesslersGlandCyst=" + isNesslersGlandCyst + ", isWhite=" + isWhite
+                + ", isCancer=" + isCancer + ", otherClinical=" + otherClinical + ", pointNumber=" + pointNumber + ", reason4doesNotComplete=" + reason4doesNotComplete + ", isComplete=" + isComplete
+                + ", checkResult=" + checkResult + ", screening=" + screening + ", checking=" + checking + ", otherSuggestion=" + otherSuggestion + ", checkDate=" + checkDate + ", modifyDate="
+                + modifyDate + ", doctorName=" + doctorName + ", doctorId=" + doctorId + ", isDelete=" + isDelete + ", address=" + address + ", prescribingDoctorName=" + prescribingDoctorName
+                + ", lct=" + lct + ", hpv=" + hpv + ", touchbleeding=" + touchbleeding + ", checkHpv=" + checkHpv + ", outpatientNo=" + outpatientNo + ", admissionNo=" + admissionNo + "]";
+    }
 	 
 	
 	
