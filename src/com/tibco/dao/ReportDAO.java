@@ -196,7 +196,7 @@ public class ReportDAO {
 				+ "otherComplaints=?,isSmooth=?,isAcuteInflammation=?,isHypertrophy=?,isPolyp=?,"
 				+ "erosion=?,isTear=?,isNesslersGlandCyst=?,isWhite=?,isCancer=?," + "otherClinical=?,pointNumber=?,isComplete=?,checkResult=?,screening=?,"
 				+ "checking=?,otherSuggestion=?,doctorName=?,doctorId=?,modifyDate=now(),department=?,"
-				+ "address=?,reason4doesNotComplete=?,phone=?,prescribingDoctorName=?,lct =? ," + "hpv =?,touchbleeding = ? , checkHpv = ? outpatientNo=?, admissionNo=? where reportId=?";
+				+ "address=?,reason4doesNotComplete=?,phone=?,prescribingDoctorName=?,lct =? ," + "hpv =?,touchbleeding = ? , checkHpv = ? ,outpatientNo=?, admissionNo=? where reportId=?";
 		// 1.patientName=?,age=?,caseNumber=?,lastTimeMenstruation=?,pregnancyNumber=?,"
 		// +
 		List<FieldParameter> fplist = new ArrayList<FieldParameter>();

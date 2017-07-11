@@ -87,3 +87,5 @@ foreign key(doctorId) REFERENCES doctors(doctorId) on delete  CASCADE
 ALTER TABLE report ADD prescribingDoctorName VARCHAR(128); 
 ALTER TABLE report ADD COLUMN (lct VARCHAR(128), hpv VARCHAR(128) ,touchbleeding VARCHAR(128) );
 ALTER TABLE report ADD checkHpv boolean default false;
+ALTER TABLE report ADD outpatientNo VARCHAR(128);
+ALTER TABLE report ADD admissionNo VARCHAR(128);
