@@ -838,6 +838,7 @@
 		border-style:solid; 
 		border-width: 0px 0px 0px 0px; 
 		border-color: darkred;
+		font-family:'simsun';
 		/*width:80px;*/
 	}
 	#checkdate{
@@ -849,7 +850,7 @@
 	}
  	td{
 		font-size:20;
-		
+		font-family:'simsun';
 	}
 	#infoTable td{
 	 	width:40px;
@@ -865,10 +866,12 @@
 	 
 	legend{
 		font-size:22;
+		background-color:#fff;
+		font-family:'simsun';
 	}
 
 	</style>
-<h1 style="margin:5px;font-size:20px;text-align:center;">
+<h1 style="margin:35px 5px 5px;font-size:20px;text-align:center;">
     <img ng-show="showLogo" src="{{hospital.hospitalLogo}}" width="50px" height="10px">
     {{hospital.name}}
 </h1>
@@ -878,16 +881,16 @@
 </h2>
 
 <fieldset width="100%" style="margin:20px;margin-top:0px;margin-bottom:0px;">
-<legend><b><font color="#296B3C" style="font-family:黑体">资料</font></b></legend>
+<legend><b><font color="#296B3C">资料</font></b></legend>
 <table style="width:100%" id="infoTable">
 <tbody>
 	<tr style="height:10px"><td colspan="10" style="width:100%"></td></tr>
 	<tr>
-		<td style="width:10%"> 科室: </td>
+		<td style="width:80px"> 科室: </td>
 		<td><input type="text" ng-model="report.department"></td>
-        <td>门诊号:</td>
+        <td style="width:80px">门诊号:</td>
 		<td><input type="text" ng-model="report.outpatientNo"></td>
-        <td>住院号:</td>
+        <td style="width:80px">住院号:</td>
 		<td colspan="3" ><input type="text" ng-model="report.admissionNo"></td>
 	</tr>
 	<tr>
@@ -903,28 +906,27 @@
 		<td style="width:7%"><label>电话:</label></td>
 		<td style="width:30%;max-width:300px"><input type="text" ng-model="report.address"></td>
 -->
-        <td>性别:</td>
-		<td><input type="text"></td>
-		<td >姓名:</td>
-		<td ><input type="text" ng-model="report.patientName" required="required"></td>
-		<td >年龄:</td>
-		<td colspan="3"><input type="text" ng-model="report.age" style="width:30px" onChange="checkNumber(event,this)"></td>
+		<td>姓名:</td>
+		<td><input type="text" ng-model="report.patientName" required="required"></td>
+		<td>年龄:</td>
+		<td><input type="text" ng-model="report.age" style="width:30px" onChange="checkNumber(event,this)"></td>
+        <td> 末次月经: </td>
+		<td><input type="text" ng-model="lastTimeMenstruationPrint" ></td>
 	</tr>
 	<tr>
-		<td style="width:80px"> 末次月经: </td>
-		<td ><input type="text" ng-model="lastTimeMenstruationPrint" ></td>
-		<td > 绝经: </td>
-		<td ><input type="checkbox" ng-model="report.isMenopause"></td>
-		<td > 孕次: </td>
+		<td> 绝经: </td>
+		<td><input type="checkbox" ng-model="report.isMenopause"></td>
+		<td> 孕次: </td>
 		<td><input type="text" ng-model="report.pregnancyNumber" ></td>
-		<td > 产次: </td>
+		<td> 产次: </td>
 		<td><input type="text" ng-model="report.childbirthNumber"></td>
-		</tr>
-</tbody></table>
+	</tr>
+    </tbody>
+    </table>
 </fieldset>
 
 <fieldset style="margin:15px;margin-bottom:0px;">
-<legend><b><font color="#296B3C" style="font-family:黑体">主诉</font></b></legend>
+<legend><b><font color="#296B3C">主诉</font></b></legend>
 <table style="width:100%">
 	<tbody> 
 	<tr style="height:10px"></tr>
@@ -958,48 +960,50 @@
 </tbody></table>
 </fieldset>
 
-<fieldset style="margin:15px;'margin-bottom:0px;">
-<legend><font color="#296B3C" style="font-family:黑体">临床表现</font></legend>
+<fieldset style="margin:15px;margin-bottom:0px;">
+<legend><font color="#296B3C">临床表现</font></legend>
 <table style="width:100%">
 	<tbody>
 <tr style="height:10px"></tr>	
 	<tr>
-		<td><label>光滑:</label></td>
-		<td><input type="checkbox" ng-model="report.isSmooth"/></td>
-		<td><label>急性炎症:</label></td>
-		<td><input type="checkbox" ng-model="report.isAcuteInflammation"/></td>
-		<td><label>肥大:</label></td>
-		<td><input type="checkbox" ng-model="report.isHypertrophy"/></td>
-		<td><label>柱状上皮异位:</label></td>
+		<td style="width:6%"><label>光滑:</label></td>
+		<td style="width:6%"><input type="checkbox" ng-model="report.isSmooth"/></td>
+		<td style="width:12%"><label>急性炎症:</label></td>
+		<td style="width:6%"><input type="checkbox" ng-model="report.isAcuteInflammation"/></td>
+		<td style="width:12%"><label>肥大:</label></td>
+		<td style="width:6%"><input type="checkbox" ng-model="report.isHypertrophy"/></td>
+		<td style="width:20%"><label>柱状上皮异位:</label></td>
 		<td>
             Ⅲ&#176;<input type="radio" value="轻" name="erosion" ng-model="report.erosion" style="margin-right:1px"/>
             Ⅱ&#176;<input type="radio" value="中" name="erosion" ng-model="report.erosion" style="margin-right:1px"/>
             Ⅰ&#176;<input type="radio" value="重" name="erosion" ng-model="report.erosion" style="margin-right:1px"/>
 		</td>
-		<td><label>息肉:</label></td>
-		<td><input type="checkbox" ng-model="report.isPolyp"/></td>
+		
 	</tr>	
 	<tr>
     	<td><label>撕裂:</label></td>
 		<td><input type="checkbox" ng-model="report.isTear"/></td>
-        <td ><label>白斑:</label></td>
+        <td><label>白斑:</label></td>
         <td><input type="checkbox" ng-model="report.isWhite"/></td>
-        <td ><label>纳博特囊:</label></td>
+        <td><label>纳博特囊:</label></td>
         <td><input type="checkbox" ng-model="report.isNesslersGlandCyst"/></td>
         <td><label>接触性出血:</label></td>
         <td>	
                 有<input type="radio" value="有" name="touchbleeding" ng-model="report.touchbleeding" style="margin-right:8px"/>
-                无<input type="radio" value="无" name="touchbleeding" ng-model="report.touchbleeding" style="margin-right:8px"/>
-                
+                无<input type="radio" value="无" name="touchbleeding" ng-model="report.touchbleeding" style="margin-right:8px"/> 
         </td>
-        <td ><label>其他:</label></td>
-        <td><input type="text" ng-model="report.otherClinical"/></td>
 	</tr>
+    <tr>
+    	<td><label>息肉:</label></td>
+		<td><input type="checkbox" ng-model="report.isPolyp"/></td>
+        <td><label>其他:</label></td>
+        <td colspan="5"><input type="text" ng-model="report.otherClinical"/></td>
+    </tr>
 </tbody></table>	
 </fieldset>
 
 <fieldset style="margin:15px;margin-bottom:0px;">
-<legend><font color="#296B3C" style="font-family:黑体">TruScreen<SUP>&reg;</SUP>宫颈癌筛查系统检查内容</font></legend>
+<legend><font color="#296B3C">TruScreen<SUP>&reg;</SUP>宫颈癌筛查系统检查内容</font></legend>
 <span  width="50%" style="float:left" >
 <table style="clear:left;max-width:460px;width:460px;vertical-align:middle;height:400px">
 <tr style="height:5px"></tr>
@@ -1038,14 +1042,14 @@
 		正常<input type="radio" name="result" value="正常" ng-model="report.checkResult"     style="margin-right:15px"/>
 		异常<input type="radio" name="result" value="异常" ng-model="report.checkResult"    /></td>-->
 </tr>
-<tr style="height:30px"><td colspan="2"></td></tr>
+<tr style="height:20px"><td colspan="2"></td></tr>
 
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="6">未发现异常细胞或组织</font></b><p>
+	<td colspan="2" style="text-align:center;font-family:黑体;font-size:22;font-weight:bold;">未发现异常细胞或组织
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p style="margin-left:-50px"><b><font size="6">发现异常细胞或组织</font></b></p><p style="margin-left:110px">
+	<td colspan="2" style="text-align:center;font-family:黑体;font-size:22;font-weight:bold;">发现异常细胞或组织
 </td>
 </tr>
 <tr valign="top" ng-show="!doesCheckCompleted">
@@ -1086,17 +1090,13 @@
 <div style="margin:10px;">
 	<table width="100%">
 	<tr>
-        <td style="width:30%">申请医生:<input type="text" ng-model="report.prescribingDoctorName"  style="width:100px"/></td>
-        <td style="width:30%">操作人员:<input type="text" ng-model="report.doctorName" style="width:100px"/></td>
-        <td align="right" style="width:40%">检查日期:<input type="text" ng-model="checkDatePrint" style="width:100px"/></td>
+        <td style="width:33.3%">申请医生:<input type="text" ng-model="report.prescribingDoctorName"  style="width:100px"/></td>
+        <td style="width:33.3%" align="center">操作人员:<input type="text" ng-model="report.doctorName" style="width:100px"/></td>
+        <td align="right" style="width:33.3%">检查日期:<input type="text" ng-model="checkDatePrint" style="width:100px"/></td>
 	</tr>
 	</table>
 </div>
-<div style="margin-bottom:0px;margin-top:0px;">
-	<table width="100%">
-	<tr text-align="right">
-		 <td style="width:40px"></td><td style="font-size:11">报告单ID:<input type="text" ng-model="report.reportId" style="margin-bottom:0px;margin-top:0px;font-size:11"/></td>
-	</tr>
-	</table>
+<div style="margin:0 12px;font-family:'simsun';">
+	报告单ID:<input type="text" ng-model="report.reportId" style="margin-bottom:0px;margin-top:0px;"/>
 </div>
 </div></div>
