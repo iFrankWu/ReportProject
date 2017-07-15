@@ -871,28 +871,28 @@
 	}
 
 	</style>
-<h1 style="margin:35px 5px 5px;font-size:20px;text-align:center;">
+<h1 style="margin:35px 5px 5px;font-size:32px;line-height:34px;text-align:center;">
     <img ng-show="showLogo" src="{{hospital.hospitalLogo}}" width="50px" height="10px">
-    {{hospital.name}}
+    <strong>{{hospital.name}}</strong>
 </h1>
 
-<h2 style="font-size:22.5px;font-weight:400;font-family:'simsun';text-align:center;">
-	TruScreen<SUP>&reg;</SUP>宫颈癌筛查系统报告单
+<h2 style="font-size:30px;line-height:32px;font-weight:400;font-family:'simsun';text-align:center;">
+	<!--TruScreen<SUP>&reg;</SUP>-->
+    宫颈癌筛查系统（TS）报告单
 </h2>
 
-<fieldset width="100%" style="margin:20px;margin-top:0px;margin-bottom:0px;">
-<legend><b><font color="#296B3C">资料</font></b></legend>
+<div style="text-align:right;font-size:20;font-family:'simsun';margin-bottom:5px;">
+	门诊号:<input type="text" ng-model="report.outpatientNo" style="width:100px">
+</div>
+<div style="text-align:right;font-size:20;height:22px;font-family:'simsun';margin-bottom:15px;">
+	<div style="float:left;margin-left:15px;">科室:<input type="text" ng-model="report.department"></div>
+	<div style="float:right">住院号:<input type="text" ng-model="report.admissionNo" style="width:100px"></div>
+</div>
+
+<fieldset width="100%" style="margin:15px;margin-top:0px;margin-bottom:0px;">
 <table style="width:100%" id="infoTable">
 <tbody>
 	<tr style="height:10px"><td colspan="10" style="width:100%"></td></tr>
-	<tr>
-		<td style="width:80px"> 科室: </td>
-		<td><input type="text" ng-model="report.department"></td>
-        <td style="width:80px">门诊号:</td>
-		<td><input type="text" ng-model="report.outpatientNo"></td>
-        <td style="width:80px">住院号:</td>
-		<td colspan="3" ><input type="text" ng-model="report.admissionNo"></td>
-	</tr>
 	<tr>
 		<!--
 		<td style="width:10%">姓名: </td>
@@ -906,11 +906,11 @@
 		<td style="width:7%"><label>电话:</label></td>
 		<td style="width:30%;max-width:300px"><input type="text" ng-model="report.address"></td>
 -->
-		<td>姓名:</td>
+		<td style="width:80px">姓名:</td>
 		<td><input type="text" ng-model="report.patientName" required="required"></td>
-		<td>年龄:</td>
+		<td style="width:80px">年龄:</td>
 		<td><input type="text" ng-model="report.age" style="width:30px" onChange="checkNumber(event,this)"></td>
-        <td> 末次月经: </td>
+        <td style="width:80px"> 末次月经: </td>
 		<td><input type="text" ng-model="lastTimeMenstruationPrint" ></td>
 	</tr>
 	<tr>
@@ -1096,7 +1096,7 @@
 	</tr>
 	</table>
 </div>
-<div style="margin:0 12px;font-family:'simsun';">
+<div style="margin:0 12px;font-size:20;font-family:'simsun';">
 	报告单ID:<input type="text" ng-model="report.reportId" style="margin-bottom:0px;margin-top:0px;"/>
 </div>
 </div></div>
