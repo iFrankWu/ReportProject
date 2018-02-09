@@ -103,7 +103,7 @@ public class ReportDAO {
 		//v1.6 added
 		fpList.add(new FieldParameter(41, report.isPregnancyStatus(), FieldTypes.BOOLEAN));
 		fpList.add(new FieldParameter(42, report.getPregnancyTime(), FieldTypes.INTEGER));
-		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.FLOAT));
 		
 		db.execute(sql, fpList);
 	}
@@ -275,7 +275,7 @@ public class ReportDAO {
 		//v1.6 added
 		fpList.add(new FieldParameter(41, report.isPregnancyStatus(), FieldTypes.BOOLEAN));
 		fpList.add(new FieldParameter(42, report.getPregnancyTime(), FieldTypes.INTEGER));
-		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.FLOAT));
 
 		fpList.add(new FieldParameter(44, report.getReportId(), FieldTypes.INTEGER));
 		db.execute(sql, fpList);

@@ -99,5 +99,5 @@ ALTER TABLE report ADD admissionNo VARCHAR(128);/** add 住院号 suggestion V1.
 
 ALTER TABLE report ADD pregnancyStatus boolean;/** add 妊娠状态 V1.6 2018.02.09 */
 ALTER TABLE report ADD pregnancyTime int;/** add 怀孕周数 V1.6 2018.02.09 */
-ALTER TABLE report ADD pnorValueResult int ;/** add PNOR值  V1.6 2018.02.09 */
+ALTER TABLE report ADD pnorValueResult FLOAT ;/** add PNOR值  V1.6 2018.02.09 */
 

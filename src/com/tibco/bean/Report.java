@@ -102,7 +102,15 @@ public class Report {
     /**
      * 检查结果 PNOR值  V1.6
      */
-    private int pnorValueResult;
+    private float pnorValueResult;
+
+    public float getPnorValueResult() {
+        return pnorValueResult;
+    }
+
+    public void setPnorValueResult(float pnorValueResult) {
+        this.pnorValueResult = pnorValueResult;
+    }
 
     public Boolean getCheckHpv() {
         return checkHpv;
@@ -765,14 +773,6 @@ public class Report {
 
     public void setPregnancyTime(int pregnancyTime) {
         this.pregnancyTime = pregnancyTime;
-    }
-
-    public int getPnorValueResult() {
-        return pnorValueResult;
-    }
-
-    public void setPnorValueResult(int pnorValueResult) {
-        this.pnorValueResult = pnorValueResult;
     }
 
     @Override
