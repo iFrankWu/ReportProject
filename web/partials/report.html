@@ -14,6 +14,8 @@
         <td><input type="text" ng-model="report.outpatientNo"></td>
         <td>住院号:</td>
         <td colspan="1" ><input type="text" ng-model="report.admissionNo"></td>
+	<td><label>电话:</label></td>
+	<td ><input type="text" ng-model="report.phone" ></td>
 	</tr>
 	<tr>
 		<td ><label>姓名:</label></td>
@@ -22,10 +24,13 @@
 		<td ><input type="text" ng-model="report.age" onChange="checkNumber(event,this)"></td>
 		<td ><label>病历号:</label></td>
 		<td ><input type="text" ng-model="report.caseNumber" required="required"></td>
-		<td><label>住址:</label></td>
-		<td ><input type="text" ng-model="report.address" ></td>
-		<td><label>电话:</label></td>
-		<td ><input type="text" ng-model="report.phone" ></td>
+		<!--<td><label>住址:</label></td>-->
+		<!--<td ><input type="text" ng-model="report.address" ></td>-->
+
+		<td><label>妊娠状态:</label></td>
+		<td><input type="checkbox" ng-model="report.pregnancyStatus"></td>
+		<td><label>孕周:</label></td>
+		<td><input type="number" ng-model="report.pregnancyTime"></td>
 		
 	</tr>
 	<tr>
@@ -41,12 +46,6 @@
 		<td ><select style="width:154px" ng-model="report.prescribingDoctorName" ng-options="v for v in applyDoctorList">
                 </select>
                 </td>
-<!--
-			<select style="width:154px"><option>刘医生</option>
-			<option>康医生</option>
-		</select>   -->
-			<!-- <input type="text" ng-model="report.prescribingDoctorName"> -->
-			
 	</tr> 
 </table>
 </fieldset>
@@ -70,20 +69,6 @@
 				<select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
                 </select>
 		</td>
-		<td style="width:5%;padding-left:10px"><label>HPV:</label></td>
-		<td style="width:10%">
-				<select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
-                </select>
-		</td>
-
-		<!-- <td style="width:10%"> 
-			<div>
-	<select style="width:100%;margin:-2px;height:20px;"  ng-model="report.hpv" ng-change="onChangeOption()" ng-options="v for v in hpv">
-                </select>  
-			    <input type="text" name="inputSelect" id="inputSelect" style="position:relative;margin-left:-0px;width:100%;border:0pt;">  
-			</div>
-		</td> -->
-
 		<td style="width:7%;padding-left:10px"><label>其他:</label></td>
 		<td style="width:15%"><input style="width:90%" type="text" ng-model="report.otherComplaints"/></td>
 	</tr>
@@ -100,16 +85,6 @@
 		<td style="width:6%"><input type="checkbox" ng-model="report.isAcuteInflammation"/></td>
 		<td style="width:8%"><label>肥大:</label></td>
 		<td style="width:6%"><input type="checkbox" ng-model="report.isHypertrophy"/></td>
-		
-
-		<!-- <td style="width:10%"><label>糜烂:</label></td>
-		<td style="width:10%">
-				重<input type="radio" value="重" name="erosion" ng-model="report.erosion" style="margin-right:8px"/>
-				中<input type="radio" value="中" name="erosion" ng-model="report.erosion" style="margin-right:8px"/>
-				轻<input type="radio" value="轻" name="erosion" ng-model="report.erosion" style="margin-right:8px"/>
-		</td> 
-			Ⅰ、Ⅱ、Ⅲ
-		-->
 		<td style="width:12%"><label>柱状上皮异位:</label></td>
 		<td style="width:18%">
 			<!-- 2016-12-25 根据301医院医生意见进行调整 v1.4 -->
@@ -168,13 +143,13 @@
 </tr>
 <tr><td><label>检查是否完成:</label></td>
 	<td style="text-align:left" >
-	<!--<input type="checkbox" name="isCompleted" ng-model="report.isComplete"/> -->
-	<!-- create report  -->
-	 
 		完成<input type="radio" name="isCompleted" value="完成" ng-model="report.isComplete" ng-change="doesCheckComplete()" style="margin-right:15px"/> 
 	           未完成<input type="radio" name="isCompleted" value="未完成" ng-model="report.isComplete" ng-change="doesCheckComplete()" /> 
 		
 		</td>
+</tr>
+<tr><td><label>    PNOR值:</label></td>
+	<td style="text-align:left" ><input type="number" style="width: 30px;" ng-model="report.pnorValueResult" onChange="checkPnorNumber(event,this)" /></td>
 </tr>
 <tr ng-show="doesCheckCompleted"><td><label>    检查结果:</label></td>
 	<td style="text-align:left">
@@ -191,68 +166,13 @@
 </td>
 </tr>
 
-<!--
-<tr ng-show="doesCheckCompleted">
-	<td style="font-size: 14px;margin:5px" colspan="2">结果分析:<span style="margin-left:60px">可能存在以下组织类型 </span></td>
-	</tr>
-	
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td  style="width:50%">1.原始鳞状上皮</td>
-	<td style="width:50%">7.纳博特囊</td>
-
-</tr>
-
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常') ">
-	<td >2.柱状上皮</td>
-	<td >8.移行带外的HPV感染区域</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >3.不成熟的化生</td>
-	<td >9.原发鳞状上皮低危型HPV</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >4.适中的/成熟的化生</td>
-	<td >10.息肉</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >5.新生的鳞状上皮(治疗后)</td>
-	<td >11.穹窿</td>
-</tr>
-
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >6.萎缩症</td>
-	<td >12.其他</td>
-</tr>
-
-<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')" >	
-		 <td  style="width:50%">1.不除外非典型性增生</td> 
-	 	 <td  style="width:50%">4.CIN3</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')" >	
-		 <td >2.CIN1</td>
-		 <td  >5.癌:鳞癌,腺癌</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')" >	
-		<td  >3.CIN2</td>  
-		<td></td>
-</tr>
--->
-
 <tr valign="top" ng-show="!doesCheckCompleted">
 	<td colspan="2"><span style="width:30%">未完成原因: </span><textarea  rows="5" cols="60" name="other" style="width:70%" ng-model="report.reason4doesNotComplete"/></td>
 </tr>
 
 	
 </table>
-<!-- 
-</div> 
-<div id="unnormal" style="display:none">
-<table width="100%">
-<thead>异常,可能存在以下组织类型:</thead>
-	
-</table>
-</div>
--->
+
 </span>
 <span style="clear:left;text-align:center" width="40%">
 	<div ><img src="../images/image1.bmp" height="280"  width="320" ></div>
@@ -267,10 +187,7 @@
 	<td><label for="regular">按照国家宫颈癌筛查指南定期筛查:</label></td>
 	<td style="text-align:left"><input type="checkbox" name="regular" ng-model="report.screening" ng-disabled="!doesCheckCompleted"></input></td>
 </tr>
-<tr>
-	<td><label for="colposcopy">建议进行HPV筛查:</label></td>
-	<td style="text-align:left"><input type="checkbox" name="colposcopy" ng-model="report.checkHpv" ng-disabled="!doesCheckCompleted"></input></td>
-</tr>
+
 <tr>
 	<td><label for="colposcopy">进行阴道镜或阴道镜下活检:</label></td>
 	<td style="text-align:left"><input type="checkbox" name="colposcopy" ng-model="report.checking" ng-disabled="!doesCheckCompleted"></input></td>
@@ -383,12 +300,7 @@
 			Ⅱ&#176;<input type="radio" value="中" name="erosion" ng-model="report.erosion" style="margin-right:2px"/>
 			Ⅰ&#176;<input type="radio" value="重" name="erosion" ng-model="report.erosion" style="margin-right:2px"/>
 		</td>
-	<!-- 	<td style="width:10%"><label>糜烂:</label></td>
-		<td style="text-align:left" style="width:10%">
-				重<input type="radio" value="重" name="erosion" ng-model="search.erosion" style="margin-right:8px"/>
-				中<input type="radio" value="中" name="erosion" ng-model="search.erosion" style="margin-right:8px"/>
-				轻<input type="radio" value="轻" name="erosion" ng-model="search.erosion" style="margin-right:8px"/>
-		</td> -->
+
 	</tr>
 <tr>
 	<td width="50px"><label>撕裂:</label></td>
@@ -410,16 +322,8 @@
 		<table>
 			<tr><td><label>检查是否完成:</label></td>
 	<td style="text-align:left" colspan="3">
-	<!--  advance search
-		<input type="checkbox" name="isCompleted" ng-model="search.isComplete" > 
-		-->
-	<!-- 
-		是<input type="radio" name="isCompleted" ng-model="search.isComplete"/>
-		否<input type="radio" name="isCompleted" ng-model="search.isComplete"/>
-		 -->
 		 完成<input type="radio" name="isCompleted" value="完成" ng-model="search.isComplete"  style="margin-right:15px;margin-left:15px" />
-		未完成<input type="radio" name="isCompleted" value="未完成" ng-model="search.isComplete" />
-		
+		未完成<input type="radio" name="isCompleted" value="未完成" ng-model="search.isComplete" />	
 		</td>
 </tr>
 
@@ -443,10 +347,6 @@
 <tr>
 	<td><label for="regular">按照国家宫颈癌筛查指南定期筛查:</label></td>
 	<td style="text-align:left"><input type="checkbox" name="regular" ng-model="search.screening"></input></td>
-</tr>
-<tr>
-	<td><label for="colposcopy">建议进行HPV筛查:</label></td>
-	<td style="text-align:left"><input type="checkbox" name="colposcopy" ng-model="report.checkHpv"></input></td>
 </tr>
 <tr>
 	<td><label for="colposcopy">进行阴道镜或阴道镜下活检:</label></td>
@@ -529,6 +429,8 @@
         <td><input type="text" ng-model="report.outpatientNo"></td>
         <td>住院号:</td>
         <td colspan="1" ><input type="text" ng-model="report.admissionNo"></td>
+	<td><label>电话:</label></td>
+	<td ><input type="text" ng-model="report.phone" ng-readonly='readonly' ></td>
 	</tr>
 	<tr>
 		<td ><label>姓名:</label></td>
@@ -539,8 +441,11 @@
 		<td ><input type="text" ng-model="report.caseNumber" ng-readonly='readonly'></td>
 		<td><label>住址:</label></td>
 		<td ><input type="text" ng-model="report.address" ng-readonly='readonly' ></td>
-		<td><label>电话:</label></td>
-		<td ><input type="text" ng-model="report.phone" ng-readonly='readonly' ></td>
+
+		<td><label>妊娠状态:</label></td>
+		<td><input type="checkbox" ng-model="report.pregnancyStatus"></td>
+		<td><label>孕周:</label></td>
+		<td><input type="number" ng-model="report.pregnancyTime"></td>
 	</tr>
 	<tr>
 		<td style="width:80px"><label>末次月经:</label></td>
@@ -614,12 +519,6 @@
 		<td style="width:6%"><input type="checkbox" ng-model="report.isHypertrophy" ng-disabled="disabled"/></td>
 	
 
-		<!-- <td style="width:10%"><label>糜烂:</label></td>
-		<td style="width:10%">
-				重<input type="radio" value="重" name="erosion" ng-model="report.erosion" ng-disabled="disabled" style="margin-right:8px"/>
-				中<input type="radio" value="中" name="erosion" ng-model="report.erosion" ng-disabled="disabled" style="margin-right:8px"/>
-				轻<input type="radio" value="轻" name="erosion" ng-model="report.erosion" ng-disabled="disabled" style="margin-right:8px"/>
-		</td> -->
 		<td style="width:12%"><label>柱状上皮异位:</label></td>
 		<td style="width:18%">
 		<!-- 2016-12-25 根据301医院医生意见进行调整 v1.4 -->
@@ -683,6 +582,9 @@
 		
 		</td>
 </tr>
+<tr><td><label>    PNOR值:</label></td>
+	<td style="text-align:left" ><input type="number" style="width: 30px;" ng-model="report.pnorValueResult" onChange="checkPnorNumber(event,this)"/></td>
+</tr>
 <tr ng-show="doesCheckCompleted"><td><label>    检查结果:</label></td>
 	<td style="text-align:left">
 		正常<input type="radio" name="result" value="正常" ng-model="report.checkResult" ng-change="isNormal(this)" ng-disabled="isDisableWhileModify"  style="margin-right:15px"/>
@@ -697,82 +599,9 @@
 	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">发现异常细胞或组织</font></b></p>
 </td>
 </tr>
-<!--
-<tr>
-	<td colspan="2" style="font-size: 14px;margin:5px" ng-show="doesCheckCompleted">结果分析:<span style="margin-left:60px">可能存在以下组织类型 </span></td>
-	</tr>
-	<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td  style="width:50%">1.原始鳞状上皮</td>
-	<td style="width:50%">7.纳博特囊</td>
-
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常') ">
-	<td >2.柱状上皮</td>
-	<td >8.移行带外的HPV感染区域</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >3.不成熟的化生</td>
-	<td >9.原发鳞状上皮低危型HPV</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >4.适中的/成熟的化生</td>
-	<td >10.息肉</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >5.新生的鳞状上皮(治疗后)</td>
-	<td >11.穹窿</td>
-</tr>
-
-<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td >6.萎缩症</td>
-	<td >12.其他</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')" >	
-		 <td  style="width:50%">1.不除外非典型性增生</td> 
-	 	 <td  style="width:50%">4.CIN3</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')" >	
-		 <td >2.CIN1</td>
-		 <td  >5.癌:鳞癌,腺癌</td>
-</tr>
-<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')" >	
-		<td  >3.CIN2</td>  
-		<td></td>
-</tr>
--->
-
 <tr valign="top" ng-show="!doesCheckCompleted">
 	<td colspan="2"><span style="width:30%">未完成原因: </span><textarea  rows="5" cols="60" name="other" style="height:100%;width:70%" ng-model="report.reason4doesNotComplete"/></td>
 </tr>
-	<!--  
-<tr class="normal">
-	<td style="text-align:left;margin:5px">1.原始鳞状上皮</td>
-	<td style="text-align:left;margin:5px">2.柱状上皮</td>
-	</tr>
-<tr class="normal">
-	<td style="text-align:left;margin:5px">3.不成熟的化生</td>
-	<td style="text-align:left;margin:5px">4.适中的/成熟的化生</td>
-<tr class="normal">
-	<td style="text-align:left;margin:5px">5.新生的鳞状上皮(治疗后)</td>
-	<td style="text-align:left;margin:5px">6.萎缩症</td>
-<tr class="normal">
-	<td style="text-align:left;margin:5px">7.纳博特囊</td>
-	<td style="text-align:left;margin:5px">8.移行带外的HPV感染区域</td>
-<tr class="normal">
-	<td style="text-align:left;margin:5px">9.原发鳞状上皮低危型HPV</td>
-	<td style="text-align:left;margin:5px">10.息肉</td>
-<tr class="normal">
-	<td style="text-align:left;margin:5px">11.穹窿</td>
-	<td style="text-align:left;margin:5px">12.其他</td>
-	</tr>
-
-	<tr class="exception" style="display:none"> <td style="text-align:left"  >1.不除外非典型性增生</td></tr>
-	<tr class="exception" style="display:none">	 <td style="text-align:left"  >2.CIN1</td></tr>
-	<tr class="exception" style="display:none">	 <td style="text-align:left"  >3.CIN2</td></tr>
-	<tr class="exception" style="display:none">	 <td style="text-align:left"  >4.CIN3</td></tr>
-	<tr class="exception" style="display:none">	 <td style="text-align:left"  >5.癌:鳞癌,腺癌</td>
-</tr>
-	-->
 </table>
  
 </span>
@@ -790,10 +619,6 @@
 	<td style="text-align:left"><input type="checkbox" name="regular" ng-model="report.screening" ng-disabled="isDisableWhileModify"></input></td>
 </tr>
 <tr>
-	<td><label for="colposcopy">建议进行HPV筛查:</label></td>
-	<td style="text-align:left"><input type="checkbox" name="colposcopy" ng-model="report.checkHpv" ng-disabled="isDisableWhileModify"></input></td>
-</tr>
-<tr>
 	<td><label for="colposcopy">进行阴道镜或阴道镜下活检:</label></td>
 	<td style="text-align:left"><input type="checkbox" name="colposcopy" ng-model="report.checking" ng-disabled="isDisableWhileModify"></input></td>
 </tr>
@@ -804,20 +629,9 @@
 </table>
 </fieldset>
 <table width="100%">
-	<tr>
-	<!-- 
-		<td>报告单ID:<input type="text" ng-readonly=true ng-model="report.reportId"/></td>
-		<td>操作人员:<input type="text" ng-readonly=true ng-model="report.doctorName"/></td>
-		 -->
-		 
+	<tr>	 
 		 <td>报告单ID:<input type="text" ng-model="report.reportId" ng-readonly="true" style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/></td>
 		 <td>操作人员:<input type="text" ng-model="report.doctorName" ng-readonly="true" style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/></td>
-		
-		  <!-- 
-		  <td>报告单ID:  {{report.reportId}}</td>
-		 <td>操作人员:  {{report.doctorName}}</td>
-		  -->
-		 
 	</tr>
 </table>
 <button class="btn" ng-click="activeUpdateReport()" ng-show="!modifyUnderDetails && !modifyFlag" ng-disabled="disabledModify">激活修改</button>
@@ -906,20 +720,27 @@
 		<td style="width:7%"><label>电话:</label></td>
 		<td style="width:30%;max-width:300px"><input type="text" ng-model="report.address"></td>
 -->
-		<td style="width:80px">姓名:</td>
+		<td style="width:60px">姓名:</td>
 		<td><input type="text" ng-model="report.patientName" required="required"></td>
-		<td style="width:80px">年龄:</td>
-		<td><input type="text" ng-model="report.age" style="width:30px" onChange="checkNumber(event,this)"></td>
+		<td style="width:60px">年龄:</td>
+		<td><input type="text" ng-model="report.age" style="width:30px"></td>
         <td style="width:80px"> 末次月经: </td>
 		<td><input type="text" ng-model="lastTimeMenstruationPrint" ></td>
+		<td  style="width:80px"> 绝经: </td>
+		<td><input type="checkbox" ng-model="report.isMenopause"></td>
+
 	</tr>
 	<tr>
-		<td> 绝经: </td>
-		<td><input type="checkbox" ng-model="report.isMenopause"></td>
+
 		<td> 孕次: </td>
 		<td><input type="text" ng-model="report.pregnancyNumber" ></td>
 		<td> 产次: </td>
 		<td><input type="text" ng-model="report.childbirthNumber"></td>
+		<td><label>妊娠状态:</label></td>
+		<td ng-show="report.pregnancyStatus">是</td>
+		<td ng-show="!report.pregnancyStatus">否</td>
+		<td ng-show="report.pregnancyStatus"><label>孕周:</label></td>
+		<td ng-show="report.pregnancyStatus"><input type="number" ng-model="report.pregnancyTime" ></td>
 	</tr>
     </tbody>
     </table>
@@ -1037,6 +858,9 @@
 		
 		</td>
 </tr>
+	<tr><td><label>    PNOR值:</label></td>
+	<td style="text-align:left" ><input type="number" style="width: 30px;" ng-model="report.pnorValueResult" onChange="checkPnorNumber(event,this)"/></td>
+</tr>
 <tr ng-show="doesCheckCompleted"><td ><label>    检查结果:</label></td>
 	<!--<td style="text-align:left">
 		正常<input type="radio" name="result" value="正常" ng-model="report.checkResult"     style="margin-right:15px"/>
@@ -1073,10 +897,6 @@
 <tr>
 	<td >按照国家宫颈癌筛查指南定期筛查:</td>
 	<td style="text-align:left"><input type="checkbox" name="regular" ng-model="report.screening"  ></td>
-</tr>
-<tr>
-	<td >建议进行HPV筛查:</td>
-	<td style="text-align:left"><input type="checkbox" name="colposcopy" ng-model="report.checkHpv"  ></td>
 </tr>
 <tr>
 	<td >进行阴道镜或阴道镜下活检:</td>

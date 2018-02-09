@@ -36,10 +36,11 @@ public class ReportDAO {
 		String sql = "insert into report(patientName,age,caseNumber,lastTimeMenstruation,pregnancyNumber,"
 				+ "childbirthNumber,isMenopause,isLeucorrhea,isBleed,unregularBleed," + "otherComplaints,isSmooth,isAcuteInflammation,isHypertrophy,isPolyp,"
 				+ "erosion,isTear,isNesslersGlandCyst,isWhite,isCancer," + "otherClinical,pointNumber,isComplete,checkResult,screening,"
-				+ "checking,otherSuggestion,checkDate,isDelete,address,doctorName,doctorId,department,reason4doesNotComplete,phone,prescribingDoctorName,lct,hpv,touchbleeding,checkHpv,outpatientNo,admissionNo)"
+				+ "checking,otherSuggestion,checkDate,isDelete,address,doctorName,doctorId,department,reason4doesNotComplete,phone,prescribingDoctorName,lct,hpv,touchbleeding,checkHpv,outpatientNo,admissionNo," +
+				"pregnancyStatus,pregnancyTime,pnorValueResult)"
 				+
 				// add patientAddress after idDelete
-				" values(?,?,?,?,?,   ?,?,?,?,?,   ?,?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,?,  ?,?,now(),false,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				" values(?,?,?,?,?,   ?,?,?,?,?,   ?,?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,?,  ?,?,now(),false,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?)";
 		// patientName,age,caseNumber,lastTimeMenstruation,pregnancyNumber,
 		List<FieldParameter> fpList = new ArrayList<FieldParameter>();
 		fpList.add(new FieldParameter(1, report.getPatientName(), FieldTypes.VARCHAR));
@@ -98,6 +99,11 @@ public class ReportDAO {
 		//v1.5 added
 		fpList.add(new FieldParameter(39, report.getOutpatientNo(), FieldTypes.VARCHAR));
         fpList.add(new FieldParameter(40, report.getAdmissionNo(), FieldTypes.VARCHAR));
+
+		//v1.6 added
+		fpList.add(new FieldParameter(41, report.isPregnancyStatus(), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(42, report.getPregnancyTime(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.INTEGER));
 		
 		db.execute(sql, fpList);
 	}
@@ -196,76 +202,83 @@ public class ReportDAO {
 				+ "otherComplaints=?,isSmooth=?,isAcuteInflammation=?,isHypertrophy=?,isPolyp=?,"
 				+ "erosion=?,isTear=?,isNesslersGlandCyst=?,isWhite=?,isCancer=?," + "otherClinical=?,pointNumber=?,isComplete=?,checkResult=?,screening=?,"
 				+ "checking=?,otherSuggestion=?,doctorName=?,doctorId=?,modifyDate=now(),department=?,"
-				+ "address=?,reason4doesNotComplete=?,phone=?,prescribingDoctorName=?,lct =? ," + "hpv =?,touchbleeding = ? , checkHpv = ? ,outpatientNo=?, admissionNo=? where reportId=?";
+				+ "address=?,reason4doesNotComplete=?,phone=?,prescribingDoctorName=?,lct =? ," + "hpv =?,touchbleeding = ? , checkHpv = ? ,outpatientNo=?, admissionNo=?," +
+				"pregnancyStatus = ? ,pregnancyTime=?, pnorValueResult=? where reportId=?";
 		// 1.patientName=?,age=?,caseNumber=?,lastTimeMenstruation=?,pregnancyNumber=?,"
 		// +
-		List<FieldParameter> fplist = new ArrayList<FieldParameter>();
-		fplist.add(new FieldParameter(1, report.getPatientName(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(2, report.getAge(), FieldTypes.INTEGER));
-		fplist.add(new FieldParameter(3, report.getCaseNumber(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(4, report.getLastTimeMenstruation(), FieldTypes.DATE));
-		fplist.add(new FieldParameter(5, report.getPregnancyNumber(), FieldTypes.INTEGER));
+		List<FieldParameter> fpList = new ArrayList<FieldParameter>();
+		fpList.add(new FieldParameter(1, report.getPatientName(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(2, report.getAge(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(3, report.getCaseNumber(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(4, report.getLastTimeMenstruation(), FieldTypes.DATE));
+		fpList.add(new FieldParameter(5, report.getPregnancyNumber(), FieldTypes.INTEGER));
 
 		// 2
 		// childbirthNumber=?,isMenopause=?,isLeucorrhea=?,isBleed=?,unregularBleed=?,"
 		// +
-		fplist.add(new FieldParameter(6, report.getChildbirthNumber(), FieldTypes.INTEGER));
-		fplist.add(new FieldParameter(7, initBoolean(report.getIsMenopause()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(8, initBoolean(report.getIsLeucorrhea()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(9, initBoolean(report.getIsBleed()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(10, report.getUnregularBleed(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(6, report.getChildbirthNumber(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(7, initBoolean(report.getIsMenopause()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(8, initBoolean(report.getIsLeucorrhea()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(9, initBoolean(report.getIsBleed()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(10, report.getUnregularBleed(), FieldTypes.VARCHAR));
 
 		// 3
 		// "otherComplaints=?,isSmooth=?,isAcuteInflammation=?,isHypertrophy=?,isPolyp=?,"
 		// +
-		fplist.add(new FieldParameter(11, report.getOtherComplaints(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(12, initBoolean(report.getIsSmooth()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(13, initBoolean(report.getIsAcuteInflammation()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(14, initBoolean(report.getIsHypertrophy()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(15, initBoolean(report.getIsPolyp()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(11, report.getOtherComplaints(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(12, initBoolean(report.getIsSmooth()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(13, initBoolean(report.getIsAcuteInflammation()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(14, initBoolean(report.getIsHypertrophy()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(15, initBoolean(report.getIsPolyp()), FieldTypes.BOOLEAN));
 
 		// 4 "erosion=?,isTear=?,isNesslersGlandCyst=?,isWhite=?,isCancer=?," +
-		fplist.add(new FieldParameter(16, report.getErosion(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(17, initBoolean(report.getIsTear()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(18, initBoolean(report.getIsNesslersGlandCyst()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(19, initBoolean(report.getIsWhite()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(20, initBoolean(report.getIsCancer()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(16, report.getErosion(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(17, initBoolean(report.getIsTear()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(18, initBoolean(report.getIsNesslersGlandCyst()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(19, initBoolean(report.getIsWhite()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(20, initBoolean(report.getIsCancer()), FieldTypes.BOOLEAN));
 
 		// 5
 		// "otherClinical=?,pointNumber=?,isComplete=?,checkResult=?,screening=?,"
 		// +
-		fplist.add(new FieldParameter(21, report.getOtherClinical(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(22, report.getPointNumber(), FieldTypes.INTEGER));
-		fplist.add(new FieldParameter(23, report.getIsComplete(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(24, report.getCheckResult(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(25, initBoolean(report.getScreening()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(21, report.getOtherClinical(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(22, report.getPointNumber(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(23, report.getIsComplete(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(24, report.getCheckResult(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(25, initBoolean(report.getScreening()), FieldTypes.BOOLEAN));
 
 		// 6
 		// "checking=?,otherSuggestion=?,doctorName=?,doctorId=?,modifyDate=now()"
 		// +
-		fplist.add(new FieldParameter(26, initBoolean(report.getChecking()), FieldTypes.BOOLEAN));
-		fplist.add(new FieldParameter(27, report.getOtherSuggestion(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(28, report.getDoctorName(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(29, report.getDoctorId(), FieldTypes.INTEGER));
-		fplist.add(new FieldParameter(30, report.getDepartment(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(26, initBoolean(report.getChecking()), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(27, report.getOtherSuggestion(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(28, report.getDoctorName(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(29, report.getDoctorId(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(30, report.getDepartment(), FieldTypes.VARCHAR));
 		// add patientAddress in 20130720
-		fplist.add(new FieldParameter(31, report.getAddress(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(32, report.getReason4doesNotComplete(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(31, report.getAddress(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(32, report.getReason4doesNotComplete(), FieldTypes.VARCHAR));
 		// 7 " where reportId=?";
 
-		fplist.add(new FieldParameter(33, report.getPhone(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(34, report.getPrescribingDoctorName(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(33, report.getPhone(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(34, report.getPrescribingDoctorName(), FieldTypes.VARCHAR));
 
-		fplist.add(new FieldParameter(35, report.getLct(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(36, report.getHpv(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(37, report.getTouchbleeding(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(38, report.getCheckHpv(), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(35, report.getLct(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(36, report.getHpv(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(37, report.getTouchbleeding(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(38, report.getCheckHpv(), FieldTypes.BOOLEAN));
 		//added v1.5 for 301
-		fplist.add(new FieldParameter(39, report.getOutpatientNo(), FieldTypes.VARCHAR));
-		fplist.add(new FieldParameter(40, report.getAdmissionNo(), FieldTypes.VARCHAR));
-		
-		fplist.add(new FieldParameter(41, report.getReportId(), FieldTypes.INTEGER));
-		db.execute(sql, fplist);
+		fpList.add(new FieldParameter(39, report.getOutpatientNo(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(40, report.getAdmissionNo(), FieldTypes.VARCHAR));
+
+
+		//v1.6 added
+		fpList.add(new FieldParameter(41, report.isPregnancyStatus(), FieldTypes.BOOLEAN));
+		fpList.add(new FieldParameter(42, report.getPregnancyTime(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.INTEGER));
+
+		fpList.add(new FieldParameter(44, report.getReportId(), FieldTypes.INTEGER));
+		db.execute(sql, fpList);
 	}
 
 	/**
