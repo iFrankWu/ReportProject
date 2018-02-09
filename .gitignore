@@ -1,3 +1,6 @@
 .settings
 *.class
 /jar
+.idea
+/bin/META-INF/persistence.xml
+/ReportProject.iml
