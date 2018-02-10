@@ -39,14 +39,14 @@
 	</target>
 
 	<target name="compile" depends="prepare">
-		<javac encoding="utf-8" srcdir="${src}" destdir="${classes}" deprecation="on"
+		<javac encoding="utf-8" target="1.7" source="1.7" srcdir="${src}" destdir="${classes}" deprecation="on"
 			debug="on">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
 
 	<target name="recompile" >
-		<javac encoding="utf-8" srcdir="${src}" destdir="${classes}" deprecation="on"
+		<javac encoding="utf-8" target="1.7" srcdir="${src}" destdir="${classes}" deprecation="on"
 				debug="on">
 			<classpath refid="classpath" />
 		</javac>
