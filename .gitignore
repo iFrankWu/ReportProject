@@ -5,3 +5,5 @@
 /bin/META-INF/persistence.xml
 /ReportProject.iml
 *.log
+error.log
+.DS_Store
