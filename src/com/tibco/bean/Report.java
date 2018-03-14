@@ -102,13 +102,13 @@ public class Report {
     /**
      * 检查结果 PNOR值  V1.6
      */
-    private float pnorValueResult;
+    private Float pnorValueResult;
 
-    public float getPnorValueResult() {
+    public Float getPnorValueResult() {
         return pnorValueResult;
     }
 
-    public void setPnorValueResult(float pnorValueResult) {
+    public void setPnorValueResult(Float pnorValueResult) {
         this.pnorValueResult = pnorValueResult;
     }
 
