@@ -101,3 +101,6 @@ ALTER TABLE report ADD pregnancyStatus boolean;/** add 妊娠状态 V1.6 2018.02
 ALTER TABLE report ADD pregnancyTime int;/** add 怀孕周数 V1.6 2018.02.09 */
 ALTER TABLE report ADD pnorValueResult FLOAT ;/** add PNOR值  V1.6 2018.02.09 */
 
+ALTER TABLE report ADD transformArea VARCHAR(128);/** add 可转换区域 V1.7 2018.09.05 */
+ALTER TABLE report ADD uid VARCHAR(128);/** add 患者id  V1.7 2018.09.05 */
+

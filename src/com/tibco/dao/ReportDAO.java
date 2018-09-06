@@ -37,10 +37,10 @@ public class ReportDAO {
 				+ "childbirthNumber,isMenopause,isLeucorrhea,isBleed,unregularBleed," + "otherComplaints,isSmooth,isAcuteInflammation,isHypertrophy,isPolyp,"
 				+ "erosion,isTear,isNesslersGlandCyst,isWhite,isCancer," + "otherClinical,pointNumber,isComplete,checkResult,screening,"
 				+ "checking,otherSuggestion,checkDate,isDelete,address,doctorName,doctorId,department,reason4doesNotComplete,phone,prescribingDoctorName,lct,hpv,touchbleeding,checkHpv,outpatientNo,admissionNo," +
-				"pregnancyStatus,pregnancyTime,pnorValueResult)"
+				"pregnancyStatus,pregnancyTime,pnorValueResult,transformArea,uid)"
 				+
 				// add patientAddress after idDelete
-				" values(?,?,?,?,?,   ?,?,?,?,?,   ?,?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,?,  ?,?,now(),false,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?)";
+				" values(?,?,?,?,?,   ?,?,?,?,?,   ?,?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,?,  ?,?,now(),false,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?)";
 		// patientName,age,caseNumber,lastTimeMenstruation,pregnancyNumber,
 		List<FieldParameter> fpList = new ArrayList<FieldParameter>();
 		fpList.add(new FieldParameter(1, report.getPatientName(), FieldTypes.VARCHAR));
@@ -104,6 +104,9 @@ public class ReportDAO {
 		fpList.add(new FieldParameter(41, report.isPregnancyStatus(), FieldTypes.BOOLEAN));
 		fpList.add(new FieldParameter(42, report.getPregnancyTime(), FieldTypes.INTEGER));
 		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.FLOAT));
+		//v1.7 added
+		fpList.add(new FieldParameter(44, report.getTransformArea(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(45, report.getUid(), FieldTypes.VARCHAR));
 		
 		db.execute(sql, fpList);
 	}
@@ -203,7 +206,7 @@ public class ReportDAO {
 				+ "erosion=?,isTear=?,isNesslersGlandCyst=?,isWhite=?,isCancer=?," + "otherClinical=?,pointNumber=?,isComplete=?,checkResult=?,screening=?,"
 				+ "checking=?,otherSuggestion=?,doctorName=?,doctorId=?,modifyDate=now(),department=?,"
 				+ "address=?,reason4doesNotComplete=?,phone=?,prescribingDoctorName=?,lct =? ," + "hpv =?,touchbleeding = ? , checkHpv = ? ,outpatientNo=?, admissionNo=?," +
-				"pregnancyStatus = ? ,pregnancyTime=?, pnorValueResult=? where reportId=?";
+				"pregnancyStatus = ? ,pregnancyTime=?, pnorValueResult=?,transformArea=?, uid=? where reportId=?";
 		// 1.patientName=?,age=?,caseNumber=?,lastTimeMenstruation=?,pregnancyNumber=?,"
 		// +
 		List<FieldParameter> fpList = new ArrayList<FieldParameter>();
@@ -277,7 +280,10 @@ public class ReportDAO {
 		fpList.add(new FieldParameter(42, report.getPregnancyTime(), FieldTypes.INTEGER));
 		fpList.add(new FieldParameter(43, report.getPnorValueResult(), FieldTypes.FLOAT));
 
-		fpList.add(new FieldParameter(44, report.getReportId(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(44, report.getTransformArea(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(45, report.getUid(), FieldTypes.VARCHAR));
+
+		fpList.add(new FieldParameter(46, report.getReportId(), FieldTypes.INTEGER));
 		db.execute(sql, fpList);
 	}
 

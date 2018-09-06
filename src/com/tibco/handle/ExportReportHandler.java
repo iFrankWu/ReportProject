@@ -90,6 +90,8 @@ public class ExportReportHandler implements ResultSetHandler {
 			xlsExport.setCell(29, rs.getString("hpv"));
 			xlsExport.setCell(30, rs.getString("touchbleeding"));
 
+
+
 			String nextStepSuggestion = "";
 			if (rs.getBoolean("screening")) {
 				nextStepSuggestion = "按照国家宫颈癌筛查指南定期筛查";
@@ -125,6 +127,9 @@ public class ExportReportHandler implements ResultSetHandler {
 			xlsExport.setCell(34, rs.getBoolean("pregnancyStatus") ? "是" : "否");
 			xlsExport.setCell(35, rs.getInt("pregnancyTime"));
 			xlsExport.setCell(36, rs.getFloat("pnorValueResult"));
+			//v1.7 add
+			xlsExport.setCell(37, rs.getString("transformArea"));
+			xlsExport.setCell(38, rs.getString("uid"));
 
 			rowIndex++;
 		} catch (Exception e) {

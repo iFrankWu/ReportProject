@@ -16,6 +16,7 @@ import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
 import com.tibco.dao.DoctorDAO;
 import com.tibco.dao.ReportDAO;
+import com.tibco.service.ReportService;
 
 /**
  * class description goes here.
@@ -32,30 +33,36 @@ public class TempTest {
 	 * @throws ParseException 
 	 */
 	public static void main(String[] args) throws ParseException {
+
+		ReportService reportService = new ReportService();
+		String file = "/Users/frank/Downloads/1333B2-000181-result.csv";
+		String s = reportService.parsePnormFromCsv(file);
+		System.out.println(s);
+
 //		Date d = format.parse("2012/2/3");
 //		System.out.println(cryptWithMD5("hello"));
 //		System.out.println(cryptWithMD5("hello"));
-		DoctorDAO dao =new DoctorDAO();
-		ReportDAO reportDAO = new ReportDAO();
-		int id = 3;
-		try {
-//			 Doctor doctor = dao.getDoctor(id);
-//			 System.out.println(id+":"+doctor.getDoctorName());
-//			 System.out.println(id+":"+doctor.getStatus());
-//			 System.out.println(id+":"+doctor.getType());
-			System.out.println(reportDAO.getAllRecordNumber());
-			for(Report report : reportDAO.getNextPage(3, 3, 2, null)){
-				System.out.println(report.getReportId()+":"+report.getPatientName());
-			}
-			
-			for(Report report : reportDAO.getPrePage(12, 3, 1, null)){
-				System.out.println(report.getReportId()+":"+report.getPatientName());
-			}
-			
-		} catch (DBException e) {
-			e.printStackTrace();
-			
-		}
+//		DoctorDAO dao =new DoctorDAO();
+//		ReportDAO reportDAO = new ReportDAO();
+//		int id = 3;
+//		try {
+////			 Doctor doctor = dao.getDoctor(id);
+////			 System.out.println(id+":"+doctor.getDoctorName());
+////			 System.out.println(id+":"+doctor.getStatus());
+////			 System.out.println(id+":"+doctor.getType());
+//			System.out.println(reportDAO.getAllRecordNumber());
+//			for(Report report : reportDAO.getNextPage(3, 3, 2, null)){
+//				System.out.println(report.getReportId()+":"+report.getPatientName());
+//			}
+//
+//			for(Report report : reportDAO.getPrePage(12, 3, 1, null)){
+//				System.out.println(report.getReportId()+":"+report.getPatientName());
+//			}
+//
+//		} catch (DBException e) {
+//			e.printStackTrace();
+//
+//		}
 	}
 	 private static MessageDigest md;
 

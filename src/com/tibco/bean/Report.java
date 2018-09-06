@@ -104,6 +104,13 @@ public class Report {
      */
     private Float pnorValueResult;
 
+    /**可转换区域*/
+    private String transformArea;
+    /**
+     * 患者在其他系统的id
+     */
+    private String uid;
+
     public Float getPnorValueResult() {
         return pnorValueResult;
     }
@@ -773,6 +780,22 @@ public class Report {
 
     public void setPregnancyTime(int pregnancyTime) {
         this.pregnancyTime = pregnancyTime;
+    }
+
+    public String getTransformArea() {
+        return transformArea;
+    }
+
+    public void setTransformArea(String transformArea) {
+        this.transformArea = transformArea;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     @Override
