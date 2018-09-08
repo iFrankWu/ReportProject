@@ -441,6 +441,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             alert("请输入UID");
             return;
         }
+        if(uid.length < 6){
+            return;
+        }
         ReportService.getPNorm(uid, function (response) {
                 if (response.isSuccess) {
                     $scope.report.pnorValueResult = response.description;
@@ -451,7 +454,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                             $scope.report.checkResult = "异常"
                         }
                     }else{
-                        if ($scope.report.pnorValueResult > 0.4) {
+                        if ($scope.report.pnorValueResult > 0.3) {
                             $scope.report.checkResult = "正常"
                         } else {
                             $scope.report.checkResult = "异常"
