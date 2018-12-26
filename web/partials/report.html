@@ -30,15 +30,13 @@
                     <!--<td><label>住址:</label></td>-->
                     <!--<td ><input type="text" ng-model="report.address" ></td>-->
 
-                    <td><label>妊娠状态:</label></td>
+                    <td><label>是否取样:</label></td>
                     <td><input type="checkbox" ng-model="report.pregnancyStatus" ></td>
-                    <td><label>孕周:</label></td>
+                    <td><label>周数:</label></td>
                     <td><input type="number" ng-model="report.pregnancyTime"></td>
 
                 </tr>
                 <tr>
-                    <td><label>末次月经:</label></td>
-                    <td><input type="date" ng-model="report.lastTimeMenstruation"></td>
                     <td><label>绝经:</label></td>
                     <td><input type="checkbox" ng-model="report.isMenopause"></td>
                     <td><label>孕次:</label></td>
@@ -74,6 +72,11 @@
                     <td style="width:5%"><label>LCT:</label></td>
                     <td style="width:10%">
                         <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
+                        </select>
+                    </td>
+                    <td style="width:5%;padding-left:10px"><label>HPV:</label></td>
+                    <td style="width:10%">
+                        <select style="width:100%" ng-model="report.hpv"  ng-options="v for v in hpvs">
                         </select>
                     </td>
                     <td style="width:7%;padding-left:10px"><label>其他:</label></td>
@@ -256,8 +259,6 @@
                     <legend><b><font color="#296B3C">资料</font></b></legend>
                     <table style="width:100%">
                         <tr>
-                            <td>报告单ID:</td>
-                            <td><input type="text" ng-model="search.reportId" onChange="checkNumber(event,this)"></td>
                             <td>病历号:</td>
                             <td><input type="text" ng-model="search.caseNumber"></td>
 
@@ -292,11 +293,6 @@
                             <td style="text-align:left"><input type="text" ng-model="search.phone"></td>
                         </tr>
                         <tr>
-                            <td>末次月经:</td>
-                            <td colspan="2">从<input type="date" ng-model="search.lastTimeMenstruation"
-                                                    id="lastTimeMenstruation"></td>
-                            <td colspan="3" style="text-align:left">至<input type="date"
-                                                                            ng-model="search.lastTimeMenstruation2">
                             </td>
                             <td><label>申请医生:</label></td>
                             <td><input type="text" ng-model="search.prescribingDoctorName"></td>
@@ -328,6 +324,7 @@
                                         style="margin-right:8px"/>
                             </td>
                             <td style="width:3%"></td>
+
                             <td style="width:7%"><label>其他:</label></td>
                             <td style="width:15%"><input style="width:90%" type="text"
                                                          ng-model="search.otherComplaints"/></td>
@@ -531,14 +528,12 @@
                     <td><label>住址:</label></td>
                     <td><input type="text" ng-model="report.address" ng-readonly='readonly'></td>
 
-                    <td><label>妊娠状态:</label></td>
+                    <td><label>是否取样:</label></td>
                     <td><input type="checkbox" ng-model="report.pregnancyStatus"></td>
-                    <td><label>孕周:</label></td>
+                    <td><label>周数:</label></td>
                     <td><input type="number" ng-model="report.pregnancyTime"></td>
                 </tr>
                 <tr>
-                    <td style="width:80px"><label>末次月经:</label></td>
-                    <td><input type="date" ng-model="report.lastTimeMenstruation" ng-readonly='readonly'></td>
                     <td><label>绝经:</label></td>
                     <td><input type="checkbox" ng-disabled="disabled" ng-model="report.isMenopause"></td>
                     <td><label>孕次:</label></td>
@@ -766,8 +761,6 @@
         </fieldset>
         <table width="100%">
             <tr>
-                <td>报告单ID:<input type="text" ng-model="report.reportId" ng-readonly="true"
-                                 style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/>
                 </td>
                 <td>操作人员:<input type="text" ng-model="report.doctorName" ng-readonly="true"
                                 style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/>
@@ -870,8 +863,6 @@
                     <td><input type="text" ng-model="report.patientName" required="required"></td>
                     <td style="width:60px">年龄:</td>
                     <td><input type="text" ng-model="report.age" style="width:30px"></td>
-                    <td style="width:80px"> 末次月经:</td>
-                    <td><input type="text" ng-model="lastTimeMenstruationPrint"></td>
                     <td style="width:80px"> 绝经:</td>
                     <td><input type="checkbox" ng-model="report.isMenopause"></td>
 
@@ -883,10 +874,10 @@
                     <td> 产次:</td>
                     <td><input type="text" ng-model="report.childbirthNumber"></td>
 
-                    <td><label>妊娠状态:</label></td>
+                    <td><label>是否取样:</label></td>
                     <td ng-show="report.pregnancyStatus">是</td>
                     <td ng-show="!report.pregnancyStatus">否</td>
-                    <td ng-show="report.pregnancyStatus"><label>孕周:</label></td>
+                    <td ng-show="report.pregnancyStatus"><label>周数:</label></td>
                     <td ng-show="report.pregnancyStatus"><input type="number" ng-model="report.pregnancyTime"></td>
                 </tr>
                 </tbody>
@@ -904,7 +895,7 @@
                     <td style="width:10%"><label>性交出血:</label></td>
                     <td style="width:4%"><input type="checkbox" ng-model="report.isBleed"/></td>
                     <td style="width:12%"><label>不规则流血:</label></td>
-                    <td style="width:21%">
+                    <td style="width:16%">
                         多<input type="radio" name="unrule" value="多" ng-model="report.unregularBleed"
                                 style="margin-right:1px"/>
                         中<input type="radio" name="unrule" value="中" ng-model="report.unregularBleed"
@@ -912,20 +903,20 @@
                         少<input type="radio" name="unrule" value="少" ng-model="report.unregularBleed"
                                 style="margin-right:1px"/>
                     </td>
-                    <td style="width:5%"><label>LCT:</label></td>
-                    <td style="width:10%">
+                    <td style="width:4%"><label>LCT:</label></td>
+                    <td style="width:6%">
                         <input style="width:100%" type="text" ng-model="report.lct">
                         <!-- <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
                         </select> -->
                     </td>
                     <td style="width:5%"><label>HPV:</label></td>
-                    <td style="width:10%">
+                    <td style="width:6%">
                         <input style="width:100%" type="text" ng-model="report.hpv">
                         <!-- <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
                         </select> -->
                     </td>
                     <td style="width:6%"><label>其他:</label></td>
-                    <td style="width:5%"><input style="width:90%" type="text" ng-model="report.otherComplaints"/></td>
+                    <td style="width:19%"><input style="width:100%" type="text" ng-model="report.otherComplaints"/></td>
                 </tr>
 
                 </tbody>
@@ -1102,10 +1093,6 @@
             </table>
         </div>
         <div style="margin:0 12px;font-size:20;font-family:'simsun';">
-            报告单ID:<input type="text" ng-model="report.reportId" style="margin-bottom:0px;margin-top:0px;"/>
-        </div>
-
-        <div style="margin:0 12px;font-size:14;font-family:'simsun';">
           本结果仅对本次检查负责，供临床医生参考使用
         </div>
     </div>
