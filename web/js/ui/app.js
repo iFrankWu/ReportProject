@@ -45,6 +45,14 @@ var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies']
 	    	templateUrl:"partials/report.html",
 	    	controller:ReportController
     	})
+        .when("/truscreen/reports_woman",{
+            templateUrl:"partials/report-backup-woman.html",
+            controller:ReportController
+        })
+        .when("/truscreen/reports_pregnancy",{
+            templateUrl:"partials/report-pregnancy.html",
+            controller:ReportController
+        })
     	 .when("/truscreen/mypage",{
 	    	templateUrl:"partials/mypage.html",
 	    	controller:DoctorController

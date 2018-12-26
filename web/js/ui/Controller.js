@@ -27,11 +27,15 @@ MainController = function ($scope, $location, $rootScope, $cookieStore, $http, C
             $("#doctorLink").show();
         }
         $("#reportLink").show();
+        $("#reportLink1").show();
+        $("#reportLink2").show();
         $("#mypageLink").show();
         $("#logout").show();
         if (doctor.type == "系统管理员") {
             $("#reportLink").hide();
             $("#systemsetting").show();
+            $("#reportLink1").hide();
+            $("#reportLink2").hide();
         }
     }
     $scope.unauthorizedCallBack = function (response) {
@@ -56,6 +60,8 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
         $("#reportLink").hide();
         $("#mypageLink").hide();
         $("#doctorLink").hide();
+        $("#reportLink1").hide();
+        $("#reportLink2").hide();
         $("#logout").hide();
     } else {
         var doctor = $cookieStore.get("doctor");
@@ -65,6 +71,8 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         $("#mypageLink").show();
         $("#reportLink").show();
+        $("#reportLink1").show();
+        $("#reportLink2").show();
         $("#logout").show();
         if (doctor.type == "系统管理员") {
             $("#reportLink").hide();
@@ -165,6 +173,8 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
                 $("#logout").show();
                 $("#mypageLink").show();
                 $("#reportLink").show();
+                $("#reportLink1").show();
+                $("#reportLink2").show();
                 $("#systemsetting").hide();
                 if (result.description.type == CommonService.types[1].name) {
                     $("#doctorLink").hide();
@@ -172,6 +182,8 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
                 } else if (result.description.type == "系统管理员") {
 //		    				$("#mypageLink").hide();
                     $("#reportLink").hide();
+                    $("#reportLink1").hide();
+                    $("#reportLink2").hide();
                     $("#systemsetting").show();
                     $("#doctorLink").show();
                     $location.path("/truscreen/hospital");
@@ -420,7 +432,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         var doctor = $cookieStore.get("doctor");
         if (doctor.type != CommonService.types[1].name) {// not normal doctor
             $("#doctorLink").show();
-            $("#createbtn").css("margin-left", "289px");
+            $("#createbtn").css("margin-left", "570px");
         }
         $("#mypageLink").show();
         $("#reportLink").show();
@@ -454,7 +466,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                             $scope.report.checkResult = "异常"
                         }
                     }else{
-                        if ($scope.report.pnorValueResult > 0.3) {
+                        if ($scope.report.pnorValueResult > 0.65) {
                             $scope.report.checkResult = "正常"
                         } else {
                             $scope.report.checkResult = "异常"
@@ -630,7 +642,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             clinical += "光滑/";
         }
         if (report.isAcuteInflammation) {
-            clinical += "急性炎症/";
+            clinical += "慢性炎症/";
         }
         if (report.isHypertrophy) {
             clinical += "肥大/";
@@ -932,11 +944,16 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     $scope.checkDatePrint;
     $scope.lastTimeMenstruationPrint;
     $scope.printReport = function (rep, $event) {
+
         $scope.report = rep;
         $scope.doesCheckComplete();
         $scope.checkDatePrint = $scope.formatChineseDate(rep.checkDate);
         $scope.lastTimeMenstruationPrint = $scope.formatChineseDate(rep.lastTimeMenstruation);
-        var doc = $('#printframe').get(0).contentWindow.document;
+        var window = $('#printframe').get(0).contentWindow;
+        // window.location.href =  window.location.href+"_"+rep.reportId;
+        var doc = window.document;
+        doc.title = rep.reportId;
+
         var $body = $('body', doc);
         var prefix = '<div style="width:1050px;margin:auto;">';
         var suffix = "<div>";
