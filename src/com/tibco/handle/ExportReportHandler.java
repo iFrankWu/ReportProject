@@ -27,7 +27,7 @@ import com.tibco.util.XLSExport;
  */
 public class ExportReportHandler implements ResultSetHandler {
 	private Hospital hopital;
-	private String tableHeader[] = "报告单ID,检查日期,姓名,年龄,病历号,主机序列号,手控器序列号,主诉,临床表现,初善仪检查结果,初善仪点探数量,是否绝经,主诉/白带多,主诉/性交出血,主诉/不规则流血,主诉/其他,临床表现/光滑,临床表现/急性炎症,临床表现/肥大,临床表现/息肉,临床表现/柱状上皮异位,临床表现/撕裂,临床表现/纳氏腺囊肿,临床表现/白斑,临床表现/可疑癌,临床表现/其他,操作人员,申请医生,主诉/LCT,主诉/HPV,临床表现/接触性出血,处理意见,门诊号,住院号,妊娠状态,怀孕周数,PNOR值"
+	private String tableHeader[] = "报告单ID,检查日期,姓名,年龄,病历号,主机序列号,手控器序列号,主诉,临床表现,初善仪检查结果,初善仪点探数量,是否绝经,主诉/白带多,主诉/性交出血,主诉/不规则流血,主诉/其他,临床表现/光滑,临床表现/慢性炎症,临床表现/肥大,临床表现/息肉,临床表现/柱状上皮异位,临床表现/撕裂,临床表现/纳氏腺囊肿,临床表现/白斑,临床表现/可疑癌,临床表现/其他,操作人员,申请医生,主诉/LCT,主诉/HPV,临床表现/接触性出血,处理意见,门诊号,住院号,是否取样,已取周数,PNOR值,妊娠状态,孕周"
 			.split(",");
 
 	public ExportReportHandler(XLSExport xlsExport) throws DBException {
@@ -127,9 +127,12 @@ public class ExportReportHandler implements ResultSetHandler {
 			xlsExport.setCell(34, rs.getBoolean("pregnancyStatus") ? "是" : "否");
 			xlsExport.setCell(35, rs.getInt("pregnancyTime"));
 			xlsExport.setCell(36, rs.getFloat("pnorValueResult"));
+			//2018-12-26 add
+			xlsExport.setCell(37, rs.getBoolean("pregnancyStatus") ? "是" : "否");
+			xlsExport.setCell(38, rs.getInt("pregnancyTime"));
 			//v1.7 add
-			xlsExport.setCell(37, rs.getString("transformArea"));
-			xlsExport.setCell(38, rs.getString("uid"));
+			xlsExport.setCell(39, rs.getString("transformArea"));
+			xlsExport.setCell(40, rs.getString("uid"));
 
 			rowIndex++;
 		} catch (Exception e) {
@@ -167,7 +170,7 @@ public class ExportReportHandler implements ResultSetHandler {
 		clinical = getBooleanValue(clinical, isSmooth, "光滑");
 
 		Boolean isAcuteInflammation = rs.getBoolean("isAcuteInflammation");
-		clinical = getBooleanValue(clinical, isAcuteInflammation, "急性炎症");
+		clinical = getBooleanValue(clinical, isAcuteInflammation, "慢性炎症");
 
 		Boolean isHypertrophy = rs.getBoolean("isHypertrophy");
 		clinical = getBooleanValue(clinical, isHypertrophy, "肥大");
