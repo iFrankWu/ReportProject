@@ -15,6 +15,7 @@ import com.tibco.bean.Result;
 import com.tibco.bean.Search;
 import com.tibco.dao.ReportDAO;
 import com.tibco.handle.ExportReportHandler;
+import com.tibco.integration.QuzhouWonmanHospital;
 import com.tibco.util.DateUtil;
 import com.tibco.util.XLSExport;
 import org.apache.log4j.Logger;
@@ -38,7 +39,9 @@ import java.util.Map;
  */
 public class ReportService {
     private ReportDAO reportDAO = new ReportDAO();
-    private Logger logger = Logger.getLogger(this.getClass());
+    private static final Logger logger = Logger.getLogger(ReportService.class);
+
+    private QuzhouWonmanHospital quzhouWonmanHospital = new QuzhouWonmanHospital();
 
     public Result addReport(Report report) throws DBException {
         reportDAO.addDoctor(report);
@@ -390,5 +393,32 @@ public class ReportService {
         }
         return "0";
     }
+
+
+    public void updateReportStatus(Integer reportId, String reportStatus) throws DBException {
+        reportDAO.updateReportStatus(reportId, reportStatus);
+    }
+
+    public List<Report> getReportByStatus(String reportStatus) throws DBException {
+        return reportDAO.getReportByStatus(reportStatus);
+    }
+
+    public Report getLastReport() throws DBException {
+        return reportDAO.getLastReport();
+    }
+
+    public void syncReport(Integer reportId) {
+        try {
+            if(reportId == null || reportId == 0){
+                Report lastReport = getLastReport();
+                quzhouWonmanHospital.commitReport(lastReport.getReportId());
+            }
+            quzhouWonmanHospital.commitReport(reportId);
+        } catch (Exception e) {
+            logger.error("sync report error", e);
+        }
+    }
+
+
 }
 

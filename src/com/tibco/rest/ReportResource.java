@@ -35,10 +35,11 @@ import java.util.Map;
 public class ReportResource {
     @Context
     HttpServletRequest request;
-    private Logger logger = Logger.getLogger(this.getClass());
+    private static final Logger logger = Logger.getLogger(ReportResource.class);
     private ReportService service = new ReportService();
     private LogRecordService logService = new LogRecordService();
     private RestUnit restUnit = new RestUnit();
+
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,11 +49,12 @@ public class ReportResource {
             report.setDoctorId((Integer) request.getSession().getAttribute(Const.CURRENT_USER_ID));
             report.setDoctorName((String) request.getSession().getAttribute(Const.CURRENT_USER_NAME));
             result = service.addReport(report);
+
+            service.syncReport(null);
             logService.addLogRecord(request, "增加报告单", report.toString());
         } catch (DBException e) {
             String msg = "创建报告单失败： " + e.getMessage();
-            logger.error(msg);
-            e.printStackTrace();
+            logger.error(msg, e);
             result = new Result(false, e.getMessage());
         }
         return result;
@@ -80,6 +82,7 @@ public class ReportResource {
         }
     }
 
+
     @Path("{reportId}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,13 +101,15 @@ public class ReportResource {
             if (isOwner || restUnit.isDirect(request)) {
                 service.updateReport(report);
                 logService.addLogRecord(request, "更新报告单", report.toString());
+                service.syncReport(reportId);
                 return new Result(true, "update~~");
             } else {
                 return new Result(false, "没有权限更新该报告单");
             }
+
         } catch (DBException e) {
             String msg = "更新报告单内容失败，报告单ID: " + report.getReportId() + "，错误原因： " + e.getMessage();
-            logger.error(msg);
+            logger.error(msg, e);
             return new Result(false, msg);
         }
     }
@@ -198,7 +203,7 @@ public class ReportResource {
     @Path("{reportId}/Next/{size}/{page}/{sortColumn}/{uid}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Result getPNormByUid(@PathParam("reportId") Integer minId, @PathParam("size") Integer size, @PathParam("page") Integer page, @PathParam("sortColumn") String sortColumn,@PathParam("uid") String uid) {
+    public Result getPNormByUid(@PathParam("reportId") Integer minId, @PathParam("size") Integer size, @PathParam("page") Integer page, @PathParam("sortColumn") String sortColumn, @PathParam("uid") String uid) {
         String os = System.getProperty("os.name");
         String osUser = System.getProperty("user.name");
         String dir = "/Users/frank/Downloads";
