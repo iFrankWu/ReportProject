@@ -426,6 +426,8 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 };
 
 ReportController = function ($scope, $routeParams, $location, $filter, $http, DoctorService, $cookieStore, CommonService, ReportService, $compile, HospitalService) {
+    $scope.lcts = ["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
+    $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
     if ($cookieStore.get("doctor") == null) {
         //$("#logout").show();
     } else {
@@ -447,7 +449,58 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     $scope.doctor = $cookieStore.get("doctor");
     $scope.hospital;
     $scope.showLogo = false;
+    $scope.pnormalThreshold = function(){
+
+        if(!$scope.report.hpv || !$scope.report.lct){
+            return 0.5;
+        }
+
+
+        //["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"]
+        if($scope.report.lct  =="ASC-H" || $scope.report.lct ==  "HSIL" || $scope.report.lct ==  "SCC" || $scope.report.lct ==  "AGC" ){
+            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+")){
+                return 1;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
+                return 0.8;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
+                return 0.7;
+            }
+        }
+        if($scope.report.lct  =="LSIL" || $scope.report.lct ==  "ASCUS"){
+            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+")){
+                return 0.6;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
+                return 0.55;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
+                return 0.3;
+            }
+        }
+
+        if($scope.report.lct  =="NILM"){
+            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+")){
+                return 0.55;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
+                return 0.4;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
+                return 0;
+            }
+        }
+        return 0.5;
+    }
+
     $scope.getPNorm = function () {
+        if(!$scope.report){
+            return;
+        }
         var uid = $scope.report.uid;
         if (!uid) {
             alert("请输入UID");
@@ -456,16 +509,28 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if(uid.length < 6){
             return;
         }
+
+        if( $scope.report.hpv){
+            if($scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")){
+                alert("HPV 阴性和其他配置冲突");
+              return;
+            }
+        }
+
+
+
         ReportService.getPNorm(uid, function (response) {
                 if (response.isSuccess) {
                     $scope.report.pnorValueResult = response.description;
+                    //非孕妇
                     if (!$scope.report.pregnancyStatus) {
-                        if ($scope.report.pnorValueResult > 0.5) {
+                        if ($scope.report.pnorValueResult > $scope.pnormalThreshold()) {
                             $scope.report.checkResult = "正常"
                         } else {
                             $scope.report.checkResult = "异常"
                         }
                     }else{
+                        //孕妇
                         if ($scope.report.pnorValueResult > 0.65) {
                             $scope.report.checkResult = "正常"
                         } else {
@@ -484,6 +549,8 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             }
         )
     }
+
+
     $scope.getHospital = function () {
         HospitalService.getHospital($scope.hospital, function (result) {
             if (result != null) {
@@ -527,8 +594,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
 
 
-    $scope.lcts = ["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
-    $scope.hpvs = ["阴性", "阳性"];
+
 
 // $scope.report = {'hpv':'vaule1'}
 // $scope.onChangeOption = function(){
@@ -585,6 +651,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     $scope.saveReport = function () {
         if (!$scope.checkReport()) return false;
         console.log($scope.report);
+        if($scope.report.hpv){
+            $scope.report.hpv = $scope.report.hpv.join(',');
+        }
         ReportService.addReport($scope.report, function (result) {
             if (result.isSuccess) {
                 alert("新建报告单成功");
@@ -872,6 +941,14 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.readonly = false;
         $scope.disabled = false;
 
+        if($scope.report.hpv == null){
+            $scope.report.hpv = [];
+        }else{
+            if(! ($scope.report.hpv instanceof  Array)){
+             $scope.report.hpv = $scope.report.hpv.split(',');
+            }
+        }
+
         $scope.doesCheckComplete();
         $scope.isNormal();
         $scope.report.lastTimeMenstruation = $scope.formatDate($scope.report.lastTimeMenstruation);
@@ -880,7 +957,18 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.doesCheckComplete();
         $scope.isAvaiableWhileModify();
 
+
         $compile($("#midfyReport").contents())($scope);
+
+        // var ele =  $("#midfyReport .abcToDel").contents();
+        // console.log(ele.html())
+
+        // for(var i = 0; i < ele.length; i++){
+        //     if(i > 1 && i < ele.length-1){
+        //         ele[i].remove();
+        //     }
+        // }
+
 
         if ($event != null) {
             $event.stopPropagation();
@@ -895,6 +983,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
     $scope.updateReport = function ($event) {
         if (!$scope.checkReport()) return false;
+        if($scope.report.hpv){
+            $scope.report.hpv = $scope.report.hpv.join(',');
+        }
         ReportService.updateReport($scope.report.reportId, $scope.report, function (result) {
             if (result.isSuccess) {
                 alert("修改报告单成功");
@@ -953,6 +1044,14 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         // window.location.href =  window.location.href+"_"+rep.reportId;
         var doc = window.document;
         doc.title = rep.reportId;
+
+        if($scope.report.hpv){
+            if(!($scope.report.hpv instanceof  Array)){
+                $scope.report.hpv = $scope.report.hpv.split(',');
+            }
+        }
+
+
 
         var $body = $('body', doc);
         var prefix = '<div style="width:1050px;margin:auto;">';

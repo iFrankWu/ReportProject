@@ -1,6 +1,6 @@
 'use strict';
 
-var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies'] ,function ($routeProvider,$compileProvider) {
+var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies',"checklist-model"] ,function ($routeProvider,$compileProvider) {
 //    console.log("Configure route provider");
   //  $locationProvider.html5Mode(true).hashPrefix('!');
     

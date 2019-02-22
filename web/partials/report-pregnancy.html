@@ -30,19 +30,31 @@
                     <!--<td><label>住址:</label></td>-->
                     <!--<td ><input type="text" ng-model="report.address" ></td>-->
 
-                    <td><label>是否取样:</label></td>
-                    <td><input type="checkbox" ng-model="report.pregnancyStatus" ng-change="getPNorm()"></td>
-                    <td><label>周数:</label></td>
-                    <td><input type="number" ng-model="report.pregnancyTime"></td>
+                    <!--<td><label>是否取样:</label></td>-->
+                    <!--<td><input type="checkbox" ng-model="report.pregnancyStatus" ng-change="getPNorm()"></td>-->
+                    <!--<td><label>周数:</label></td>-->
+                    <!--<td><input type="number" ng-model="report.pregnancyTime"></td>-->
+
+                    <td><label>孕次:</label></td>
+                    <td><input type="text" ng-model="report.pregnancyNumber" onChange="checkNumber(event,this)"></td>
+                    <td><label>产次:</label></td>
+                    <td><input type="text" ng-model="report.childbirthNumber" onChange="checkNumber(event,this)"></td>
 
                 </tr>
                 <tr>
                     <td><label>绝经:</label></td>
                     <td><input type="checkbox" ng-model="report.isMenopause"></td>
-                    <td><label>孕次:</label></td>
-                    <td><input type="text" ng-model="report.pregnancyNumber" onChange="checkNumber(event,this)"></td>
-                    <td><label>产次:</label></td>
-                    <td><input type="text" ng-model="report.childbirthNumber" onChange="checkNumber(event,this)"></td>
+                    <td style="width:5%"><label>LCT:</label></td>
+                    <td style="width:10%">
+                        <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts" ng-change="getPNorm()">
+                        </select>
+                    </td>
+                    <td style="width:5%;padding-left:10px"><label>HPV:</label></td>
+                    <td style="width:40%" colspan="3">
+                        <span ng-repeat="hpv in hpvs">
+                            <input type="checkbox" checklist-model="report.hpv" checklist-value="hpv" ng-change="getPNorm()"> {{hpv}}
+                        </span>
+                    </td>
                     <td><label>申请医生:</label></td>
                     <td><select style="width:154px" ng-model="report.prescribingDoctorName"
                                 ng-options="v for v in applyDoctorList">
@@ -69,16 +81,16 @@
                         少<input type="radio" name="unrule" value="少" ng-model="report.unregularBleed"
                                 style="margin-right:2px"/>
                     </td>
-                    <td style="width:5%"><label>LCT:</label></td>
-                    <td style="width:10%">
-                        <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
-                        </select>
-                    </td>
-                    <td style="width:5%;padding-left:10px"><label>HPV:</label></td>
-                    <td style="width:10%">
-                        <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
-                        </select>
-                    </td>
+                    <!--<td style="width:5%"><label>LCT:</label></td>-->
+                    <!--<td style="width:10%">-->
+                        <!--<select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">-->
+                        <!--</select>-->
+                    <!--</td>-->
+                    <!--<td style="width:5%;padding-left:10px"><label>HPV:</label></td>-->
+                    <!--<td style="width:10%">-->
+                        <!--<select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">-->
+                        <!--</select>-->
+                    <!--</td>-->
                     <td style="width:7%;padding-left:10px"><label>其他:</label></td>
                     <td style="width:15%"><input style="width:90%" type="text" ng-model="report.otherComplaints"/></td>
                 </tr>
@@ -527,10 +539,10 @@
                     <td><label>住址:</label></td>
                     <td><input type="text" ng-model="report.address" ng-readonly='readonly'></td>
 
-                    <td><label>是否取样:</label></td>
-                    <td><input type="checkbox" ng-model="report.pregnancyStatus"></td>
-                    <td><label>周数:</label></td>
-                    <td><input type="number" ng-model="report.pregnancyTime"></td>
+                    <!--<td><label>是否取样:</label></td>-->
+                    <!--<td><input type="checkbox" ng-model="report.pregnancyStatus"></td>-->
+                    <!--<td><label>周数:</label></td>-->
+                    <!--<td><input type="number" ng-model="report.pregnancyTime"></td>-->
                 </tr>
                 <tr>
                     <td><label>绝经:</label></td>
@@ -546,6 +558,22 @@
                     <td>
                         <select style="width:156px" ng-model="report.prescribingDoctorName" ng-readonly='readonly'
                                 ng-options="v for v in applyDoctorList"></select></td>
+                </tr>
+                <tr>
+                    <td style="width:5%"><label>LCT:</label></td>
+                    <td style="width:10%">
+                        <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
+                        </select>
+                    </td>
+                    <td style="width:5%;padding-left:10px"><label>HPV:</label></td>
+                    <td class="abcToDel">
+                        <!--<span ng-repeat='hpv in ["阴性", "16+","18+","其他高危型+"]' >-->
+                        <!--<input type="checkbox" checklist-model="report.hpv" checklist-value="hpv"> {{hpv}}-->
+                        <!--</span>-->
+
+                        <input style="width:100%" type="text" ng-model="report.hpv">
+
+                    </td>
                 </tr>
                 <tr>
                     <td width="50px"><label>检查时间:</label></td>
@@ -874,11 +902,27 @@
                     <td> 产次:</td>
                     <td><input type="text" ng-model="report.childbirthNumber"></td>
 
-                    <td><label>是否取样:</label></td>
-                    <td ng-show="report.pregnancyStatus">是</td>
-                    <td ng-show="!report.pregnancyStatus">否</td>
-                    <td ng-show="report.pregnancyStatus"><label>周数:</label></td>
-                    <td ng-show="report.pregnancyStatus"><input type="number" ng-model="report.pregnancyTime"></td>
+                    <td><label>LCT:</label></td>
+                    <td>
+                        <input type="text" ng-model="report.lct">
+                        <!-- <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
+                        </select> -->
+                    </td>
+
+                    <!--<td><label>是否取样:</label></td>-->
+                    <!--<td ng-show="report.pregnancyStatus">是</td>-->
+                    <!--<td ng-show="!report.pregnancyStatus">否</td>-->
+                    <!--<td ng-show="report.pregnancyStatus"><label>周数:</label></td>-->
+                    <!--<td ng-show="report.pregnancyStatus"><input type="number" ng-model="report.pregnancyTime"></td>-->
+                </tr>
+                <tr>
+                    <td><label>HPV:</label></td>
+                    <td colspan="5">
+                        <input type="text" ng-model="report.hpv">
+                        <!-- <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
+                        </select> -->
+                    </td>
+
                 </tr>
                 </tbody>
             </table>
@@ -903,18 +947,18 @@
                         少<input type="radio" name="unrule" value="少" ng-model="report.unregularBleed"
                                 style="margin-right:1px"/>
                     </td>
-                    <td style="width:4%"><label>LCT:</label></td>
-                    <td style="width:6%">
-                        <input style="width:100%" type="text" ng-model="report.lct">
-                        <!-- <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
-                        </select> -->
-                    </td>
-                    <td style="width:5%"><label>HPV:</label></td>
-                    <td style="width:6%">
-                        <input style="width:100%" type="text" ng-model="report.hpv">
-                        <!-- <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
-                        </select> -->
-                    </td>
+                    <!--<td style="width:4%"><label>LCT:</label></td>-->
+                    <!--<td style="width:6%">-->
+                        <!--<input style="width:100%" type="text" ng-model="report.lct">-->
+                        <!--&lt;!&ndash; <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">-->
+                        <!--</select> &ndash;&gt;-->
+                    <!--</td>-->
+                    <!--<td style="width:5%"><label>HPV:</label></td>-->
+                    <!--<td style="width:6%">-->
+                        <!--<input style="width:100%" type="text" ng-model="report.hpv">-->
+                        <!--&lt;!&ndash; <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">-->
+                        <!--</select> &ndash;&gt;-->
+                    <!--</td>-->
                     <td style="width:6%"><label>其他:</label></td>
                     <td style="width:19%"><input style="width:100%" type="text" ng-model="report.otherComplaints"/></td>
                 </tr>

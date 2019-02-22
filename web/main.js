@@ -16,6 +16,7 @@ require(["angular/angular"], function() {
 	require(["angular/i18n/angular-locale_en-us"]);
 	require(["angular/angular-cookies.js"]);
 	require(["angular/angular-cookies.min.js"]);
+    require(["angular/checklist-model.min.js"]);
 	require(["angular/angular-resource","angular/angular-ui", "angular/angular-ui-ieshiv"]);
 	
 	//resource dependencies
