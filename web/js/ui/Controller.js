@@ -427,7 +427,7 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 ReportController = function ($scope, $routeParams, $location, $filter, $http, DoctorService, $cookieStore, CommonService, ReportService, $compile, HospitalService) {
     $scope.lcts = ["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
-    $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+    $scope.hpvs = ["16+","18+","其他高危型+","阴性"];
     if ($cookieStore.get("doctor") == null) {
         //$("#logout").show();
     } else {
@@ -503,7 +503,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         var uid = $scope.report.uid;
         if (!uid) {
-            alert("请输入UID");
+           // alert("请输入UID");
             return;
         }
         if(uid.length < 6){
@@ -524,14 +524,14 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                     $scope.report.pnorValueResult = response.description;
                     //非孕妇
                     if (!$scope.report.pregnancyStatus) {
-                        if ($scope.report.pnorValueResult > $scope.pnormalThreshold()) {
+                        if ($scope.report.pnorValueResult >= $scope.pnormalThreshold()) {
                             $scope.report.checkResult = "正常"
                         } else {
                             $scope.report.checkResult = "异常"
                         }
                     }else{
                         //孕妇
-                        if ($scope.report.pnorValueResult > 0.65) {
+                        if ($scope.report.pnorValueResult >= 0.65) {
                             $scope.report.checkResult = "正常"
                         } else {
                             $scope.report.checkResult = "异常"
