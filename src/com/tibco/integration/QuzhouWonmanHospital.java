@@ -8,6 +8,7 @@ import com.tibco.dao.HospitalDAO;
 import com.tibco.dao.ReportDAO;
 import com.tibco.integration.net.HttpSender;
 import com.tibco.service.LogRecordService;
+import com.tibco.util.RSAToolUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -48,9 +49,17 @@ public class QuzhouWonmanHospital {
 
         reportJson.putAll(hospitalJson);
 
-        String result = HttpSender.sendPost(serviceUrl, reportJson.toJSONString());
+        String data = RSAToolUtil.RSAEncode(reportJson.toJSONString());
+        logger.info("commit.report: " + reportJson);
 
-        logger.info("commit.repott: " + reportJson);
+
+        JSONObject rsaData = new JSONObject();
+        rsaData.put("data",data);
+
+        logger.info("commit.rsa.data: " + rsaData.toJSONString());
+
+        String result = HttpSender.sendPost(serviceUrl, rsaData.toJSONString());
+
 
         JSONObject rst = (JSONObject) JSONObject.parse(result);
         if (StringUtils.isNotBlank(rst.toString()) && "1".equals(rst.getString("code"))) {
@@ -66,7 +75,7 @@ public class QuzhouWonmanHospital {
             try {
                 commitReport(report.getReportId());
             } catch (Exception e) {
-                logger.error("commit serivce error", e);
+                logger.error("commit serivce error :"+ JSONObject.toJSONString(report), e);
             }
         }
     }
@@ -87,6 +96,6 @@ public class QuzhouWonmanHospital {
                     logger.error("timer error", e);
                 }
             }
-        }, 10, 240, TimeUnit.MINUTES);
+        }, 0, 2, TimeUnit.MINUTES);
     }
 }
