@@ -111,6 +111,11 @@ public class Report {
      */
     private String uid;
 
+    /**
+     * 是否肉眼可见癌
+     */
+    private Boolean visableCancer;
+
     public Float getPnorValueResult() {
         return pnorValueResult;
     }
@@ -796,6 +801,15 @@ public class Report {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+
+    public Boolean getVisableCancer() {
+        return visableCancer;
+    }
+
+    public void setVisableCancer(Boolean visableCancer) {
+        this.visableCancer = visableCancer;
     }
 
     @Override

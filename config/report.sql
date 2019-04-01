@@ -104,3 +104,5 @@ ALTER TABLE report ADD pnorValueResult FLOAT ;/** add PNOR值  V1.6 2018.02.09 *
 ALTER TABLE report ADD transformArea VARCHAR(128);/** add 可转换区域 V1.7 2018.09.05 */
 ALTER TABLE report ADD uid VARCHAR(128);/** add 患者id  V1.7 2018.09.05 */
 
+ALTER TABLE report ADD visableCancer boolean;/** add 是否肉眼可见癌 V1.8 2019.04.01 */
+
