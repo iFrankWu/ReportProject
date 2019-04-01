@@ -1,6 +1,9 @@
 package com.tibco.integration.net;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.tibco.bean.Report;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 import java.io.*;
@@ -15,7 +18,26 @@ import static org.eclipse.jetty.http.HttpHeaders.USER_AGENT;
 
 public class HttpSender {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
+        String url = "http://service4.99melove.cn/miai-hisproxy-service/service/rest/miaiTransfer.TsTransfer/collection/query?start=0&limit=25";
+        String response = HttpSender.sendGet(url,null);
+        System.out.println(response);
+        JSONObject json = (JSONObject) JSON.parse(response);
+        JSONObject result =  json.getJSONObject("result");
+
+        Report report = new Report();
+
+        if(result != null){
+            JSONArray users = result.getJSONArray("users");
+            if(users !=null && users.size() > 0){
+                JSONObject user = users.getJSONObject(0);
+
+                Report report1 = JSONObject.toJavaObject(user,Report.class);
+
+                System.out.println(JSONObject.toJSON(report1));
+            }
+        }
+
     }
 
     /**
@@ -28,7 +50,7 @@ public class HttpSender {
     public static String sendGet(String url, String param, Map<String, String> header) throws UnsupportedEncodingException, IOException {
         String result = "";
         BufferedReader in = null;
-        String urlNameString = url + "?" + param;
+        String urlNameString = url  ;//+ "?" + param;
         URL realUrl = new URL(urlNameString);
         // 打开和URL之间的连接
         URLConnection connection = realUrl.openConnection();

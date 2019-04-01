@@ -105,6 +105,9 @@ ReportServiceImpl = function (ReportResource) {
         },
         getPNorm: function (uid, callback, failurecallback) {
             ReportResource.getPNorm({uid:uid}, callback, failurecallback);
+        },
+        getPatientInfo: function (patientName,caseNumber,idCard, callback, failurecallback) {
+            ReportResource.getPatientInfo({patientName:patientName,caseNumber:caseNumber,idCard:idCard}, callback, failurecallback);
         }
     }
 };

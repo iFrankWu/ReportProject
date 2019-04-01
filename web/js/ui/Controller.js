@@ -484,6 +484,22 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             }
         )
     }
+
+    $scope.getPatientInfo = function () {
+        var patientName = "aaa";
+        var caseNumber = "111";
+        var idCard = "222";
+        if($scope.report && $scope.report.patientName){
+            patientName = $scope.report.patientName;
+        }
+
+        ReportService.getPatientInfo(patientName,caseNumber,idCard,function (result) {
+            console.log(result);// just log it
+            $scope.report = result.description;
+        },function (response) {
+            console.log(response);// just log it
+        });
+    }
     $scope.getHospital = function () {
         HospitalService.getHospital($scope.hospital, function (result) {
             if (result != null) {

@@ -8,13 +8,18 @@
  */
 package com.tibco.rest;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
 import com.tibco.bean.Result;
 import com.tibco.bean.Search;
+import com.tibco.integration.net.HttpSender;
 import com.tibco.service.LogRecordService;
 import com.tibco.service.ReportService;
 import com.tibco.util.Const;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -221,6 +226,63 @@ public class ReportResource {
             }
         }
         return new Result(false, "获取pnorm值失败，请检查是否文件已经同步到" + dir + "文件夹下");
+
+
+    }
+
+    @Path("{reportId}/Next/{size}/{page}/{sortColumn}/{uid}/{patientName}/{caseNumber}/{idCard}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Result getPatientInfo(@PathParam("reportId") Integer minId, @PathParam("size") Integer size, @PathParam("page") Integer page,
+                                 @PathParam("sortColumn") String sortColumn, @PathParam("uid") String uid,
+                                 @PathParam("patientName") String patientName,
+                                 @PathParam("caseNumber") String caseNumber,
+                                 @PathParam("idCard") String idCard
+    ) {
+        Report report = new Report();
+        try {
+            logger.info("patientName:" + patientName + ",caseNumber:" + caseNumber + ",idCard:" + idCard);
+
+            String url = Const.INTEGRATION_SERICE_GET_PATIENT_INFO ;
+            if (StringUtils.isNotBlank(patientName)) {
+                url = url + "&patientName=" + patientName;
+            }
+
+            if (StringUtils.isNotBlank(caseNumber)) {
+                url = url + "&caseNumber=" + caseNumber;
+            }
+
+            if (StringUtils.isNotBlank(idCard)) {
+                url = url + "&idCard=" + idCard;
+            }
+
+
+            logger.info("request url : " + url);
+
+            String response = HttpSender.sendGet(url, null);
+//            System.out.println(response);
+            if (StringUtils.isNotBlank(response)) {
+
+
+                JSONObject json = (JSONObject) JSON.parse(response);
+                JSONObject result = json.getJSONObject("result");
+
+
+                if (result != null) {
+                    JSONArray users = result.getJSONArray("users");
+                    if (users != null && users.size() > 0) {
+                        JSONObject user = users.getJSONObject(0);
+
+                         report = JSONObject.toJavaObject(user, Report.class);
+
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("aa", e);
+        }
+        return new Result(true, report);
 
 
     }

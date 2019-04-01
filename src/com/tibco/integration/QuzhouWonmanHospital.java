@@ -9,6 +9,7 @@ import com.tibco.dao.ReportDAO;
 import com.tibco.integration.net.HttpSender;
 import com.tibco.service.LogRecordService;
 import com.tibco.util.RSAToolUtil;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -49,7 +50,10 @@ public class QuzhouWonmanHospital {
 
         reportJson.putAll(hospitalJson);
 
-        String data = RSAToolUtil.RSAEncode(reportJson.toJSONString());
+        String utf8data = new String(Base64.encodeBase64(reportJson.toJSONString().getBytes("UTF-8")));
+
+//        String data = RSAToolUtil.RSAEncode(reportJson.toJSONString());
+        String data = RSAToolUtil.RSAEncode(utf8data);
         logger.info("commit.report: " + reportJson);
 
 

@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <td><label>姓名:</label></td>
-                    <td><input type="text" ng-model="report.patientName" required="required"></td>
+                    <td><input type="text" ng-model="report.patientName" required="required" ng-mouseleave="getPatientInfo()"></td>
                     <td><label>年龄:</label></td>
                     <td><input type="text" ng-model="report.age" onChange="checkNumber(event,this)"></td>
                     <td><label>病历号:</label></td>
