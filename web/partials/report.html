@@ -105,6 +105,8 @@
                         Ⅰ&#176;<input type="radio" value="轻" name="erosion" ng-model="report.erosion"
                                       style="margin-right:2px"/>
                     </td>
+
+
                     <td style="width:8%"><label>息肉:</label></td>
                     <td style="width:8%"><input type="checkbox" ng-model="report.isPolyp"/></td>
 
@@ -121,6 +123,12 @@
                     <td><input type="checkbox" ng-model="report.isWhite"/></td>
                     <td><label>可疑癌:</label></td>
                     <td><input type="checkbox" ng-model="report.isCancer"></input></td>
+
+                    <!--<td><label>肉眼可见癌:</label></td>-->
+                    <!--<td><input type="checkbox" ng-model="report.visableCancer"></input></td>-->
+
+
+
                     <td><label>接触性出血:</label></td>
                     <td>
                         有<input type="radio" value="有" name="touchbleeding" ng-model="report.touchbleeding"
@@ -129,6 +137,10 @@
                                 style="margin-right:8px"/>
 
                     </td>
+
+                    <td><label>肉眼可见癌:</label></td>
+                    <td><input type="checkbox" ng-model="report.visableCancer"></input></td>
+
                     <td><label>其他:</label></td>
                     <td colspan=3><input type="text" ng-model="report.otherClinical"/></td>
                 </tr>
@@ -641,6 +653,9 @@
                     <td><input type="checkbox" ng-model="report.isWhite" ng-disabled="disabled"/></td>
                     <td><label>可疑癌:</label></td>
                     <td><input type="checkbox" ng-model="report.isCancer" ng-disabled="disabled"></input></td>
+
+
+
                     <td><label>接触性出血:</label></td>
                     <td>
                         有<input type="radio" value="有" name="touchbleeding" ng-model="report.touchbleeding"
@@ -649,6 +664,10 @@
                                 style="margin-right:8px"/>
 
                     </td>
+
+                    <td><label>肉眼可见癌:</label></td>
+                    <td><input type="checkbox" ng-model="report.visableCancer"></input></td>
+
                     <td><label>其他:</label></td>
                     <td colspan=3><input type="text" ng-model="report.otherClinical" ng-readonly='readonly'/></td>
                 </tr>
