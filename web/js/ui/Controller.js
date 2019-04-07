@@ -550,6 +550,12 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         )
     }
 
+    $scope.isVisableCancer = function () {
+        if($scope.report.visableCancer){
+            $scope.report.checkResult = "异常"
+        }
+    }
+
 
     $scope.getHospital = function () {
         HospitalService.getHospital($scope.hospital, function (result) {
