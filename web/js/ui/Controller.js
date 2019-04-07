@@ -493,6 +493,14 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             patientName = $scope.report.patientName;
         }
 
+        if($scope.report && $scope.report.caseNumber){
+            caseNumber = $scope.report.caseNumber;
+        }
+
+        if($scope.report && $scope.report.idCard){
+            idCard = $scope.report.idCard;
+        }
+
         ReportService.getPatientInfo(patientName,caseNumber,idCard,function (result) {
             console.log(result);// just log it
             $scope.report = result.description;
