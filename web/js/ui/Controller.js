@@ -521,25 +521,31 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         ReportService.getPNorm(uid, function (response) {
                 if (response.isSuccess) {
-                    $scope.report.pnorValueResult = response.description;
-                    //非孕妇
-                    if (!$scope.report.pregnancyStatus) {
-                        if ($scope.report.pnorValueResult >= $scope.pnormalThreshold()) {
-                            $scope.report.checkResult = "正常"
-                        } else {
-                            $scope.report.checkResult = "异常"
-                        }
+                    if($scope.report.visableCancer){
+                        $scope.report.checkResult = "异常"
+                        $scope.doesCheckCompleted = true;
+                        $scope.report.isComplete = '完成';
                     }else{
-                        //孕妇
-                        if ($scope.report.pnorValueResult >= 0.65) {
-                            $scope.report.checkResult = "正常"
-                        } else {
-                            $scope.report.checkResult = "异常"
+                        $scope.report.pnorValueResult = response.description;
+                        //非孕妇
+                        if (!$scope.report.pregnancyStatus) {
+                            if ($scope.report.pnorValueResult >= $scope.pnormalThreshold()) {
+                                $scope.report.checkResult = "正常"
+                            } else {
+                                $scope.report.checkResult = "异常"
+                            }
+                        }else{
+                            //孕妇
+                            if ($scope.report.pnorValueResult >= 0.65) {
+                                $scope.report.checkResult = "正常"
+                            } else {
+                                $scope.report.checkResult = "异常"
+                            }
                         }
+                        $scope.isNormal();
+                        $scope.doesCheckCompleted = true;
+                        $scope.report.isComplete = '完成';
                     }
-                    $scope.isNormal();
-                    $scope.doesCheckCompleted = true;
-                    $scope.report.isComplete = '完成';
                 }
                 else {
                     alert(response.description);
