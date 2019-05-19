@@ -472,10 +472,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if($scope.report.lct  =="LSIL" || $scope.report.lct ==  "ASCUS"){
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+")){
-                return 0.6;
+                return 0.65;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
-                return 0.55;
+                return 0.6;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
                 return 0.3;
@@ -485,7 +485,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if($scope.report.lct  =="NILM"){
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+")){
-                return 0.55;
+                return 0.6;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
                 return 0.4;
@@ -517,8 +517,6 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             }
         }
 
-
-
         ReportService.getPNorm(uid, function (response) {
                 if (response.isSuccess) {
                     if($scope.report.visableCancer){
@@ -536,7 +534,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                             }
                         }else{
                             //孕妇
-                            if ($scope.report.pnorValueResult >= 0.65) {
+                            if ($scope.report.pnorValueResult >= 0.25) {
                                 $scope.report.checkResult = "正常"
                             } else {
                                 $scope.report.checkResult = "异常"
@@ -623,19 +621,22 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         if(report.age >= 35){
             if(report.uid ){
+                //可见癌 不规则流血 可疑癌 接触性流血
                 if(report.visableCancer || report.unregularBleed || report.isCancer || report.touchbleeding) {
                    $scope.report.checkResult = "异常";
-                }else{
-                     $scope.report.checkResult = "正常";
                 }
+                // else{
+                //      $scope.report.checkResult = "正常";
+                // }
             }
         }else{
             if(report.uid ){
-                if(report.visableCancer){
+                if(report.visableCancer || report.isCancer){
                      $scope.report.checkResult = "异常";
-                }else{
-                    $scope.report.checkResult = "正常";
                 }
+                // else{
+                //     $scope.report.checkResult = "正常";
+                // }
             }
          }
     }
@@ -1371,6 +1372,25 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.search = null;
         $("#showPageTr").css("display", "");
         $('#showResultSize').css("display", "none");
+    }
+
+    $scope.stash = function () {
+        var report = $scope.report;
+        if(report == null){
+            alert("报告单不完整,请先填写完整的报告单");
+            return;
+        }
+
+        var isFull = report.outpatientNo && report.admissionNo && report.patientName;
+        if(!isFull){
+            alert("报告单不完整,请先填写完整的报告单");
+            return;
+        }
+
+        var r = confirm("点击录入完成，以上材料不允许变更，确认吗？");
+        if (r == true) {
+            $scope.stashDone = true;
+        }
     }
 }
 ;

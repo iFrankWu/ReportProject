@@ -10,42 +10,40 @@
                 <tr>
                     <td><label>科室:</label></td>
                     <td colspan="1"><input type="text" ng-model="hospital.department" required="required"
-                                           style="width:150px"></td>
+                                           style="width:150px" ng-readonly="stashDone"></td>
                     <td>门诊号:</td>
-                    <td><input type="text" ng-model="report.outpatientNo"></td>
+                    <td><input type="text" ng-model="report.outpatientNo" ng-readonly="stashDone"></td>
                     <td>住院号:</td>
-                    <td colspan="1"><input type="text" ng-model="report.admissionNo"></td>
-                    <td>UID:</td>
-                    <td colspan="1"><input type="text" ng-model="report.uid"  ng-change="getPNormPregenancy()"></td>
+                    <td colspan="1"><input type="text" ng-model="report.admissionNo" ng-readonly="stashDone"></td>
                     <td><label>电话:</label></td>
-                    <td><input type="text" ng-model="report.phone"></td>
+                    <td><input type="text" ng-model="report.phone" ng-readonly="stashDone"></td>
                 </tr>
                 <tr>
                     <td><label>姓名:</label></td>
-                    <td><input type="text" ng-model="report.patientName" required="required"></td>
+                    <td><input type="text" ng-model="report.patientName" required="required" ng-readonly="stashDone"></td>
                     <td><label>年龄:</label></td>
-                    <td><input type="text" ng-model="report.age" onChange="checkNumber(event,this)"></td>
+                    <td><input type="text" ng-model="report.age" onChange="checkNumber(event,this)" ng-readonly="stashDone"></td>
                     <td><label>病历号:</label></td>
-                    <td><input type="text" ng-model="report.caseNumber" required="required"></td>
+                    <td><input type="text" ng-model="report.caseNumber" required="required" ng-readonly="stashDone"></td>
                     <!--<td><label>住址:</label></td>-->
                     <!--<td ><input type="text" ng-model="report.address" ></td>-->
 
                     <td><label>是否取样:</label></td>
-                    <td><input type="checkbox" ng-model="report.pregnancyStatus" ng-change="getPNormPregenancy()"></td>
+                    <td><input type="checkbox" ng-model="report.pregnancyStatus" ng-change="getPNormPregenancy()" ng-disabled="stashDone"></td>
                     <td><label>周数:</label></td>
-                    <td><input type="number" ng-model="report.pregnancyTime"></td>
+                    <td><input type="number" ng-model="report.pregnancyTime" ng-readonly="stashDone"></td>
 
                 </tr>
                 <tr>
                     <td><label>绝经:</label></td>
-                    <td><input type="checkbox" ng-model="report.isMenopause"></td>
+                    <td><input type="checkbox" ng-model="report.isMenopause" ng-disabled="stashDone"></td>
                     <td><label>孕次:</label></td>
-                    <td><input type="text" ng-model="report.pregnancyNumber" onChange="checkNumber(event,this)"></td>
+                    <td><input type="text" ng-model="report.pregnancyNumber" onChange="checkNumber(event,this)" ng-readonly="stashDone"></td>
                     <td><label>产次:</label></td>
-                    <td><input type="text" ng-model="report.childbirthNumber" onChange="checkNumber(event,this)"></td>
+                    <td><input type="text" ng-model="report.childbirthNumber" onChange="checkNumber(event,this)" ng-readonly="stashDone"></td>
                     <td><label>申请医生:</label></td>
                     <td><select style="width:154px" ng-model="report.prescribingDoctorName"
-                                ng-options="v for v in applyDoctorList">
+                                ng-options="v for v in applyDoctorList" ng-disabled="stashDone">
                     </select>
                     </td>
                 </tr>
@@ -57,11 +55,11 @@
             <table>
                 <tr>
                     <td style="width:6%"><label>白带多:</label></td>
-                    <td style="width:4%"><input type="checkbox" ng-model="report.isLeucorrhea"/></td>
+                    <td style="width:4%"><input type="checkbox" ng-model="report.isLeucorrhea" ng-disabled="stashDone"/></td>
                     <td style="width:6%"><label>性交出血:</label></td>
-                    <td style="width:4%"><input type="checkbox" ng-model="report.isBleed"/></td>
+                    <td style="width:4%"><input type="checkbox" ng-model="report.isBleed" ng-disabled="stashDone"/></td>
                     <td style="width:8%"><label>不规则流血:</label></td>
-                    <td style="width:4%"><input type="checkbox" ng-model="report.unregularBleed" ng-change="isVisableCancer()"/></td>
+                    <td style="width:4%"><input type="checkbox" ng-model="report.unregularBleed" ng-change="isVisableCancer()" ng-disabled="stashDone"/></td>
                     <!--<td style="width:10%">-->
                         <!--多<input type="radio" name="unrule" value="多" ng-model="report.unregularBleed"-->
                                 <!--style="margin-right:2px"/>-->
@@ -72,16 +70,16 @@
                     <!--</td>-->
                     <td style="width:5%"><label>LCT:</label></td>
                     <td style="width:10%">
-                        <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
+                        <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts" ng-disabled="stashDone">
                         </select>
                     </td>
                     <td style="width:5%;padding-left:10px"><label>HPV:</label></td>
                     <td style="width:10%">
-                        <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
+                        <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs" ng-disabled="stashDone">
                         </select>
                     </td>
                     <td style="width:7%;padding-left:10px"><label>其他:</label></td>
-                    <td style="width:15%"><input style="width:90%" type="text" ng-model="report.otherComplaints"/></td>
+                    <td style="width:15%"><input style="width:90%" type="text" ng-model="report.otherComplaints" ng-readonly="stashDone"/></td>
                 </tr>
             </table>
         </fieldset>
@@ -91,39 +89,39 @@
             <table>
                 <tr>
                     <td style="width:8%"><label>光滑:</label></td>
-                    <td style="width:6%"><input type="checkbox" ng-model="report.isSmooth"/></td>
+                    <td style="width:6%"><input type="checkbox" ng-model="report.isSmooth" ng-disabled="stashDone"/></td>
                     <td style="width:8%"><label>慢性炎症:</label></td>
-                    <td style="width:6%"><input type="checkbox" ng-model="report.isAcuteInflammation"/></td>
+                    <td style="width:6%"><input type="checkbox" ng-model="report.isAcuteInflammation" ng-disabled="stashDone"/></td>
                     <td style="width:8%"><label>肥大:</label></td>
-                    <td style="width:6%"><input type="checkbox" ng-model="report.isHypertrophy"/></td>
+                    <td style="width:6%"><input type="checkbox" ng-model="report.isHypertrophy" ng-disabled="stashDone"/></td>
                     <td style="width:12%"><label>柱状上皮异位:</label></td>
                     <td style="width:18%">
                         <!-- 2016-12-25 根据301医院医生意见进行调整 v1.4 -->
                         Ⅲ&#176;<input type="radio" value="重" name="erosion" ng-model="report.erosion"
-                                      style="margin-right:2px"/>
+                                      style="margin-right:2px" ng-disabled="stashDone"/>
                         Ⅱ&#176;<input type="radio" value="中" name="erosion" ng-model="report.erosion"
-                                      style="margin-right:2px"/>
+                                      style="margin-right:2px" ng-disabled="stashDone"/>
                         Ⅰ&#176;<input type="radio" value="轻" name="erosion" ng-model="report.erosion"
-                                      style="margin-right:2px"/>
+                                      style="margin-right:2px" ng-disabled="stashDone"/>
                     </td>
                     <td style="width:8%"><label>息肉:</label></td>
-                    <td style="width:8%"><input type="checkbox" ng-model="report.isPolyp"/></td>
+                    <td style="width:8%"><input type="checkbox" ng-model="report.isPolyp" ng-disabled="stashDone"/></td>
 
                     <td style="width:8%"><label>撕裂:</label></td>
-                    <td style="width:6%"><input type="checkbox" ng-model="report.isTear"/></td>
+                    <td style="width:6%"><input type="checkbox" ng-model="report.isTear" ng-disabled="stashDone"/></td>
 
                 </tr>
 
                 <tr>
 
                     <td><label>纳博特囊:</label></td>
-                    <td><input type="checkbox" ng-model="report.isNesslersGlandCyst"/></td>
+                    <td><input type="checkbox" ng-model="report.isNesslersGlandCyst" ng-disabled="stashDone"/></td>
                     <td><label>白斑:</label></td>
-                    <td><input type="checkbox" ng-model="report.isWhite"/></td>
+                    <td><input type="checkbox" ng-model="report.isWhite" ng-disabled="stashDone"/></td>
                     <td><label>阴道排液:</label></td>
-                    <td><input type="checkbox" ng-model="report.isCancer" ng-change="isVisableCancer()"></input></td>
+                    <td><input type="checkbox" ng-model="report.isCancer" ng-change="isVisableCancer()" ng-disabled="stashDone"></input></td>
                     <td><label>接触性出血:</label></td>
-                    <td><input type="checkbox" ng-model="report.touchbleeding" ng-change="isVisableCancer()"/></td>
+                    <td><input type="checkbox" ng-model="report.touchbleeding" ng-change="isVisableCancer()" ng-disabled="stashDone"/></td>
                     <!--<td>-->
                         <!--有<input type="radio" value="有" name="touchbleeding" ng-model="report.touchbleeding"-->
                                 <!--style="margin-right:8px"/>-->
@@ -132,12 +130,22 @@
 
                     <!--</td>-->
                     <td><label>肉眼可见癌:</label></td>
-                    <td><input type="checkbox" ng-model="report.visableCancer" ng-change="isVisableCancer()"></input></td>
+                    <td><input type="checkbox" ng-model="report.visableCancer" ng-change="isVisableCancer()" ng-disabled="stashDone"></input></td>
                     <td><label>其他:</label></td>
-                    <td colspan=3><input type="text" ng-model="report.otherClinical"/></td>
+                    <td colspan=3><input type="text" ng-model="report.otherClinical" ng-readonly="stashDone"/></td>
                 </tr>
             </table>
+
         </fieldset>
+
+        <table>
+            <tr>
+                <td>
+                    <button ng-click="stash()">录入完成</button>
+                </td>
+            </tr>
+        </table>
+
 
         <fieldset>
             <legend><b><font color="#296B3C">TruScreen<SUP>&reg;</SUP>宫颈癌筛查系统检查内容</font></b></legend>
@@ -154,7 +162,12 @@
     <!--<tr><td><label>    韧体版本:</label></td>-->
     <!--<td style="text-align:left">{{hospital.firmwareVersion}}</td>-->
     <!--</tr>-->
-<tr><td><label>    检查类型:</label></td>
+    <tr>
+        <td>UID:</td>
+        <td colspan="1"><input type="text" ng-model="report.uid"  ng-change="getPNormPregenancy()"></td>
+    </tr>
+    <tr><td><label>    检查类型:</label></td>
+
 	<td style="text-align:left">筛查 </td>
 </tr>
     <!--<tr><td><label>    点探数量:</label></td>-->
@@ -207,10 +220,10 @@
 <tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
 	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">发现异常细胞或组织</font></b></p>
 </td>
-    <tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>
-</td>
-</tr>
+    <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->
+	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
+<!--</td>-->
+<!--</tr>-->
 
 
 
@@ -732,10 +745,10 @@
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
 	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">发现异常细胞或组织</font></b></p>
 </td>
-       <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>
-</td>
-</tr>
+       <!--<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">-->
+	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
+<!--</td>-->
+<!--</tr>-->
 
 
 
@@ -1050,10 +1063,10 @@
 	<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;font-size:22;font-weight:bold;">发现异常细胞或组织
 </td>
 </tr>
-     <tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
-	<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>
-</td>
-</tr>
+     <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->
+	<!--<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
+<!--</td>-->
+<!--</tr>-->
 
 
 
