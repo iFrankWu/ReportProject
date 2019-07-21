@@ -16,7 +16,9 @@ import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
 import com.tibco.dao.DoctorDAO;
 import com.tibco.dao.ReportDAO;
+import com.tibco.service.HHDService;
 import com.tibco.service.ReportService;
+import com.tibco.util.Const;
 
 /**
  * class description goes here.
@@ -33,11 +35,18 @@ public class TempTest {
 	 * @throws ParseException 
 	 */
 	public static void main(String[] args) throws ParseException {
+		Const.initLogger();
 
-		ReportService reportService = new ReportService();
-		String file = "/Users/frank/Downloads/1333B2-000181-result.csv";
-		String s = reportService.parsePnormFromCsv(file);
-		System.out.println(s);
+		HHDService hhdService  = new HHDService();
+		hhdService.login();
+		hhdService.logout();
+		hhdService.terminate();
+		hhdService.login();
+
+//		ReportService reportService = new ReportService();
+//		String file = "/Users/frank/Downloads/1333B2-000181-result.csv";
+//		String s = reportService.parsePnormFromCsv(file);
+//		System.out.println(s);
 
 //		Date d = format.parse("2012/2/3");
 //		System.out.println(cryptWithMD5("hello"));

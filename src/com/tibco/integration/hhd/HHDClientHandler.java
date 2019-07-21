@@ -4,11 +4,18 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.apache.log4j.Logger;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HHDClientHandler extends SimpleChannelInboundHandler {
 
+    private Logger logger = Logger.getLogger(this.getClass());
+
+
+    private HHDResponseHandler hhdResponseHandler = new HHDResponseHandler();
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -21,8 +28,21 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
         String body = new String(req, "UTF-8");
-        System.out.println("Body is : " + body);
+        logger.info("HHD server response is : " + body);
 
+        String[] response = body.split("\r\n");
+        Map<String, String> responseMap = new HashMap<>();
+        for (String rep : response) {
+            String row[] = rep.split("=");
+            if (row.length != 2) {
+                continue;
+            }
+            String key = row[0];
+            String value = row[1];
+            responseMap.put(key, value.replace("'", ""));
+        }
+
+        hhdResponseHandler.handler(responseMap);
 
     }
 

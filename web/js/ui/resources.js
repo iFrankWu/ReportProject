@@ -25,6 +25,7 @@ ReportResourceImpl = function ($resource) {
     return $resource('truscreen/report/:reportId/:preOrNext/:size/:page/:sortColumn/:uid', {}, {
       //  login:{method:'POST',params:{}},
         //logout:{method:'GET',params:{id:'id'}},
+        getDetail:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
         getNextPage:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
         getPrePage:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
         getCurrentPage:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},

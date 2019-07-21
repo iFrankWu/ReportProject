@@ -91,6 +91,16 @@ ReportServiceImpl = function (ReportResource) {
                 sortColumn: sortColumns
             }, callback, failurecallback);
         },
+        getDetail :  function(startId, sizes, pages, sortColumns, callback, failurecallback){
+            if (startId == null) alert("请求参数错误");
+            ReportResource.getDetail({
+                reportId: startId,
+                preOrNext: 'Detail',
+                size: sizes,
+                page: pages,
+                sortColumn: sortColumns
+            }, callback, failurecallback);
+        },
         addReport: function (report, callback, failurecallback) {
             ReportResource.addReport(report, callback, failurecallback);
         },

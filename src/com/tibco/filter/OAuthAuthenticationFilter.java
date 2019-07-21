@@ -40,7 +40,7 @@ public class OAuthAuthenticationFilter implements ContainerRequestFilter {
 		}else if(containerRequest.getPath().startsWith("crm/clazz") && !Const.METHOD_GET.equals(containerRequest.getMethod())){
 			if( httpRequest.getSession().getAttribute(Const.CURRENT_USER_TYPE).equals(Const.TYPE_Doctor)) //normal user has no privilegies for this operation
 				throw new WebApplicationException(401);
-		}else if(containerRequest.getPath().startsWith(Const.OPEN_API_PATH)){
+		}else if(containerRequest.getPath().startsWith(Const.OPEN_API_PATH) || containerRequest.getPath().contains("hdd")){
 			//open api don't check it
 		}else{
 			Object o = httpRequest.getSession().getAttribute(Const.LOGIN_SUCCESS);

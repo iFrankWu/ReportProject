@@ -20,3 +20,62 @@ version=1.4
 
 #09/07／2018
 #1.支持Pnorm值从wifi设备同步
+
+
+
+#07/14/2019
+
+1. 录入完成 保存申请单 done
+2. 发起 手持设备 操作 通过姓名/年龄 查询申请单 更新UID done
+3. 返回前端reportID done
+4. 前端通过reportId 进行轮询
+5. 手持设备 检测到结构 根据uid 更新report done [done]
+6. 前端轮询获取pnorm值，医生完成操作 []
+7. 医生点击保存 其实是更新操作。
+
+connect server  成功---------
+hdd:POST
+login_1='TruScreenSKT'
+login_2='Socket123'
+socket_request='login'
+
+Body is : socket_status='退出登陆'
+
+hdd:POST
+login_1='TruScreenSKT'
+login_2='Socket123'
+socket_request='login'
+
+Body is : socket_status='登陆成功'
+
+hdd:POST
+socket_request='ready'
+
+Body is : socket_status='设备就绪'
+
+hdd:POST
+patient_05='lina'
+patient_06='32'
+socket_request='start'
+
+Body is : patient_01='18D853-000073'
+patient_02=''
+patient_03=''
+patient_05='lina'
+patient_06='32'
+screening_result=''
+screening_pnorm=''
+screening_nSpots=''
+socketDataChecksum='0xD005'
+
+Body is : socket_status='检查过程中...'
+
+hdd:POST
+socket_request='socket_status'
+
+socket_request='socket_status'
+
+hdd:POST
+socket_request='socket_status'
+
+socket_request='socket_status'

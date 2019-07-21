@@ -10,6 +10,7 @@ package com.tibco.service;
 
 import com.shinetech.sql.ResultSetHandler;
 import com.shinetech.sql.exception.DBException;
+import com.tibco.bean.HHDOpreationDTO;
 import com.tibco.bean.Report;
 import com.tibco.bean.Result;
 import com.tibco.bean.Search;
@@ -17,6 +18,7 @@ import com.tibco.dao.ReportDAO;
 import com.tibco.handle.ExportReportHandler;
 import com.tibco.util.DateUtil;
 import com.tibco.util.XLSExport;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.json.simple.JSONObject;
@@ -38,11 +40,32 @@ import java.util.Map;
  */
 public class ReportService {
     private ReportDAO reportDAO = new ReportDAO();
+
+    private HHDService hhdService = new HHDService();
     private Logger logger = Logger.getLogger(this.getClass());
 
+
     public Result addReport(Report report) throws DBException {
-        reportDAO.addDoctor(report);
-        return new Result(true, "");
+        Integer reportId = report.getReportId();
+        if (reportId != null && reportId > 0) {
+            reportDAO.updateReport(report);
+        } else {
+            if (StringUtils.isBlank(report.getPatientName()) || report.getAge() == null) {
+                return new Result(false, "姓名和年龄不能为空");
+            }
+            reportId = reportDAO.addReport(report);
+
+            //该接口不一定能登陆成功
+//            hhdService.login();
+//            hhdService.login();
+
+//            hhdService.ready();
+
+            hhdService.start(report.getPatientName(), report.getAge());
+
+        }
+
+        return new Result(true, reportId);
     }
 
     public Result updateReport(Report report) throws DBException {
@@ -51,7 +74,13 @@ public class ReportService {
     }
 
     public Report getReportByID(Integer reportId) throws DBException {
-        return reportDAO.getReportByID(reportId);
+        Report report = reportDAO.getReportByID(reportId);
+        if (report.getUid() == null || report.getPnorValueResult() == null) {
+            HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
+            hddOpreationDTO.setSocket_request("system_report");
+            hhdService.commonRequest(hddOpreationDTO);
+        }
+        return report;
     }
 
     public void deleteReportByID(Integer id) throws DBException {
