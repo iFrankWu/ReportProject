@@ -92,4 +92,12 @@ public class HHDService {
         request.append("\r\n");
         client.sendMsg(request.toString());
     }
+
+    public void socketStatus() {
+        HHDClient client = HHDClient.getInstance();
+        StringBuffer request = new StringBuffer();
+        request.append("socket_request='socket_status'");
+        request.append("\r\n");
+        client.sendMsg(request.toString());
+    }
 }

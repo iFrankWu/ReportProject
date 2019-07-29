@@ -22,6 +22,16 @@ public class HHDClient {
     private final static Logger logger = Logger.getLogger(HHDClient.class);
 
     public volatile boolean status = true;
+    public volatile String  currecntStatus = null;
+
+    public String getCurrecntStatus() {
+        return currecntStatus;
+    }
+
+    public void setCurrecntStatus(String currecntStatus) {
+        this.currecntStatus = currecntStatus;
+    }
+
     private HHDClient() {
 
     }
@@ -29,6 +39,11 @@ public class HHDClient {
     public static HHDClient getInstance() {
         return hhdClient;
 
+    }
+
+    public void setSocketChannel(SocketChannel socketChannel) {
+        logger.info("HDD 重启 重置连接");
+        this.socketChannel = socketChannel;
     }
 
     private SocketChannel socketChannel;
@@ -76,7 +91,12 @@ public class HHDClient {
                 throw new RuntimeException("连接手持设备失败");
             }
         }
-        socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.defaultCharset()));
+        try {
+            socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.defaultCharset()));
+        } catch (Exception e) {
+            socketChannel = null;
+            logger.error("HDD设备重启了 需要重新建立连接", e);
+        }
     }
 
     public static void main(String[] args) throws Exception {

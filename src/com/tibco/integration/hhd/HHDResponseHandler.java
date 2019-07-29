@@ -27,6 +27,9 @@ public class HHDResponseHandler {
         //登陆失败
         //'设备未就绪...'
         String status = responseMap.get("socket_status");
+        if(StringUtils.isNotBlank(status)){
+            HHDClient.getInstance().setCurrecntStatus(status);
+        }
         if ("退出登陆".equals(status)) {
             hhdService.login();
             return;
@@ -41,6 +44,14 @@ public class HHDResponseHandler {
             hhdService.ready();
             return;
         }
+        if("设备未就绪...".equals(status)){
+            hhdService.ready();
+            return;
+        }
+
+        if("检查过程中...".equals(status)){
+            return;
+        }
 
         if ("设备就绪".equals(status)) {
             Report report = reportDAO.getLastReport();
@@ -50,8 +61,9 @@ public class HHDResponseHandler {
             return;
         }
 
+
         if("检查结束".equals(status)){
-            hhdService.systemReport();
+           // hhdService.systemReport();
         }
         if (responseMap.containsKey("patient_01")) {
             String uid = responseMap.get("patient_01");

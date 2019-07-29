@@ -218,7 +218,7 @@ public class ReportDAO {
         String sql = "select * from report where patientName=? and age = ? order by reportId desc limit 1";
         List<FieldParameter> fplist = new ArrayList<FieldParameter>();
         fplist.add(new FieldParameter(1, patientName, FieldTypes.VARCHAR));
-        fplist.add(new FieldParameter(2, patientName, FieldTypes.INTEGER));
+        fplist.add(new FieldParameter(2, age, FieldTypes.INTEGER));
         Report returnBean = (Report) db.queryPrepareFirst(Report.class, sql, fplist);
         return returnBean;
     }

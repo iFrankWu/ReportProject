@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,11 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        logger.error("HHD server exception is : ", cause);
+        if (cause instanceof IOException && cause.getMessage().contains("Connection reset by peer")) {
+            //WIFI 重启了
+            HHDClient.getInstance().setSocketChannel(null);
+        }
         super.exceptionCaught(ctx, cause);
     }
 }

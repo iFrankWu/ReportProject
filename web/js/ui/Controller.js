@@ -982,7 +982,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                     $scope.getPNorm();
                 }
             }else{
-                $timeout($scope.getDetail, 5000);
+                $timeout($scope.getDetail, 15000);
             }
         }, function (response) {
             alert("返回错误"+response);

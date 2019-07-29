@@ -16,6 +16,7 @@ import com.tibco.bean.Result;
 import com.tibco.bean.Search;
 import com.tibco.dao.ReportDAO;
 import com.tibco.handle.ExportReportHandler;
+import com.tibco.integration.hhd.HHDClient;
 import com.tibco.util.DateUtil;
 import com.tibco.util.XLSExport;
 import org.apache.commons.lang.StringUtils;
@@ -59,9 +60,10 @@ public class ReportService {
 //            hhdService.login();
 //            hhdService.login();
 
-//            hhdService.ready();
+//            hhdService.socketStatus();
+            hhdService.ready();
 
-            hhdService.start(report.getPatientName(), report.getAge());
+            //hhdService.start(report.getPatientName(), report.getAge());
 
         }
 
@@ -75,10 +77,19 @@ public class ReportService {
 
     public Report getReportByID(Integer reportId) throws DBException {
         Report report = reportDAO.getReportByID(reportId);
-        if (report.getUid() == null || report.getPnorValueResult() == null) {
-            HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
-            hddOpreationDTO.setSocket_request("system_report");
-            hhdService.commonRequest(hddOpreationDTO);
+        try {
+            if (report.getUid() == null || report.getPnorValueResult() == null) {
+                String currentStatus = HHDClient.getInstance().getCurrecntStatus();
+                if ("设备就绪".equals(currentStatus) || "检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) ||"筛查错误".equals(currentStatus)) {
+                    HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
+                    hddOpreationDTO.setSocket_request("system_report");
+                    hhdService.commonRequest(hddOpreationDTO);
+                } else {
+                    logger.error("currentStatus invalid : " + report + ": " + currentStatus);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("get detail got error : " + report, e);
         }
         return report;
     }
