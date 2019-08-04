@@ -56,9 +56,11 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         logger.error("HHD server exception is : ", cause);
-        if (cause instanceof IOException && cause.getMessage().contains("Connection reset by peer")) {
+        //远程主机强迫关闭了一个现有的连接
+        if (cause instanceof IOException && (cause.getMessage().contains("Connection reset by peer") || cause.getMessage().contains("远程主机"))) {
             //WIFI 重启了
             HHDClient.getInstance().setSocketChannel(null);
+            HHDClient.getInstance().setCurrecntStatus(null);
         }
         super.exceptionCaught(ctx, cause);
     }

@@ -50,7 +50,7 @@ public class ReportResource {
             result = service.addReport(report);
 
             logService.addLogRecord(request, "增加报告单", report.toString());
-        } catch (DBException e) {
+        } catch (Exception e) {
             String msg = "创建报告单失败： " + e.getMessage();
             logger.error(msg,e);
             result = new Result(false, e.getMessage());
@@ -72,7 +72,7 @@ public class ReportResource {
             } else {
                 return new Result(false, "没有权限删除该报告单");
             }
-        } catch (DBException e) {
+        } catch (Exception e) {
             String msg = "删除该报告单失败： " + e.getMessage();
             logger.error(msg,e);
             return new Result(false, e.getMessage());
@@ -101,9 +101,9 @@ public class ReportResource {
             } else {
                 return new Result(false, "没有权限更新该报告单");
             }
-        } catch (DBException e) {
+        } catch (Exception e) {
             String msg = "更新报告单内容失败，报告单ID: " + report.getReportId() + "，错误原因： " + e.getMessage();
-            logger.error(msg);
+            logger.error(msg,e);
             return new Result(false, msg);
         }
     }
@@ -205,7 +205,7 @@ public class ReportResource {
         try {
             map.put("reportList", service.advanceSerach(search));
             logService.addLogRecord(request, "高级搜索", search.toString());
-        } catch (DBException e) {
+        } catch (Exception e) {
             logger.error("",e);
 
         }

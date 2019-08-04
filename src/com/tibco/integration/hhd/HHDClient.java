@@ -9,6 +9,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.apache.log4j.Logger;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Truscreen 手持手柄连接操作
@@ -22,7 +25,23 @@ public class HHDClient {
     private final static Logger logger = Logger.getLogger(HHDClient.class);
 
     public volatile boolean status = true;
-    public volatile String  currecntStatus = null;
+    /**
+     * 当前状态
+     */
+    public volatile String currecntStatus = null;
+
+    /**
+     * 是第一次连接WI-FI成功 如果是 则不能发起start命令
+     */
+    public volatile boolean isConnectedFisrt = true;
+
+    public boolean isConnectedFisrt() {
+        return isConnectedFisrt;
+    }
+
+    public void setConnectedFisrt(boolean connectedFisrt) {
+        isConnectedFisrt = connectedFisrt;
+    }
 
     public String getCurrecntStatus() {
         return currecntStatus;
@@ -31,6 +50,8 @@ public class HHDClient {
     public void setCurrecntStatus(String currecntStatus) {
         this.currecntStatus = currecntStatus;
     }
+
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(5));
 
     private HHDClient() {
 
@@ -78,22 +99,35 @@ public class HHDClient {
 
     }
 
-    public void sendMsg(String request) {
+    public void sendMsg(final String request) {
         logger.info(request);
         if (socketChannel == null) {
-            try {
-                connect();
-            } catch (Exception e) {
-                logger.error("", e);
-                throw new RuntimeException("连接手持设备出错：" + e.getMessage());
-            }
-            if (socketChannel == null) {
-                throw new RuntimeException("连接手持设备失败");
-            }
+            threadPoolExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        connect();
+                    } catch (Exception e) {
+                        logger.error("", e);
+                        throw new RuntimeException("连接手持设备出错：" + e.getMessage());
+                    }
+                    if (socketChannel == null) {
+                        throw new RuntimeException("连接手持设备失败,请求被忽略:" + request);
+                    } else {
+                        writeMsg(request);
+                    }
+                }
+            });
+        } else {
+            writeMsg(request);
         }
+
+    }
+
+    private void writeMsg(String request) {
         try {
             socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.defaultCharset()));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             socketChannel = null;
             logger.error("HDD设备重启了 需要重新建立连接", e);
         }

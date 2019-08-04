@@ -55,17 +55,14 @@ public class ReportService {
                 return new Result(false, "姓名和年龄不能为空");
             }
             reportId = reportDAO.addReport(report);
-
-            //该接口不一定能登陆成功
-//            hhdService.login();
-//            hhdService.login();
-
-//            hhdService.socketStatus();
-            hhdService.ready();
-
-            //hhdService.start(report.getPatientName(), report.getAge());
-
         }
+
+        //只要当前的检查结果未获取成功 即可以触发
+        if (report.getPnorValueResult() == null || StringUtils.isBlank(report.getUid())) {
+            HHDClient.getInstance().setConnectedFisrt(false);
+            hhdService.ready();
+        }
+
 
         return new Result(true, reportId);
     }
@@ -80,10 +77,13 @@ public class ReportService {
         try {
             if (report.getUid() == null || report.getPnorValueResult() == null) {
                 String currentStatus = HHDClient.getInstance().getCurrecntStatus();
-                if ("设备就绪".equals(currentStatus) || "检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) ||"筛查错误".equals(currentStatus)) {
+                //设备就绪不能发请求
+                if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
                     HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
                     hddOpreationDTO.setSocket_request("system_report");
                     hhdService.commonRequest(hddOpreationDTO);
+                } else if ("设备未就绪...".equals(currentStatus)) {
+                    hhdService.ready();
                 } else {
                     logger.error("currentStatus invalid : " + report + ": " + currentStatus);
                 }

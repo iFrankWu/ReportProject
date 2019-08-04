@@ -49,7 +49,6 @@ public class OpenApi {
 		    	 map.put("description", "获取报告单成功");
 		    //	 logService.addLogRecord(request, "开发API，获取报告单成功", caseNumber);
 	    	}catch(Exception e){
-	    		e.printStackTrace();
 	    		map.put("description", "获取报告单失败，原因："+e.getMessage());
     			map.put("isSuccess", false);
     			map.put("reports",null);

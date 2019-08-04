@@ -751,6 +751,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 if (!doNotCheck) {
                     $scope.newCreateReport = false;
                     $scope.report = null;
+                    $scope.stashDone = false;
                     $scope.getTopPage(1);
                 }
                 $scope.report.reportId = result.description;
@@ -981,6 +982,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 }else{
                     $scope.getPNorm();
                 }
+                $scope.report.isComplete = '完成';
             }else{
                 $timeout($scope.getDetail, 15000);
             }
@@ -1123,11 +1125,14 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
     $scope.updateReport = function ($event) {
         if (!$scope.checkReport()) return false;
-        if ($scope.report.hpv) {
+        if ($scope.report.hpv && $scope.report.hpv instanceof Array) {
             $scope.report.hpv = $scope.report.hpv.join(',');
         }
         ReportService.updateReport($scope.report.reportId, $scope.report, function (result) {
             if (result.isSuccess) {
+                if(!$scope.report.reportId){
+                    return;
+                }
                 alert("修改报告单成功");
                 //update locoal updated report value
                 for (var ele in $scope.reports) {
@@ -1409,6 +1414,11 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         var isFull = report.outpatientNo && report.admissionNo && report.patientName;
         if (!isFull) {
             alert("报告单不完整,请先填写完整的报告单");
+            return;
+        }
+
+        if ($scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
+            alert("HPV 阴性和其他配置冲突");
             return;
         }
 
