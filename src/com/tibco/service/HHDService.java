@@ -48,8 +48,12 @@ public class HHDService {
     }
 
 
-
     public void ready() {
+
+        if ("设备就绪".equals(HHDClient.getInstance().getCurrecntStatus())) {
+            return;
+        }
+
         HHDClient.getInstance().status = true;
         HHDClient client = HHDClient.getInstance();
         StringBuffer request = new StringBuffer();

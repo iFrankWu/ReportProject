@@ -511,7 +511,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         if ($scope.report.hpv) {
-            if ($scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
+            if ($scope.report.hpv instanceof Array && $scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
                 alert("HPV 阴性和其他配置冲突");
                 return;
             }
@@ -571,7 +571,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         if ($scope.report.hpv) {
-            if ($scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
+            if ($scope.report.hpv instanceof Array && $scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
                 alert("HPV 阴性和其他配置冲突");
                 return;
             }
@@ -974,17 +974,21 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
        var reportId =  $scope.report.reportId;
         ReportService.getDetail(reportId, 1, 10, 'getDetail', function (result) {
             console.log(result);
-            if (result.data.pnorValueResult && result.data.pnorValueResult > 0) {
-                console.log("stop timer");
-                $scope.report = result.data;
-                if(location.href.endsWith("reports_pregnancy")){
-                    $scope.getPNormPregenancy();
+            if(result.isSuccess){
+                if (result.data.pnorValueResult && result.data.pnorValueResult > 0) {
+                    console.log("stop timer");
+                    $scope.report = result.data;
+                    if(location.href.endsWith("reports_pregnancy")){
+                        $scope.getPNormPregenancy();
+                    }else{
+                        $scope.getPNorm();
+                    }
+                    $scope.report.isComplete = '完成';
                 }else{
-                    $scope.getPNorm();
+                    $timeout($scope.getDetail, 15000);
                 }
-                $scope.report.isComplete = '完成';
             }else{
-                $timeout($scope.getDetail, 15000);
+                alert(result.data);
             }
         }, function (response) {
             alert("返回错误"+response);
@@ -1417,7 +1421,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             return;
         }
 
-        if ($scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
+        if ($scope.report.hpv instanceof Array && $scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
             alert("HPV 阴性和其他配置冲突");
             return;
         }

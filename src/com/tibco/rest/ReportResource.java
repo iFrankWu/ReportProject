@@ -186,12 +186,13 @@ public class ReportResource {
         try {
 
             Report report = service.getReportByID(reportId);
-
             map.put("isSuccess", true);
             map.put("data", report);
             return map;
         } catch (Exception e) {
             logger.error("",e);
+            map.put("isSuccess", false);
+            map.put("data", e.getMessage());
         }
         return map;
     }

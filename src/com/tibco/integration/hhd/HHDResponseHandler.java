@@ -24,8 +24,6 @@ public class HHDResponseHandler {
             return;
         }
 
-
-
         //登陆失败
         //'设备未就绪...'
         String status = responseMap.get("socket_status");
@@ -107,7 +105,7 @@ public class HHDResponseHandler {
                 }
                 Float pnormValue = Float.parseFloat(pnorm);
 
-                reportDAO.updateReport(checkResult, Integer.parseInt(points), pnormValue, uid);
+                reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid);
 //                hhdService.logout();
                 //断开手持设备
 //                hhdService.terminate();

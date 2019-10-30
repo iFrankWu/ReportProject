@@ -87,8 +87,8 @@ public class HHDClient {
 
             if (future.isSuccess()) {
                 socketChannel = (SocketChannel) future.channel();
-                logger.info("connect server  成功---------");
-
+                logger.info("connect server successful");
+                HHDClient.getInstance().setCurrecntStatus("Connected");
             }
 
             future.channel().closeFuture().sync();
@@ -100,7 +100,7 @@ public class HHDClient {
     }
 
     public void sendMsg(final String request) {
-        logger.info(request);
+        logger.info(request + " : current:" + HHDClient.getInstance().getCurrecntStatus());
         if (socketChannel == null) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
@@ -112,6 +112,7 @@ public class HHDClient {
                         throw new RuntimeException("连接手持设备出错：" + e.getMessage());
                     }
                     if (socketChannel == null) {
+                        HHDClient.getInstance().setCurrecntStatus("SocketChannel-Null");
                         throw new RuntimeException("连接手持设备失败,请求被忽略:" + request);
                     } else {
                         writeMsg(request);

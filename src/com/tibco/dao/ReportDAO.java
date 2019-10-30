@@ -12,6 +12,7 @@ import com.shinetech.sql.*;
 import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
 import com.tibco.util.DateUtil;
+import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class ReportDAO {
     }
 
     public int addReport(Report report) throws DBException {
+        volidateCheckResult(report.getCheckResult());
         int nextReportId = getLastInsertId();
         String sql = "insert into report(patientName,age,caseNumber,lastTimeMenstruation,pregnancyNumber,"
                 + "childbirthNumber,isMenopause,isLeucorrhea,isBleed,unregularBleed,"
@@ -247,19 +249,28 @@ public class ReportDAO {
         db.execute(sql, fpList);
     }
 
-    public void updateReport(String checkResult, int pointNumber, float pnorValueResult, String uid) throws DBException {
-        String sql = "update report  set pnorValueResult=?,checkResult=?,pointNumber=? where uid = ? ";
+    public void updateReport( int pointNumber, float pnorValueResult, String uid) throws DBException {
+        String sql = "update report  set pnorValueResult=?,pointNumber=? where uid = ? ";
         List<FieldParameter> fpList = new ArrayList<FieldParameter>();
         fpList.add(new FieldParameter(1, pnorValueResult, FieldTypes.FLOAT));
-        fpList.add(new FieldParameter(2, checkResult, FieldTypes.VARCHAR));
-        fpList.add(new FieldParameter(3, pointNumber, FieldTypes.INTEGER));
-        fpList.add(new FieldParameter(4, uid, FieldTypes.VARCHAR));
+        fpList.add(new FieldParameter(2, pointNumber, FieldTypes.INTEGER));
+        fpList.add(new FieldParameter(3, uid, FieldTypes.VARCHAR));
 
         db.execute(sql, fpList);
     }
 
 
+    private void volidateCheckResult(String checkResult) {
+        if (StringUtils.isNotBlank(checkResult)) {
+            boolean isGood = "正常".equals(checkResult) || "异常".equals(checkResult);
+            if (!isGood) {
+                throw new RuntimeException("检查结果必须是正常或者异常");
+            }
+        }
+    }
+
     public void updateReport(Report report) throws DBException {
+        volidateCheckResult(report.getCheckResult());
         String sql = "update report  set patientName=?,age=?,caseNumber=?,lastTimeMenstruation=?,pregnancyNumber=?,"
                 + "childbirthNumber=?,isMenopause=?,isLeucorrhea=?,isBleed=?,unregularBleed=?,"
                 + "otherComplaints=?,isSmooth=?,isAcuteInflammation=?,isHypertrophy=?,isPolyp=?,"
@@ -455,6 +466,6 @@ public class ReportDAO {
 
     public Report getLastReport() throws DBException {
         String sql = "select * from report order by reportId desc limit 1";
-        return (Report)db.queryFirst(Report.class, sql);
+        return (Report) db.queryFirst(Report.class, sql);
     }
 }

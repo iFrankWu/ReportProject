@@ -72,7 +72,7 @@ public class ReportService {
         return new Result(true, "");
     }
 
-    public Report getReportByID(Integer reportId) throws DBException {
+    public Report getReportByID(Integer reportId) throws Exception {
         Report report = reportDAO.getReportByID(reportId);
         try {
             if (report.getUid() == null || report.getPnorValueResult() == null) {
@@ -85,11 +85,16 @@ public class ReportService {
                 } else if ("设备未就绪...".equals(currentStatus)) {
                     hhdService.ready();
                 } else {
-                    logger.error("currentStatus invalid : " + report + ": " + currentStatus);
+                    logger.error("currentStatus invalid : " + currentStatus + " :" + report);
+                    //检查结束 退出登陆等都不应该弹出
+                    if (StringUtils.isBlank(currentStatus) || "SocketChannel-Null".equals(currentStatus)) {
+                        throw new Exception("状态异常，建议断开WI-FI连接，重启手持设备，再连接WI-FI,点击'录入完成'按钮重试");
+                    }
                 }
             }
         } catch (Exception e) {
             logger.error("get detail got error : " + report, e);
+            throw e;
         }
         return report;
     }
