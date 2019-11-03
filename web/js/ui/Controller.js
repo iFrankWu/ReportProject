@@ -425,7 +425,21 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 };
 
-ReportController = function ($scope, $routeParams, $location, $filter, $http, DoctorService, $cookieStore, CommonService, ReportService, $compile, HospitalService,$timeout) {
+ReportController = function ($scope, $routeParams, $location, $filter, $http, DoctorService, $cookieStore, CommonService, ReportService, $compile, HospitalService,HHDService,$timeout) {
+
+   $scope.commands = ["current","socket_status","system_report","terminate","connect","login","exit"];
+    $scope.command = "current";
+    $scope.hhdStatus = "INIT";
+    $scope.executeCommand = function (){
+        HHDService.executeHHDCommand( $scope.command,function (result) {
+            $scope.hhdStatus = result.description;
+       },function (error) {
+           console.log(error)
+            $scope.hhdStatus = "ERROR";
+       });
+    }
+
+
     $scope.lcts = ["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
     $scope.hpvs = ["16+", "18+", "其他高危型+", "阴性"];
     if ($cookieStore.get("doctor") == null) {

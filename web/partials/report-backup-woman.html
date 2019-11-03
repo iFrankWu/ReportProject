@@ -4,6 +4,24 @@
     <!-- create report -->
     <fieldset id="main" ng-show="newCreateReport">
         <legend>创建报告单</legend>
+        <fieldset  width="100%">
+            <legend><b><font color="#296B3C">手持设备</font></b></legend>
+            <table>
+                <tr>
+                    <td>
+                        <select style="width:100%" ng-model="command" ng-options="v for v in commands">
+
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn" ng-click="executeCommand()">操作手持设备</button>
+                    </td>
+                    <td><input type="text" ng-model="hhdStatus" ng-readonly="true"></input></td>
+                </tr>
+            </table>
+
+        </fieldset>
+
         <fieldset width="100%">
             <legend><b><font color="#296B3C">资料</font></b></legend>
             <table style="width:100%">

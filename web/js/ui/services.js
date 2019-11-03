@@ -150,3 +150,12 @@ RecordServiceImpl = function (RecordResource) {
 
     }
 };
+
+HHDServiceImpl = function (HHDResource) {
+    return {
+        executeHHDCommand: function (command, callback, failurecallback) {
+            HHDResource.executeHHDCommand({command:command}, callback, failurecallback);
+        }
+    }
+};
+

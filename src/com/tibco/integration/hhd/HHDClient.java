@@ -63,7 +63,7 @@ public class HHDClient {
     }
 
     public void setSocketChannel(SocketChannel socketChannel) {
-        logger.info("HDD 重启 重置连接");
+        logger.info("HDD重启重置连接");
         this.socketChannel = socketChannel;
     }
 
@@ -100,7 +100,7 @@ public class HHDClient {
     }
 
     public void sendMsg(final String request) {
-        logger.info(request + " : current:" + HHDClient.getInstance().getCurrecntStatus());
+        logger.info("current status:" + HHDClient.getInstance().getCurrecntStatus() + " request : " + request);
         if (socketChannel == null) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override

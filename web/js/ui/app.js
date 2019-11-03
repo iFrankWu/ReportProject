@@ -72,12 +72,15 @@ var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies',
     .factory("CommonResource",CommonResourceImpl)
     .factory("ReportResource",ReportResourceImpl)  
     .factory("HospitalResource",HospitalResourceImpl)
-     .factory("RecordResource",RecordResourceImpl)
+	.factory("RecordResource",RecordResourceImpl)
+    .factory("HHDResource",HHDResourceImpl)
+
     .service('DoctorService',DoctorServiceImpl)
     .service('ReportService',ReportServiceImpl)
     .service('CommonService',CommonServiceImpl)
     .service('HospitalService',HospitalServiceImpl)
-    .service('RecordService',RecordServiceImpl);
+    .service('RecordService',RecordServiceImpl)
+	.service('HHDService',HHDServiceImpl);
 
 
 //var app = angular.module('myApp', []);

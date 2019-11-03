@@ -37,7 +37,7 @@ public class HHDResponseHandler {
         }
 
         if ("登陆失败".equals(status)) {
-            Thread.sleep(2000L);
+            Thread.sleep(5000L);
             hhdService.login();
             return;
         }
@@ -48,7 +48,7 @@ public class HHDResponseHandler {
             return;
         }
         if ("设备未就绪...".equals(status)) {
-            Thread.sleep(2000L);
+            Thread.sleep(5000L);
             hhdService.ready();
             return;
         }
@@ -58,7 +58,7 @@ public class HHDResponseHandler {
         }
 
         if ("设备就绪".equals(status)) {
-            Thread.sleep(2000L);
+            Thread.sleep(5000L);
             Report report = reportDAO.getLastReport();
             if (report.getUid() == null || report.getPnorValueResult() == null) {
                 if (HHDClient.getInstance().isConnectedFisrt()) {
@@ -72,7 +72,8 @@ public class HHDResponseHandler {
 
 
         if ("检查结束".equals(status)) {
-            // hhdService.systemReport();
+            Thread.sleep(5000L);
+             hhdService.systemReport();
         }
         if (responseMap.containsKey("patient_01")) {
             String uid = responseMap.get("patient_01");

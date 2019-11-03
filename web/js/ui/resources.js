@@ -54,6 +54,12 @@ RecordResourceImpl = function ($resource) {
     });
 };
 
+HHDResourceImpl = function ($resource) {
+    return $resource('truscreen/hdd/:command', {}, {
+         executeHHDCommand:{method:'GET',params:{ command:'command' }}
+    });
+};
+
  
 
  
