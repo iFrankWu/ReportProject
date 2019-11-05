@@ -9,9 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.apache.log4j.Logger;
 
 import java.nio.charset.Charset;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Truscreen 手持手柄连接操作
@@ -21,6 +19,11 @@ public class HHDClient {
     private final static int port = 8483;
 
     private static HHDClient hhdClient = new HHDClient();
+
+    /**
+     * 定时器是否已经开启
+     */
+    private volatile boolean TIMER_START = false;
 
     private final static Logger logger = Logger.getLogger(HHDClient.class);
 
@@ -52,6 +55,9 @@ public class HHDClient {
     }
 
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(5));
+
+    // ScheduledExecutorService:是从Java SE5的java.util.concurrent里，
+    private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
     private HHDClient() {
 
@@ -89,6 +95,22 @@ public class HHDClient {
                 socketChannel = (SocketChannel) future.channel();
                 logger.info("connect server successful");
                 HHDClient.getInstance().setCurrecntStatus("Connected");
+
+                synchronized (this) {
+                    if (!TIMER_START) {
+                        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                            @Override
+                            public void run() {
+                                logger.info("scheduleAtFixedRate execute every 3 min...");
+                                StringBuffer request = new StringBuffer();
+                                request.append("socket_request='socket_status'");
+                                request.append("\r\n");
+                                HHDClient.getInstance().sendMsg(request.toString());
+                            }
+                        }, 3, 3, TimeUnit.MINUTES);
+                        TIMER_START = true;
+                    }
+                }
             }
 
             future.channel().closeFuture().sync();
@@ -127,7 +149,7 @@ public class HHDClient {
 
     private void writeMsg(String request) {
         try {
-            socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.defaultCharset()));
+            socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
         } catch (Throwable e) {
             socketChannel = null;
             logger.error("HDD设备重启了 需要重新建立连接", e);
