@@ -103,7 +103,7 @@ public class HHDClient {
                             public void run() {
                                 logger.info("scheduleAtFixedRate execute every 3 min...");
                                 StringBuffer request = new StringBuffer();
-                                request.append("socket_request='socket_status'");
+                                request.append("socket_status?");
                                 request.append("\r\n");
                                 HHDClient.getInstance().sendMsg(request.toString());
                             }

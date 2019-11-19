@@ -39,14 +39,6 @@ public class HHDService {
         client.sendMsg(request.toString());
     }
 
-    public void commonRequest(HHDOpreationDTO hddOpreationDTO) {
-        HHDClient client = HHDClient.getInstance();
-        StringBuffer request = new StringBuffer();
-        request.append("socket_request='" + hddOpreationDTO.getSocket_request() + "'");
-        request.append("\r\n");
-        client.sendMsg(request.toString());
-    }
-
 
     public void ready() {
 
@@ -100,7 +92,7 @@ public class HHDService {
     public void socketStatus() {
         HHDClient client = HHDClient.getInstance();
         StringBuffer request = new StringBuffer();
-        request.append("socket_request='socket_status'");
+        request.append("socket_status?");
         request.append("\r\n");
         client.sendMsg(request.toString());
     }
