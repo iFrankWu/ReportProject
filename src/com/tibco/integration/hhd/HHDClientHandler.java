@@ -20,7 +20,7 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(Unpooled.copiedBuffer("this is from client : active", Charset.forName("UTF-8")));
+//        ctx.writeAndFlush(Unpooled.copiedBuffer("this is from client : active", Charset.forName("UTF-8")));
     }
 
     @Override
