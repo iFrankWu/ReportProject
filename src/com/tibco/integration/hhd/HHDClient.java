@@ -18,6 +18,8 @@ public class HHDClient {
     private final static String host = "192.168.2.1";
     private final static int port = 8483;
 
+    private static int requestTimes = 0;
+
     private static HHDClient hhdClient = new HHDClient();
     /**
      * 跟HDD设备交互 是否已经接收到上次请求命令的回复信息 true 代表是
@@ -129,7 +131,7 @@ public class HHDClient {
     }
 
     public void sendMsg(final String request) {
-        logger.info("current status:" + HHDClient.getInstance().getCurrecntStatus() + " request : " + request);
+        logger.info(requestTimes++ + " Send to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request : " + request);
         if (socketChannel == null) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
