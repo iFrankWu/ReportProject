@@ -1,13 +1,11 @@
 package com.tibco.integration.hhd;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +23,7 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+        HHDClient.lastCommandResponseDone = true;
         ByteBuf buf = (ByteBuf) msg;
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
@@ -55,6 +54,7 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        HHDClient.lastCommandResponseDone = true;
         logger.error("HHD server exception is : ", cause);
         //远程主机强迫关闭了一个现有的连接
         if (cause instanceof IOException && (cause.getMessage().contains("Connection reset by peer") || cause.getMessage().contains("远程主机"))) {

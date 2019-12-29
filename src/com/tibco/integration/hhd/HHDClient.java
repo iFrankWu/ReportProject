@@ -19,6 +19,13 @@ public class HHDClient {
     private final static int port = 8483;
 
     private static HHDClient hhdClient = new HHDClient();
+    /**
+     * 跟HDD设备交互 是否已经接收到上次请求命令的回复信息 true 代表是
+     * 系统初始化时 该值默认为ture
+     * 命令发送后 更新为false
+     * 收到命令回信后 更新为true
+     */
+    public static boolean lastCommandResponseDone = true;
 
     /**
      * 定时器是否已经开启
@@ -149,7 +156,11 @@ public class HHDClient {
 
     private void writeMsg(String request) {
         try {
-            socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
+            if (lastCommandResponseDone) {
+                socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
+            } else {
+                logger.warn("上次命令发送没回到回复，此命令丢弃：" + request);
+            }
         } catch (Throwable e) {
             socketChannel = null;
             logger.error("HDD设备重启了 需要重新建立连接", e);
