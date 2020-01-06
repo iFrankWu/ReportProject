@@ -10,7 +10,6 @@ package com.tibco.service;
 
 import com.shinetech.sql.ResultSetHandler;
 import com.shinetech.sql.exception.DBException;
-import com.tibco.bean.HHDOpreationDTO;
 import com.tibco.bean.Report;
 import com.tibco.bean.Result;
 import com.tibco.bean.Search;
@@ -76,6 +75,7 @@ public class ReportService {
         Report report = reportDAO.getReportByID(reportId);
         try {
             if (report.getUid() == null || report.getPnorValueResult() == null) {
+                HHDClient.IS_CHECK_FINISH = false;
                 String currentStatus = HHDClient.getInstance().getCurrecntStatus();
                 //设备就绪不能发请求
                 if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
@@ -92,6 +92,9 @@ public class ReportService {
                         throw new Exception("状态异常，建议断开WI-FI连接，重启手持设备，再连接WI-FI,点击'录入完成'按钮重试");
                     }
                 }
+            } else {
+                logger.info("check finished for report : " + HHDClient.IS_CHECK_FINISH + " :" + report);
+                HHDClient.IS_CHECK_FINISH = true;
             }
         } catch (Exception e) {
             logger.error("get detail got error : " + report, e);

@@ -9,6 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.apache.log4j.Logger;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.concurrent.*;
 
 /**
@@ -19,6 +20,11 @@ public class HHDClient {
     private final static int port = 8483;
 
     private static int requestTimes = 0;
+
+    /**
+     * 当检查结束后 不再发送 system report了
+     */
+    public static boolean IS_CHECK_FINISH = false;
 
     private static HHDClient hhdClient = new HHDClient();
     /**
@@ -131,7 +137,8 @@ public class HHDClient {
     }
 
     public void sendMsg(final String request) {
-        logger.info(requestTimes++ + " Send to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request : " + request);
+        Date now = new Date();
+        logger.info(requestTimes++ +" "+now + " Send to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request : " + request);
         if (socketChannel == null) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override

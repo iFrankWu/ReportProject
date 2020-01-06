@@ -10,6 +10,8 @@ import org.eclipse.jetty.util.ajax.JSON;
 import java.nio.charset.Charset;
 import java.util.Map;
 
+import static com.tibco.integration.hhd.HHDClient.IS_CHECK_FINISH;
+
 public class HHDResponseHandler {
 
     private ReportDAO reportDAO = new ReportDAO();
@@ -31,24 +33,24 @@ public class HHDResponseHandler {
             HHDClient.getInstance().setCurrecntStatus(status);
         }
         if ("退出登陆".equals(status)) {
-            Thread.sleep(2000L);
+//            Thread.sleep(2000L);
             hhdService.login();
             return;
         }
 
         if ("登陆失败".equals(status)) {
-            Thread.sleep(5000L);
+//            Thread.sleep(5000L);
             hhdService.login();
             return;
         }
 
         if ("登陆成功".equals(status)) {
-            Thread.sleep(2000L);
+//            Thread.sleep(2000L);
             hhdService.ready();
             return;
         }
         if ("设备未就绪...".equals(status)) {
-            Thread.sleep(5000L);
+//            Thread.sleep(5000L);
             hhdService.ready();
             return;
         }
@@ -58,7 +60,7 @@ public class HHDResponseHandler {
         }
 
         if ("设备就绪".equals(status)) {
-            Thread.sleep(5000L);
+//            Thread.sleep(5000L);
             Report report = reportDAO.getLastReport();
             if (report.getUid() == null || report.getPnorValueResult() == null) {
                 if (HHDClient.getInstance().isConnectedFisrt()) {
@@ -72,8 +74,11 @@ public class HHDResponseHandler {
 
 
         if ("检查结束".equals(status)) {
-            Thread.sleep(5000L);
-             hhdService.systemReport();
+//            Thread.sleep(5000L);
+            logger.info("check is finished ?  : " + HHDClient.IS_CHECK_FINISH);
+            if (!IS_CHECK_FINISH) {
+                hhdService.systemReport();
+            }
         }
         if (responseMap.containsKey("patient_01")) {
             String uid = responseMap.get("patient_01");
