@@ -122,7 +122,7 @@ public class HHDClient {
                                 request.append("\r\n");
                                 HHDClient.getInstance().sendMsg(request.toString());
                             }
-                        }, 3, 3, TimeUnit.MINUTES);
+                        }, 0, 3, TimeUnit.MINUTES);
                         TIMER_START = true;
                     }
                 }
