@@ -38,7 +38,7 @@ public class Jetty {
 
 
         Const.initLogger();
-        Server server = new Server(8081);
+        Server server = new Server(80);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
         context.setResourceBase("./web");
