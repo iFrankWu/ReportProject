@@ -56,6 +56,8 @@ public class HHDResponseHandler {
         }
 
         if ("检查过程中...".equals(status)) {
+            //检查过程中 一般需要好几分钟 可以等等再去请求 降低HHD服务压力
+            Thread.sleep(5000L);
             return;
         }
 
@@ -112,6 +114,8 @@ public class HHDResponseHandler {
                 Float pnormValue = Float.parseFloat(pnorm);
 
                 reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid);
+
+                IS_CHECK_FINISH = true;
 //                hhdService.logout();
                 //断开手持设备
 //                hhdService.terminate();
