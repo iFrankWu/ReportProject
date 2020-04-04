@@ -1440,6 +1440,26 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             return;
         }
 
+        if ($scope.report == null || $scope.report.patientName == null || $scope.report.caseNumber == null || $scope.report.patientName == "" || $scope.report.caseNumber == "") {
+            alert("报告单中的姓名、病历号等信息不能够为空！");
+            return false;
+        }
+        if ($scope.report.department == null || $scope.report.department == "") {
+            $scope.report.department = $scope.hospital.department;
+            //alert("请输入报告单中的科室字段");
+            //return false;
+        }
+        if ($scope.getComplaints($scope.report) == "") {
+            alert("请填写报告单主诉信息");
+            return false;
+        }
+
+        if ($scope.getClinical($scope.report) == "") {
+            alert("请填写报告单临床表现信息");
+            return false;
+        }
+
+
         var r = confirm("点击录入完成，以上材料不允许变更，确认吗？");
         if (r == true) {
             $scope.stashDone = true;
