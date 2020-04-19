@@ -27,7 +27,15 @@ import com.tibco.util.XLSExport;
  */
 public class ExportReportHandler implements ResultSetHandler {
 	private Hospital hopital;
-	private String tableHeader[] = "报告单ID,检查日期,姓名,年龄,病历号,主机序列号,手控器序列号,主诉,临床表现,初善仪检查结果,初善仪点探数量,是否绝经,主诉/白带多,主诉/性交出血,主诉/不规则流血,主诉/其他,临床表现/光滑,临床表现/慢性炎症,临床表现/肥大,临床表现/息肉,临床表现/柱状上皮异位,临床表现/撕裂,临床表现/纳氏腺囊肿,临床表现/白斑,临床表现/可疑癌,临床表现/其他,操作人员,申请医生,主诉/LCT,主诉/HPV,临床表现/接触性出血,处理意见,门诊号,住院号,是否取样,已取周数,PNOR值,妊娠状态,孕周"
+	private String tableHeader[] = ("报告单ID,检查日期,姓名,年龄,病历号," + //0-4
+            "主机序列号,手控器序列号,主诉,临床表现,初善仪检查结果," + //5-9
+            "初善仪点探数量,是否绝经,主诉/白带多,主诉/性交出血,主诉/不规则流血," + //10-14
+            "主诉/其他,临床表现/光滑,临床表现/慢性炎症,临床表现/肥大,临床表现/息肉," + //15-19
+            "临床表现/柱状上皮异位,临床表现/撕裂,临床表现/纳氏腺囊肿,临床表现/白斑,临床表现/可疑癌," +//20-24
+			"临床表现/其他,操作人员,申请医生,主诉/LCT,主诉/HPV," +//25-29
+			"临床表现/接触性出血,处理意见,门诊号,住院号,是否取样," +//30-34
+			"已取周数,PNOR值,妊娠状态,孕周,可转换区域," + //35-39
+			"UID,肉眼可见病变")//40-41
 			.split(",");
 
 	public ExportReportHandler(XLSExport xlsExport) throws DBException {
@@ -92,6 +100,8 @@ public class ExportReportHandler implements ResultSetHandler {
 
 
 
+
+
 			String nextStepSuggestion = "";
 			if (rs.getBoolean("screening")) {
 				nextStepSuggestion = "按照国家宫颈癌筛查指南定期筛查";
@@ -133,6 +143,8 @@ public class ExportReportHandler implements ResultSetHandler {
 			//v1.7 add
 			xlsExport.setCell(39, rs.getString("transformArea"));
 			xlsExport.setCell(40, rs.getString("uid"));
+
+			xlsExport.setCell(41, rs.getBoolean("visableCancer") ? "是":"否");
 
 			rowIndex++;
 		} catch (Exception e) {
@@ -179,7 +191,7 @@ public class ExportReportHandler implements ResultSetHandler {
 		clinical = getBooleanValue(clinical, isPolyp, "息肉");
 
 		String erosion = rs.getString("erosion");
-		clinical = getStringValue(clinical, erosion, "糜烂");
+		clinical = getStringValue(clinical, erosion, "柱状上皮异位");
 
 		Boolean isTear = rs.getBoolean("isTear");
 		clinical = getBooleanValue(clinical, isTear, "撕裂");
@@ -191,7 +203,7 @@ public class ExportReportHandler implements ResultSetHandler {
 		clinical = getBooleanValue(clinical, isWhite, "白斑");
 
 		Boolean isCancer = rs.getBoolean("isCancer");
-		clinical = getBooleanValue(clinical, isCancer, "可疑癌");
+		clinical = getBooleanValue(clinical, isCancer, "阴道排液");
 
 		String otherClinical = rs.getString("otherClinical");
 		if (otherClinical != null) {

@@ -832,7 +832,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             clinical += "息肉/";
         }
         if (report.erosion != null) {
-            clinical += "糜烂:" + report.erosion + "/";
+            clinical += "柱状上皮异位:" + report.erosion + "/";
         }
         if (report.isTear) {
             clinical += "撕裂/";
