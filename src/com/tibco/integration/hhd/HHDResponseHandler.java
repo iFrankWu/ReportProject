@@ -67,7 +67,7 @@ public class HHDResponseHandler {
             if (report.getUid() == null || report.getPnorValueResult() == null) {
                 if (HHDClient.getInstance().isConnectedFisrt()) {
                     logger.info("设备刚刚连接WI-FI成功，忽略Start命令");
-                    return;
+//                    return;
                 }
                 hhdService.start(report.getPatientName(), report.getAge());
             }
