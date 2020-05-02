@@ -17,11 +17,13 @@ import com.tibco.dao.ReportDAO;
 import com.tibco.handle.ExportReportHandler;
 import com.tibco.util.DateUtil;
 import com.tibco.util.XLSExport;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.ResultSet;
@@ -41,6 +43,17 @@ public class ReportService {
     private Logger logger = Logger.getLogger(this.getClass());
 
     public Result addReport(Report report) throws DBException {
+        String uid = report.getUid();
+
+        if (StringUtils.isBlank(uid)) {
+            return new Result(false, "uid不能为空");
+
+        }
+        int npots = getScreennPpots(uid);
+        if (npots <= 0) {
+            return new Result(false, "获取取点数失败");
+        }
+        report.setPointNumber(npots);
         reportDAO.addDoctor(report);
         return new Result(true, "");
     }
@@ -389,6 +402,60 @@ public class ReportService {
             }
         }
         return "0";
+    }
+
+
+    /**
+     * 获取取点数
+     *
+     * @param uid
+     * @return
+     */
+    public int getScreennPpots(String uid) {
+//       String file = "/Users/frank/Downloads/1333B2-000181-result.csv";
+
+        String os = System.getProperty("os.name");
+        String dir = "/Users/frank/Downloads";
+        if (os != null && os.startsWith("Windows")) {
+            dir = "D:\\truscreen\\checkresult";
+        }
+
+        File file = new File(dir);
+        if (file.isDirectory()) {
+            for (File checkResultFile : file.listFiles()) {
+                if (checkResultFile.getName().endsWith("-" + uid + "-result.csv")) {
+                    //声明流对象
+                    FileInputStream fis = null;
+                    try {
+                        //创建流对象
+                        fis = new FileInputStream(checkResultFile);
+                        //读取数据，并将读取到的数据存储到数组中
+                        BufferedReader input = new BufferedReader(new InputStreamReader(fis));
+                        String line = null;
+                        while ((line = input.readLine()) != null) {
+                            if (line.contains("nSpots,")) {
+                                String nSpots[] = line.split(",");
+                                String nSpot = nSpots[1].split("\r\n")[0];
+                                logger.info("取点数uid:" + uid + "内容\t" + line);
+                                return Integer.valueOf(nSpot);
+                            }
+                        }
+
+                        return 0;
+                    } catch (Exception e) {
+                        logger.error(checkResultFile, e);
+                    } finally {
+                        try {
+                            //关闭流，释放资源
+                            fis.close();
+                        } catch (Exception e) {
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return 0;
     }
 }
 

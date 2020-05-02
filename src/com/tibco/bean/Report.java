@@ -112,7 +112,7 @@ public class Report {
     private String uid;
 
     /**
-     * 是否肉眼可见癌
+     * 是否肉眼可见病变
      */
     private Boolean visableCancer;
 
