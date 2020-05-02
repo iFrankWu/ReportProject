@@ -104,7 +104,7 @@ public class Report {
      */
     private Float pnorValueResult;
 
-    /**可转换区域*/
+    /**可转化区*/
     private String transformArea;
     /**
      * 患者在其他系统的id

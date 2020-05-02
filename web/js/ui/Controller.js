@@ -682,6 +682,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.report = null;//也可以赋值 比如 $scope.report = {'key1':'vaule1'}
         $scope.doesCheckCompleted = true;
         $scope.newCreateReport = !$scope.newCreateReport;
+        $scope.stashDone = false;
     }
 
 
@@ -827,6 +828,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         if(report.touchbleeding){
             clinical += "接触性出血/";
+        }
+        if(report.visableCancer){
+            clinical += "肉眼可见病变/";
         }
         if (report.otherClinical != null) {
             clinical += report.otherClinical;
@@ -1385,6 +1389,11 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if(!isFull){
             alert("报告单不完整,请先填写完整的报告单");
             return;
+        }
+
+        if ($scope.getClinical($scope.report) == "") {
+            alert("请填写报告单临床表现信息");
+            return ;
         }
 
         var r = confirm("点击录入完成，以上材料不允许变更，确认吗？");
