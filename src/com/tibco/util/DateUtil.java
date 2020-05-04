@@ -31,6 +31,11 @@ public class DateUtil {
 	public static String getToday(){
 		return timeFormat.format(Calendar.getInstance().getTime()).substring(0,10);
 	}
+
+	public static Date getTodayDate() throws Exception{
+		 String today = timeFormat.format(Calendar.getInstance().getTime()).substring(0,10);
+		return  dateFormat.parse(today);
+	}
 	public static String getYestorday(){
 		Calendar cl = Calendar.getInstance();
 		cl.set(Calendar.DAY_OF_MONTH, cl.get(Calendar.DAY_OF_MONTH)-1);
@@ -75,9 +80,9 @@ public class DateUtil {
 	public static String formatTime(String date){
 		return dateFormat.format(date).substring(0,10);
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 //		System.out.println(getNowDate());
-//		System.out.println(getToday());
+		System.out.println(getTodayDate());
 //		System.out.println(getYestorday());
 		System.out.println(getNextDay("2013-07-31"));
 	}

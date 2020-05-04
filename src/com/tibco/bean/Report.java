@@ -862,6 +862,9 @@ public class Report {
                 ", pregnancyStatus=" + pregnancyStatus +
                 ", pregnancyTime=" + pregnancyTime +
                 ", pnorValueResult=" + pnorValueResult +
+                ", transformArea='" + transformArea + '\'' +
+                ", uid='" + uid + '\'' +
+                ", visableCancer=" + visableCancer +
                 '}';
     }
 }

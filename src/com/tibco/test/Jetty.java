@@ -81,8 +81,8 @@ public class Jetty {
             }
         }));
 
-        HHDClient client = HHDClient.getInstance();
-        client.connect();
+//        HHDClient client = HHDClient.getInstance();
+//        client.connect();
 
 
 //		Server server = new Server(8082);

@@ -2,7 +2,10 @@ package com.tibco.integration.hhd;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -24,7 +27,7 @@ public class HHDClient {
     /**
      * 当检查结束后 不再发送 system report了
      */
-    public static boolean IS_CHECK_FINISH = false;
+    public static volatile  boolean IS_CHECK_FINISH = false;
 
     private static HHDClient hhdClient = new HHDClient();
     /**
@@ -33,7 +36,7 @@ public class HHDClient {
      * 命令发送后 更新为false
      * 收到命令回信后 更新为true
      */
-    public static boolean lastCommandResponseDone = true;
+    public static volatile boolean lastCommandResponseDone = true;
 
     /**
      * 定时器是否已经开启
@@ -42,24 +45,16 @@ public class HHDClient {
 
     private final static Logger logger = Logger.getLogger(HHDClient.class);
 
+    /**
+     * 这个值有什么用？
+     */
     public volatile boolean status = true;
+
     /**
      * 当前状态
      */
     public volatile String currecntStatus = null;
 
-    /**
-     * 是第一次连接WI-FI成功 如果是 则不能发起start命令
-     */
-    public volatile boolean isConnectedFisrt = true;
-
-    public boolean isConnectedFisrt() {
-        return isConnectedFisrt;
-    }
-
-    public void setConnectedFisrt(boolean connectedFisrt) {
-        isConnectedFisrt = connectedFisrt;
-    }
 
     public String getCurrecntStatus() {
         return currecntStatus;
@@ -84,13 +79,13 @@ public class HHDClient {
     }
 
     public void setSocketChannel(SocketChannel socketChannel) {
-        logger.info("HDD重启重置连接");
+        logger.info(new Date() + "\tHDD重启重置连接");
         this.socketChannel = socketChannel;
     }
 
     private SocketChannel socketChannel;
 
-    private SingleThreadEventLoop singleThreadEventLoop = new DefaultEventLoop();
+//    private SingleThreadEventLoop singleThreadEventLoop = new DefaultEventLoop();
 
     public void connect() throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -108,24 +103,24 @@ public class HHDClient {
 
             if (future.isSuccess()) {
                 socketChannel = (SocketChannel) future.channel();
-                logger.info("connect server successful");
+                logger.info(new Date() + "\tconnect server successful");
                 HHDClient.getInstance().setCurrecntStatus("Connected");
 
-                synchronized (this) {
-                    if (!TIMER_START) {
-                        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-                            @Override
-                            public void run() {
-                                logger.info("scheduleAtFixedRate execute every 3 min...");
-                                StringBuffer request = new StringBuffer();
-                                request.append("socket_status?");
-                                request.append("\r\n");
-                                HHDClient.getInstance().sendMsg(request.toString());
-                            }
-                        }, 0, 3, TimeUnit.MINUTES);
-                        TIMER_START = true;
-                    }
-                }
+//                synchronized (this) {
+//                    if (!TIMER_START) {
+//                        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                logger.info("scheduleAtFixedRate execute every 3 min...");
+//                                StringBuffer request = new StringBuffer();
+//                                request.append("socket_status?");
+//                                request.append("\r\n");
+//                                HHDClient.getInstance().sendMsg(request.toString());
+//                            }
+//                        }, 0, 3, TimeUnit.MINUTES);
+//                        TIMER_START = true;
+//                    }
+//                }
             }
 
             future.channel().closeFuture().sync();
@@ -138,7 +133,7 @@ public class HHDClient {
 
     public void sendMsg(final String request) {
         Date now = new Date();
-        logger.info(requestTimes++ +" "+now + " Send to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request : " + request);
+        logger.info(requestTimes++ + " " + now + "\tSend to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request :\t" + request);
         if (socketChannel == null) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
@@ -146,7 +141,7 @@ public class HHDClient {
                     try {
                         connect();
                     } catch (Exception e) {
-                        logger.error("", e);
+                        logger.error("连接手持设备出错", e);
                         throw new RuntimeException("连接手持设备出错：" + e.getMessage());
                     }
                     if (socketChannel == null) {
@@ -163,16 +158,18 @@ public class HHDClient {
 
     }
 
-    private void writeMsg(String request) {
+    private synchronized void writeMsg(String request) {
         try {
             if (lastCommandResponseDone) {
                 socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
+                logger.info(new Date() + "\t设备连接成功，发送请求\t" + request);
+                lastCommandResponseDone = false;
             } else {
-                logger.warn("上次命令发送没回到回复，此命令丢弃：" + request);
+                logger.info(new Date() + "\t上次命令发送没回到回复，此命令丢弃：" + request);
             }
         } catch (Throwable e) {
             socketChannel = null;
-            logger.error("HDD设备重启了 需要重新建立连接", e);
+            logger.error(new Date() + "\tHDD设备重启了 需要重新建立连接", e);
         }
     }
 

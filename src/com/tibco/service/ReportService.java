@@ -21,6 +21,7 @@ import com.tibco.util.XLSExport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.eclipse.jetty.util.ajax.JSON;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,27 +44,27 @@ public class ReportService {
     private ReportDAO reportDAO = new ReportDAO();
 
     private HHDService hhdService = new HHDService();
+
     private Logger logger = Logger.getLogger(this.getClass());
 
-
     public Result addReport(Report report) throws DBException {
+        logger.info(new Date() + "\t创建报告单\t" + JSON.toString(report));
         Integer reportId = report.getReportId();
+
         if (reportId != null && reportId > 0) {
+            logger.info(new Date() + "\t" + "更新报告单reportId\t" + reportId);
             reportDAO.updateReport(report);
         } else {
             if (StringUtils.isBlank(report.getPatientName()) || report.getAge() == null) {
                 return new Result(false, "姓名和年龄不能为空");
             }
             reportId = reportDAO.addReport(report);
+            logger.info(new Date() + "\t" + "点击录入完成,新建报告单\t" + reportId);
+            //只要当前的检查结果未获取成功 即可以触发
+            if (report.getPnorValueResult() == null || StringUtils.isBlank(report.getUid())) {
+                hhdService.socketStatus();
+            }
         }
-
-        //只要当前的检查结果未获取成功 即可以触发
-        if (report.getPnorValueResult() == null || StringUtils.isBlank(report.getUid())) {
-            HHDClient.getInstance().setConnectedFisrt(false);
-            hhdService.ready();
-        }
-
-
         return new Result(true, reportId);
     }
 
@@ -71,27 +73,43 @@ public class ReportService {
         return new Result(true, "");
     }
 
+    /**
+     * 前端页面5s获取一个报告单数据
+     *
+     * @param reportId
+     * @return
+     * @throws Exception
+     */
     public Report getReportByID(Integer reportId) throws Exception {
         Report report = reportDAO.getReportByID(reportId);
         try {
             if (report.getUid() == null || report.getPnorValueResult() == null) {
                 HHDClient.IS_CHECK_FINISH = false;
-                String currentStatus = HHDClient.getInstance().getCurrecntStatus();
+                hhdService.socketStatus();
+//                String currentStatus = HHDClient.getInstance().getCurrecntStatus();
                 //设备就绪不能发请求
-                if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
-//                    HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
-//                    hddOpreationDTO.setSocket_request("system_report");
-//                    hhdService.commonRequest(hddOpreationDTO);
-                    hhdService.socketStatus();
-                } else if ("设备未就绪...".equals(currentStatus)) {
-                    hhdService.ready();
-                } else {
-                    logger.error("currentStatus invalid : " + currentStatus + " :" + report);
-                    //检查结束 退出登陆等都不应该弹出
-                    if (StringUtils.isBlank(currentStatus) || "SocketChannel-Null".equals(currentStatus)) {
-                        throw new Exception("状态异常，建议断开WI-FI连接，重启手持设备，再连接WI-FI,点击'录入完成'按钮重试");
-                    }
-                }
+//                if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
+////                    HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
+////                    hddOpreationDTO.setSocket_request("system_report");
+////                    hhdService.commonRequest(hddOpreationDTO);
+//                    hhdService.socketStatus();
+//                } else if ("设备未就绪...".equals(currentStatus)) {
+//                    hhdService.socketStatus();
+//                } else {
+//                    logger.error("currentStatus invalid : " + currentStatus + " :" + report);
+//                    if ("登陆成功".equals(currentStatus) && LoginSuccessTimes++ > 5) {
+//
+//                        logger.error("手持设备未就绪，当前状态: " + currentStatus + " 已经超过次数" + LoginSuccessTimes + "，因此退出登陆，重试");
+//                        LoginSuccessTimes = 0;
+//                        hhdService.socketStatus();
+//                        return report;
+//                    }
+//
+//                    //检查结束 退出登陆等都不应该弹出
+//                    if (StringUtils.isBlank(currentStatus) || "SocketChannel-Null".equals(currentStatus)) {
+//                        throw new Exception("状态异常，建议断开WI-FI连接，重启手持设备，再连接WI-FI,点击'录入完成'按钮重试");
+//                    }
+//                }
             } else {
                 logger.info("check finished for report : " + HHDClient.IS_CHECK_FINISH + " :" + report);
                 HHDClient.IS_CHECK_FINISH = true;

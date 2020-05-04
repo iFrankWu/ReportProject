@@ -3,11 +3,13 @@ package com.tibco.integration.hhd;
 import com.tibco.bean.Report;
 import com.tibco.dao.ReportDAO;
 import com.tibco.service.HHDService;
+import com.tibco.util.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.Map;
 
 import static com.tibco.integration.hhd.HHDClient.IS_CHECK_FINISH;
@@ -19,12 +21,15 @@ public class HHDResponseHandler {
 
     private HHDService hhdService = new HHDService();
 
+    private int hhdNotReadyTimes = 0;
 
-    public void handler(Map<String, String> responseMap) throws Exception {
-
-        if (!HHDClient.getInstance().status) {
-            return;
-        }
+    /**
+     * 此处是处理手持设备返回的结果 需要加锁
+     *
+     * @param responseMap
+     * @throws Exception
+     */
+    public synchronized void handler(Map<String, String> responseMap) throws Exception {
 
         //登陆失败
         //'设备未就绪...'
@@ -33,24 +38,36 @@ public class HHDResponseHandler {
             HHDClient.getInstance().setCurrecntStatus(status);
         }
         if ("退出登陆".equals(status)) {
-//            Thread.sleep(2000L);
+            Thread.sleep(1000L);
             hhdService.login();
             return;
         }
 
         if ("登陆失败".equals(status)) {
 //            Thread.sleep(5000L);
+            Thread.sleep(1000L);
             hhdService.login();
             return;
         }
 
         if ("登陆成功".equals(status)) {
 //            Thread.sleep(2000L);
+            Thread.sleep(1000L);
             hhdService.ready();
             return;
         }
         if ("设备未就绪...".equals(status)) {
 //            Thread.sleep(5000L);
+            hhdNotReadyTimes++;
+            Thread.sleep(1000L);
+            //设备返回5次未就绪 一般是设备死机了
+            if (hhdNotReadyTimes > 5) {
+                logger.error(new Date() + "\t设备超过5次返回 设备未就绪一般是设备死机了 此时中断连接，退出登陆，重新登陆尝试");
+                hhdService.terminate();
+                hhdService.socketStatus();
+                hhdNotReadyTimes = 0;
+                return;
+            }
             hhdService.ready();
             return;
         }
@@ -63,13 +80,17 @@ public class HHDResponseHandler {
 
         if ("设备就绪".equals(status)) {
 //            Thread.sleep(5000L);
+            hhdNotReadyTimes = 0;
+            Thread.sleep(1000L);
             Report report = reportDAO.getLastReport();
-            if (report.getUid() == null || report.getPnorValueResult() == null) {
-                if (HHDClient.getInstance().isConnectedFisrt()) {
-                    logger.info("设备刚刚连接WI-FI成功，忽略Start命令");
-//                    return;
+            boolean lastReportHasFinish = report.getUid() == null || report.getPnorValueResult() == null;
+            logger.info(new Date() + "\t设备刚刚就绪 上次检查是否已经结束?\t" + !lastReportHasFinish + "\treport为" + report);
+
+            if (lastReportHasFinish) {
+                //如最后一条是今天的 则发起start检测
+                if (report.getModifyDate().after(DateUtil.getTodayDate())) {
+                    hhdService.start(report.getPatientName(), report.getAge());
                 }
-                hhdService.start(report.getPatientName(), report.getAge());
             }
             return;
         }
@@ -77,9 +98,32 @@ public class HHDResponseHandler {
 
         if ("检查结束".equals(status)) {
 //            Thread.sleep(5000L);
-            logger.info("check is finished ?  : " + HHDClient.IS_CHECK_FINISH);
+            Thread.sleep(1000L);
+
             if (!IS_CHECK_FINISH) {
-                hhdService.systemReport();
+                //仅当hhd返回的数据不携带业务数据 才发起获取报告单 否则不发起
+                if (responseMap.size() < 3) {
+                    logger.info(new Date() + "\t报告单未结束,发送system-report获取报告单");
+                    hhdService.systemReport();
+                    return;
+                } else {
+                    logger.info(new Date() + "\t报告单未结束,但hhd返回数据中已经包括检查结果，因此不发送system-report获取报告单");
+                }
+            } else {
+                //注：一个报告单检查完了后 系统会一直返回检查结束，如果此时继续发送systemReport那么则会陷入死循环
+                //因此在此从数据库中捞取最新的报告单，并启动hdd检查
+                logger.info(new Date() + "\t报告单已经结束,不发送systemreport命令,IS_CHECK_FINISH:" + HHDClient.IS_CHECK_FINISH);
+                Report report = reportDAO.getLastReport();
+                boolean lastReportHasFinish = report.getUid() == null || report.getPnorValueResult() == null;
+                logger.info(new Date() + "\t获取最新创建的报告单,该报告单是否结束：\t" + !lastReportHasFinish + "\treport为" + report);
+
+                if (lastReportHasFinish) {
+                    //如最后一条是今天的 则发起start检测
+                    if (report.getModifyDate().after(DateUtil.getTodayDate())) {
+                        hhdService.start(report.getPatientName(), report.getAge());
+                    }
+                }
+                return;
             }
         }
         if (responseMap.containsKey("patient_01")) {
@@ -103,21 +147,27 @@ public class HHDResponseHandler {
                 }
                 reportDAO.updateReport(uid, report.getReportId());
             } else {
-                String checkDate = responseMap.get("patient_02");
+//                String checkDate = responseMap.get("patient_02");
                 String checkResult = responseMap.get("screening_result");
                 String pnorm = responseMap.get("screening_pnorm");
                 String points = responseMap.get("screening_nSpots");
                 if (StringUtils.isBlank(checkResult) || StringUtils.isBlank(pnorm) || StringUtils.isBlank(points)) {
-                    logger.info("检查结果为空或者pnorm值为空，结果忽略:" + JSON.toString(responseMap));
+                    logger.info(new Date() + "\t检查结果为空或者pnorm值为空，结果忽略:" + JSON.toString(responseMap));
                     return;
                 }
                 Float pnormValue = Float.parseFloat(pnorm);
 
                 reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid);
 
-                IS_CHECK_FINISH = true;
-//                hhdService.logout();
-                //断开手持设备
+                if (!IS_CHECK_FINISH) {
+                    logger.info(new Date() + "\t报告单未结束,发送exit命令，退出本次检查uid:\t" + uid);
+                    IS_CHECK_FINISH = true;
+                    Thread.sleep(1000L);
+                    hhdService.exit();
+                }
+
+
+                //断开手持设备 会断开wifi连接
 //                hhdService.terminate();
             }
         }

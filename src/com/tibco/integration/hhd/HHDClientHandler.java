@@ -29,7 +29,7 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
         String body = new String(req, "UTF-8");
-        logger.info(new Date() + " HHD server response is : " + body);
+        logger.info(new Date() + "\tHHD server response is : " + body);
 
         String[] response = body.split("\r\n");
         Map<String, String> responseMap = new HashMap<>();
