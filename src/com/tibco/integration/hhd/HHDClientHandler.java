@@ -24,7 +24,7 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        HHDClient.lastCommandResponseDone = true;
+        HHDClient.getInstance().lastCommandContext.lastCommandResponseDone = true;
         ByteBuf buf = (ByteBuf) msg;
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
@@ -55,7 +55,7 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        HHDClient.lastCommandResponseDone = true;
+        HHDClient.getInstance().lastCommandContext.lastCommandResponseDone = true;
         logger.error("HHD server exception is : ", cause);
         //远程主机强迫关闭了一个现有的连接
         if (cause instanceof IOException && (cause.getMessage().contains("Connection reset by peer") || cause.getMessage().contains("远程主机"))) {

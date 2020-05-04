@@ -24,6 +24,11 @@ public class HHDResponseHandler {
     private int hhdNotReadyTimes = 0;
 
     /**
+     * 是否需要发送system_report命令
+     */
+    private static boolean requireSendSystemReportCmd = true;
+
+    /**
      * 此处是处理手持设备返回的结果 需要加锁
      *
      * @param responseMap
@@ -80,6 +85,7 @@ public class HHDResponseHandler {
 
         if ("设备就绪".equals(status)) {
 //            Thread.sleep(5000L);
+            requireSendSystemReportCmd = true;
             hhdNotReadyTimes = 0;
             Thread.sleep(1000L);
             Report report = reportDAO.getLastReport();
@@ -101,9 +107,10 @@ public class HHDResponseHandler {
             Thread.sleep(1000L);
 
             if (!IS_CHECK_FINISH) {
-                //仅当hhd返回的数据不携带业务数据 才发起获取报告单 否则不发起
-                if (responseMap.size() < 3) {
-                    logger.info(new Date() + "\t报告单未结束,发送system-report获取报告单");
+//                仅当hhd返回的数据不携带业务数据 才发起获取报告单 否则不发起
+                if (responseMap.size() < 3 && requireSendSystemReportCmd) {
+                    logger.info(new Date() + "\t报告单未结束,发送system_report获取报告单");
+                    requireSendSystemReportCmd = false;
                     hhdService.systemReport();
                     return;
                 } else {
@@ -112,7 +119,7 @@ public class HHDResponseHandler {
             } else {
                 //注：一个报告单检查完了后 系统会一直返回检查结束，如果此时继续发送systemReport那么则会陷入死循环
                 //因此在此从数据库中捞取最新的报告单，并启动hdd检查
-                logger.info(new Date() + "\t报告单已经结束,不发送systemreport命令,IS_CHECK_FINISH:" + HHDClient.IS_CHECK_FINISH);
+                logger.info(new Date() + "\t报告单已经结束,不发送system_report命令,IS_CHECK_FINISH:" + HHDClient.IS_CHECK_FINISH);
                 Report report = reportDAO.getLastReport();
                 boolean lastReportHasFinish = report.getUid() == null || report.getPnorValueResult() == null;
                 logger.info(new Date() + "\t获取最新创建的报告单,该报告单是否结束：\t" + !lastReportHasFinish + "\treport为" + report);
@@ -120,7 +127,8 @@ public class HHDResponseHandler {
                 if (lastReportHasFinish) {
                     //如最后一条是今天的 则发起start检测
                     if (report.getModifyDate().after(DateUtil.getTodayDate())) {
-                        hhdService.start(report.getPatientName(), report.getAge());
+//                        hhdService.start(report.getPatientName(), report.getAge());
+                        hhdService.ready();
                     }
                 }
                 return;
@@ -151,8 +159,10 @@ public class HHDResponseHandler {
                 String checkResult = responseMap.get("screening_result");
                 String pnorm = responseMap.get("screening_pnorm");
                 String points = responseMap.get("screening_nSpots");
+                //hhd返回结果 可能会不完整 数据被截断 因此此时需要再次获取报告单检查结果
                 if (StringUtils.isBlank(checkResult) || StringUtils.isBlank(pnorm) || StringUtils.isBlank(points)) {
                     logger.info(new Date() + "\t检查结果为空或者pnorm值为空，结果忽略:" + JSON.toString(responseMap));
+                    hhdService.systemReport();
                     return;
                 }
                 Float pnormValue = Float.parseFloat(pnorm);

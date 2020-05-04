@@ -27,7 +27,7 @@ public class HHDClient {
     /**
      * 当检查结束后 不再发送 system report了
      */
-    public static volatile  boolean IS_CHECK_FINISH = false;
+    public static volatile boolean IS_CHECK_FINISH = false;
 
     private static HHDClient hhdClient = new HHDClient();
     /**
@@ -36,7 +36,29 @@ public class HHDClient {
      * 命令发送后 更新为false
      * 收到命令回信后 更新为true
      */
-    public static volatile boolean lastCommandResponseDone = true;
+    public volatile Context lastCommandContext = new Context(true, new Date(),null);
+
+    class Context {
+        boolean lastCommandResponseDone;
+        Date lastCommandCommitTime;
+        String command;
+
+        Context(boolean lastCommandResponseDone, Date lastCommandCommitTime,String command) {
+            this.lastCommandCommitTime = lastCommandCommitTime;
+            this.lastCommandResponseDone = lastCommandResponseDone;
+            this.command = command;
+        }
+
+        @Override
+        public String toString() {
+            return "Context{" +
+                    "lastCommandResponseDone=" + lastCommandResponseDone +
+                    ", lastCommandCommitTime=" + lastCommandCommitTime +
+                    ", command='" + command + '\'' +
+                    '}';
+        }
+    }
+
 
     /**
      * 定时器是否已经开启
@@ -159,13 +181,26 @@ public class HHDClient {
     }
 
     private synchronized void writeMsg(String request) {
+        Date now = new Date();
+
         try {
-            if (lastCommandResponseDone) {
+            if (lastCommandContext.lastCommandResponseDone) {
                 socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
                 logger.info(new Date() + "\t设备连接成功，发送请求\t" + request);
-                lastCommandResponseDone = false;
+                lastCommandContext.lastCommandResponseDone = false;
+                lastCommandContext.command = request;
+                lastCommandContext.lastCommandCommitTime = now;
             } else {
-                logger.info(new Date() + "\t上次命令发送没回到回复，此命令丢弃：" + request);
+
+                if (now.getTime() - lastCommandContext.lastCommandCommitTime.getTime() > 30 * 1000) {
+                    logger.info(new Date() + "\t上次命令发送没回到回复，但是已经等待30s未返回结果，再次发送请求\t" + request +"\tlastCommandContext:"+ lastCommandContext);
+                    socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
+                    lastCommandContext.command = request;
+                    lastCommandContext.lastCommandCommitTime = now;
+                } else {
+                    logger.info(new Date() + "\t上次命令发送没回到回复，此命令丢弃：" + request+"\tlastCommandContext:"+ lastCommandContext);
+                }
+
             }
         } catch (Throwable e) {
             socketChannel = null;
