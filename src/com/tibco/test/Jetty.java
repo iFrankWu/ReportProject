@@ -69,17 +69,17 @@ public class Jetty {
         server.start();
         System.out.println(context.getResourceBase());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            private HHDService hhdService = new HHDService();
-
-            @Override
-            public void run() {
-//                hhdService.logout();
-//                hhdService.terminate();
-                hhdService.terminate();
-                System.out.println("正常关闭手持设备");
-            }
-        }));
+//        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+//            private HHDService hhdService = new HHDService();
+//
+//            @Override
+//            public void run() {
+////                hhdService.logout();
+////                hhdService.terminate();
+////                hhdService.terminate();
+////                System.out.println("正常关闭手持设备");
+//            }
+//        }));
 
 //        HHDClient client = HHDClient.getInstance();
 //        client.connect();
