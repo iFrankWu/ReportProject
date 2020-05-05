@@ -22,6 +22,14 @@ public class HHDClientHandler extends SimpleChannelInboundHandler {
 //        ctx.writeAndFlush(Unpooled.copiedBuffer("this is from client : active", Charset.forName("UTF-8")));
     }
 
+
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        logger.info(new Date() + "\t手持设备连接被关闭");
+        HHDClient.getInstance().setSocketChannel(null);
+        super.channelInactive(ctx);
+    }
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         HHDClient.getInstance().lastCommandContext.lastCommandResponseDone = true;

@@ -68,7 +68,7 @@ public class HHDResponseHandler {
             //设备返回5次未就绪 一般是设备死机了
             if (hhdNotReadyTimes > 5) {
                 logger.error(new Date() + "\t设备超过5次返回 设备未就绪一般是设备死机了 此时中断连接，退出登陆，重新登陆尝试");
-                hhdService.terminate();
+//                hhdService.terminate();
                 hhdService.socketStatus();
                 hhdNotReadyTimes = 0;
                 return;

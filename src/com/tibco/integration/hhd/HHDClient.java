@@ -36,14 +36,14 @@ public class HHDClient {
      * 命令发送后 更新为false
      * 收到命令回信后 更新为true
      */
-    public volatile Context lastCommandContext = new Context(true, new Date(),null);
+    public volatile Context lastCommandContext = new Context(true, new Date(), null);
 
     class Context {
         boolean lastCommandResponseDone;
         Date lastCommandCommitTime;
         String command;
 
-        Context(boolean lastCommandResponseDone, Date lastCommandCommitTime,String command) {
+        Context(boolean lastCommandResponseDone, Date lastCommandCommitTime, String command) {
             this.lastCommandCommitTime = lastCommandCommitTime;
             this.lastCommandResponseDone = lastCommandResponseDone;
             this.command = command;
@@ -101,13 +101,11 @@ public class HHDClient {
     }
 
     public void setSocketChannel(SocketChannel socketChannel) {
-        logger.info(new Date() + "\tHDD重启重置连接");
+        logger.info(new Date() + "\tHDD连接被重置为null？" + socketChannel == null);
         this.socketChannel = socketChannel;
     }
 
     private SocketChannel socketChannel;
-
-//    private SingleThreadEventLoop singleThreadEventLoop = new DefaultEventLoop();
 
     public void connect() throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -153,10 +151,16 @@ public class HHDClient {
 
     }
 
+    private boolean isNotAvaiable() {
+        boolean notAvaiable = socketChannel == null || socketChannel.isShutdown() || socketChannel.isOutputShutdown() || socketChannel.isInputShutdown();
+        logger.info(new Date() + "\t通道是否可用 avaiable:" + !notAvaiable);
+        return notAvaiable;
+    }
+
     public void sendMsg(final String request) {
         Date now = new Date();
         logger.info(requestTimes++ + " " + now + "\tSend to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request :\t" + request);
-        if (socketChannel == null) {
+        if (isNotAvaiable()) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -166,7 +170,7 @@ public class HHDClient {
                         logger.error("连接手持设备出错", e);
                         throw new RuntimeException("连接手持设备出错：" + e.getMessage());
                     }
-                    if (socketChannel == null) {
+                    if (isNotAvaiable()) {
                         HHDClient.getInstance().setCurrecntStatus("SocketChannel-Null");
                         throw new RuntimeException("连接手持设备失败,请求被忽略:" + request);
                     } else {
@@ -193,12 +197,12 @@ public class HHDClient {
             } else {
 
                 if (now.getTime() - lastCommandContext.lastCommandCommitTime.getTime() > 30 * 1000) {
-                    logger.info(new Date() + "\t上次命令发送没回到回复，但是已经等待30s未返回结果，再次发送请求\t" + request +"\tlastCommandContext:"+ lastCommandContext);
+                    logger.info(new Date() + "\t上次命令发送没回到回复，但是已经等待30s未返回结果，再次发送请求\t" + request + "\tlastCommandContext:" + lastCommandContext);
                     socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
                     lastCommandContext.command = request;
                     lastCommandContext.lastCommandCommitTime = now;
                 } else {
-                    logger.info(new Date() + "\t上次命令发送没回到回复，此命令丢弃：" + request+"\tlastCommandContext:"+ lastCommandContext);
+                    logger.info(new Date() + "\t上次命令发送没回到回复，此命令丢弃：" + request + "\tlastCommandContext:" + lastCommandContext);
                 }
 
             }
