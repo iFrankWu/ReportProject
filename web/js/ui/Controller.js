@@ -1429,7 +1429,8 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             return;
         }
 
-        var isFull = report.outpatientNo && report.admissionNo && report.patientName;
+        //report.outpatientNo && report.admissionNo &&
+        var isFull =  report.patientName;
         if (!isFull) {
             alert("报告单不完整,请先填写完整的报告单");
             return;
