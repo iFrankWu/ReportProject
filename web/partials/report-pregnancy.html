@@ -3,9 +3,10 @@
     <button id="createbtn" class="btn" ng-click="newCreate()">创建报告单</button>
     <!-- create report -->
     <fieldset id="main" ng-show="newCreateReport">
-        <legend>创建报告单</legend>
+ 
+      
 
-        <fieldset  width="100%">
+        <fieldset  width="100%" hidden="true">
             <legend><b><font color="#296B3C">手持设备</font></b></legend>
             <table>
                 <tr>
@@ -22,7 +23,9 @@
             </table>
 
         </fieldset>
-
+ 
+        <legend>创建报告单(孕妇)</legend>
+ 
         <fieldset width="100%">
             <legend><b><font color="#296B3C">资料</font></b></legend>
             <table style="width:100%">
@@ -233,11 +236,11 @@
 </tr>
 <tr style="height:30px"></tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
     <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->
 	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
@@ -758,11 +761,11 @@
 
 <tr style="height:30px"></tr>
 <tr ng-show="doesCheckCompleted &&  (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
        <!--<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">-->
 	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
@@ -1075,11 +1078,11 @@
 </tr>
 
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td></td><td style="text-align:left;font-family:黑体;font-size:22;font-weight:bold;text-indent: 20px;">未发现异常细胞或组织
+	<td></td><td style="text-align:left;font-family:黑体;font-size:22;font-weight:bold;text-indent: 20px;">未发现异常
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;font-size:22;font-weight:bold;">发现异常细胞或组织
+	<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;font-size:22;font-weight:bold;">可能有异常，应进一步检查
 </td>
 </tr>
      <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->
