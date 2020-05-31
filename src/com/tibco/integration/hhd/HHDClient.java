@@ -126,21 +126,28 @@ public class HHDClient {
                 logger.info(new Date() + "\tconnect server successful");
                 HHDClient.getInstance().setCurrecntStatus("Connected");
 
-//                synchronized (this) {
-//                    if (!TIMER_START) {
-//                        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                logger.info("scheduleAtFixedRate execute every 3 min...");
-//                                StringBuffer request = new StringBuffer();
-//                                request.append("socket_status?");
-//                                request.append("\r\n");
-//                                HHDClient.getInstance().sendMsg(request.toString());
-//                            }
-//                        }, 0, 3, TimeUnit.MINUTES);
-//                        TIMER_START = true;
-//                    }
-//                }
+                synchronized (this) {
+                    if (!TIMER_START) {
+                        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                            @Override
+                            public void run() {
+                                boolean lastCmdIsTenMintueBefore = lastCommandContext == null || System.currentTimeMillis() - lastCommandContext.lastCommandCommitTime.getTime() > 10 * 60 * 1000;
+                                if (lastCmdIsTenMintueBefore) {
+                                    logger.info("定时任务发送命令 上次命令执行在十分钟之前 防止设备进入充电状态");
+                                    StringBuffer request = new StringBuffer();
+                                    request.append("socket_status?");
+                                    request.append("\r\n");
+                                    HHDClient.getInstance().sendMsg(request.toString());
+                                } else {
+                                    logger.info("定时任务不发送命令 上次命令执行在十分钟之内" + lastCommandContext);
+                                }
+
+
+                            }
+                        }, 0, 5, TimeUnit.MINUTES);
+                        TIMER_START = true;
+                    }
+                }
             }
 
             future.channel().closeFuture().sync();
