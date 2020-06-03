@@ -640,7 +640,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         if(report.age >= 35){
-            if(report.uid && report.uid.length == 6){
+            if(report.uid && report.uid.length >= 6){
                 //可见癌 不规则流血 可疑癌 接触性流血
                 if(Boolean(report.visableCancer) || Boolean(report.isCancer ) || Boolean(report.touchbleeding )) {
                    $scope.report.checkResult = "异常";
@@ -652,7 +652,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 $scope.report.checkResult = null;
             }
         }else{
-            if(report.uid  && report.uid.length == 6){
+            if(report.uid  && report.uid.length >= 6){
                 if(Boolean(report.visableCancer) || Boolean(report.isCancer )){
                      $scope.report.checkResult = "异常";
                 }
@@ -1460,7 +1460,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             return;
         }
 
-<<<<<<< HEAD
+
         if ($scope.report.hpv instanceof Array && $scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")) {
             alert("HPV 阴性和其他配置冲突");
             return;
