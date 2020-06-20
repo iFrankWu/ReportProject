@@ -68,7 +68,7 @@ public class HHDResponseHandler {
             //设备返回5次未就绪 一般是设备死机了
             if (hhdNotReadyTimes > 5) {
                 logger.error(new Date() + "\t设备超过5次返回 设备未就绪一般是设备死机了 此时中断连接，退出登陆，重新登陆尝试");
-//                hhdService.terminate();
+                hhdService.exit();
                 hhdService.socketStatus();
                 hhdNotReadyTimes = 0;
                 return;
@@ -96,6 +96,9 @@ public class HHDResponseHandler {
                 //如最后一条是今天的 则发起start检测
                 if (report.getModifyDate().after(DateUtil.getTodayDate())) {
                     hhdService.start(report.getPatientName(), report.getAge());
+                }else{
+                    logger.info(new Date() + "\t设备刚刚就绪 上次检查没结束，但是不是今天的 退出下试试 创建日期：" + report.getModifyDate());
+                    hhdService.exit();
                 }
             }
             return;
@@ -109,12 +112,12 @@ public class HHDResponseHandler {
             if (!IS_CHECK_FINISH) {
 //                仅当hhd返回的数据不携带业务数据 才发起获取报告单 否则不发起
                 if (responseMap.size() < 3 && requireSendSystemReportCmd) {
-                    logger.info(new Date() + "\t报告单未结束,发送system_report获取报告单");
+                    logger.info(new Date() + "\t报告单未结束,发送system_report获取报告单" + responseMap);
                     requireSendSystemReportCmd = false;
                     hhdService.systemReport();
                     return;
                 } else {
-                    logger.info(new Date() + "\t报告单未结束,但hhd返回数据中已经包括检查结果，因此不发送system-report获取报告单");
+                    logger.info(new Date() + "\t报告单未结束,但hhd返回数据中已经包括检查结果，因此不发送system-report获取报告单" + responseMap + "requireSendSystemReportCmd："+requireSendSystemReportCmd);
                 }
             } else {
                 //注：一个报告单检查完了后 系统会一直返回检查结束，如果此时继续发送systemReport那么则会陷入死循环
@@ -170,8 +173,9 @@ public class HHDResponseHandler {
                 reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid);
 
                 if (!IS_CHECK_FINISH) {
-                    logger.info(new Date() + "\t报告单未结束,发送exit命令，退出本次检查uid:\t" + uid);
+                    logger.info(new Date() + "\t报告单已结束,发送exit命令，退出本次检查uid:\t" + uid);
                     IS_CHECK_FINISH = true;
+                    requireSendSystemReportCmd = true;
                     Thread.sleep(1000L);
                     hhdService.exit();
                 }

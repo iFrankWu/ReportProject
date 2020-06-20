@@ -9,6 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.nio.charset.Charset;
@@ -125,29 +126,8 @@ public class HHDClient {
                 socketChannel = (SocketChannel) future.channel();
                 logger.info(new Date() + "\tconnect server successful");
                 HHDClient.getInstance().setCurrecntStatus("Connected");
+                startPingTimer();
 
-                synchronized (this) {
-                    if (!TIMER_START) {
-                        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-                            @Override
-                            public void run() {
-                                boolean lastCmdIsTenMintueBefore = lastCommandContext == null || System.currentTimeMillis() - lastCommandContext.lastCommandCommitTime.getTime() > 10 * 60 * 1000;
-                                if (lastCmdIsTenMintueBefore) {
-                                    logger.info("定时任务发送命令 上次命令执行在十分钟之前 防止设备进入充电状态");
-                                    StringBuffer request = new StringBuffer();
-                                    request.append("socket_status?");
-                                    request.append("\r\n");
-                                    HHDClient.getInstance().sendMsg(request.toString());
-                                } else {
-                                    logger.info("定时任务不发送命令 上次命令执行在十分钟之内" + lastCommandContext);
-                                }
-
-
-                            }
-                        }, 0, 5, TimeUnit.MINUTES);
-                        TIMER_START = true;
-                    }
-                }
             }
 
             future.channel().closeFuture().sync();
@@ -158,6 +138,44 @@ public class HHDClient {
 
     }
 
+    public void startPingTimer() {
+        try {
+            synchronized (this) {
+                if (!TIMER_START) {
+                    sendSocketStatus();
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean lastCmdIsTenMintueBefore = lastCommandContext == null || lastCommandContext.command == null ||  System.currentTimeMillis() - lastCommandContext.lastCommandCommitTime.getTime() > 10 * 60 * 1000;
+                            if (lastCmdIsTenMintueBefore) {
+                                logger.info(new Date()+"\t定时任务发送命令 上次命令执行在十分钟之前 或者命令为空 防止设备进入充电状态");
+                                sendSocketStatus();
+                            } else {
+                                logger.info(new Date()+"\t定时任务不发送命令 上次命令执行在十分钟之内 " + lastCommandContext);
+                            }
+
+
+                        }
+                    }, 0, 5, TimeUnit.MINUTES);
+                    TIMER_START = true;
+                    logger.info(new Date()+"\t定时任务 启动成功" );
+                }else{
+                    logger.info(new Date()+"\t定时任务 已启动，不重复启动" );
+                }
+            }
+        } catch (Exception e) {
+            logger.error(new Date() + "\t定时任务启动失败", e);
+        }
+    }
+
+    private void sendSocketStatus(){
+        StringBuffer request = new StringBuffer();
+        request.append("socket_status?");
+        request.append("\r\n");
+        HHDClient.getInstance().sendMsg(request.toString());
+    }
+
+
     private boolean isNotAvaiable() {
         boolean notAvaiable = socketChannel == null || socketChannel.isShutdown() || socketChannel.isOutputShutdown() || socketChannel.isInputShutdown();
         logger.info(new Date() + "\t通道是否可用 avaiable:" + !notAvaiable);
@@ -166,7 +184,17 @@ public class HHDClient {
 
     public void sendMsg(final String request) {
         Date now = new Date();
+
+        String currentStatus = HHDClient.getInstance().getCurrecntStatus();
+        if(StringUtils.isNotBlank(currentStatus) && currentStatus.contains("设备就绪")){
+           if(request.contains("socket_status?")){
+               logger.info(requestTimes++ + " " + now + "\t状态为：" + HHDClient.getInstance().getCurrecntStatus() + " 状态请求被忽略 :\t" + request);
+               return;
+           }
+        }
+
         logger.info(requestTimes++ + " " + now + "\tSend to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request :\t" + request);
+
         if (isNotAvaiable()) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override

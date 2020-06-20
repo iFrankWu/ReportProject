@@ -85,8 +85,9 @@ public class ReportService {
         try {
             if (report.getUid() == null || report.getPnorValueResult() == null) {
                 HHDClient.IS_CHECK_FINISH = false;
+
+
                 hhdService.socketStatus();
-//                String currentStatus = HHDClient.getInstance().getCurrecntStatus();
                 //设备就绪不能发请求
 //                if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
 ////                    HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();

@@ -217,7 +217,7 @@ public class ReportDAO {
     }
 
     public Report getReportByNameAndAge(String patientName, int age) throws DBException {
-        String sql = "select * from report where patientName=? and age = ? order by reportId desc limit 1";
+        String sql = "select * from report where patientName=? and age = ? order by modifyDate desc limit 1";
         List<FieldParameter> fplist = new ArrayList<FieldParameter>();
         fplist.add(new FieldParameter(1, patientName, FieldTypes.VARCHAR));
         fplist.add(new FieldParameter(2, age, FieldTypes.INTEGER));
@@ -464,8 +464,13 @@ public class ReportDAO {
         return db.queryPrepareList(Report.class, sql, fpList);
     }
 
+    /**
+     * 获取最近更新的一条数据
+     * @return
+     * @throws DBException
+     */
     public Report getLastReport() throws DBException {
-        String sql = "select * from report order by reportId desc limit 1";
+        String sql = "select * from report order by modifyDate desc limit 1";
         return (Report) db.queryFirst(Report.class, sql);
     }
 }
