@@ -37,17 +37,20 @@ public class HHDClient {
      * 命令发送后 更新为false
      * 收到命令回信后 更新为true
      */
-    public volatile Context lastCommandContext = new Context(true, new Date(), null);
+    public volatile Context lastCommandContext = new Context(true, new Date(), null,false);
 
     class Context {
         boolean lastCommandResponseDone;
         Date lastCommandCommitTime;
         String command;
+        //定时任务发起的命令
+        boolean isFromTimer;
 
-        Context(boolean lastCommandResponseDone, Date lastCommandCommitTime, String command) {
+        Context(boolean lastCommandResponseDone, Date lastCommandCommitTime, String command,boolean isFromTimer) {
             this.lastCommandCommitTime = lastCommandCommitTime;
             this.lastCommandResponseDone = lastCommandResponseDone;
             this.command = command;
+            this.isFromTimer = isFromTimer;
         }
 
         @Override
@@ -56,6 +59,7 @@ public class HHDClient {
                     "lastCommandResponseDone=" + lastCommandResponseDone +
                     ", lastCommandCommitTime=" + lastCommandCommitTime +
                     ", command='" + command + '\'' +
+                    ", isFromTimer=" + isFromTimer +
                     '}';
         }
     }
@@ -172,7 +176,7 @@ public class HHDClient {
         StringBuffer request = new StringBuffer();
         request.append("socket_status?");
         request.append("\r\n");
-        HHDClient.getInstance().sendMsg(request.toString());
+        HHDClient.getInstance().sendMsg(request.toString(),true);
     }
 
 
@@ -183,6 +187,10 @@ public class HHDClient {
     }
 
     public void sendMsg(final String request) {
+        this.sendMsg(request,false);
+    }
+
+    public void sendMsg(final String request, final boolean isFromTimer) {
         Date now = new Date();
 
         String currentStatus = HHDClient.getInstance().getCurrecntStatus();
@@ -209,17 +217,17 @@ public class HHDClient {
                         HHDClient.getInstance().setCurrecntStatus("SocketChannel-Null");
                         throw new RuntimeException("连接手持设备失败,请求被忽略:" + request);
                     } else {
-                        writeMsg(request);
+                        writeMsg(request,isFromTimer);
                     }
                 }
             });
         } else {
-            writeMsg(request);
+            writeMsg(request,isFromTimer);
         }
 
     }
 
-    private synchronized void writeMsg(String request) {
+    private synchronized void writeMsg(String request,boolean isFromTimer) {
         Date now = new Date();
 
         try {
@@ -229,6 +237,7 @@ public class HHDClient {
                 lastCommandContext.lastCommandResponseDone = false;
                 lastCommandContext.command = request;
                 lastCommandContext.lastCommandCommitTime = now;
+                lastCommandContext.isFromTimer = isFromTimer;
             } else {
 
                 if (now.getTime() - lastCommandContext.lastCommandCommitTime.getTime() > 30 * 1000) {
@@ -236,6 +245,7 @@ public class HHDClient {
                     socketChannel.writeAndFlush(Unpooled.copiedBuffer(request, Charset.forName("UTF-8")));
                     lastCommandContext.command = request;
                     lastCommandContext.lastCommandCommitTime = now;
+                    lastCommandContext.isFromTimer = isFromTimer;
                 } else {
                     logger.info(new Date() + "\t上次命令发送没回到回复，此命令丢弃：" + request + "\tlastCommandContext:" + lastCommandContext);
                 }

@@ -42,6 +42,12 @@ public class HHDResponseHandler {
         if (StringUtils.isNotBlank(status)) {
             HHDClient.getInstance().setCurrecntStatus(status);
         }
+
+        if(HHDClient.getInstance().lastCommandContext.isFromTimer){
+            logger.info(new Date() + "\t定时任务发送的请求 不触发后续操作 它仅仅是为了设备不进入充电状态" +  HHDClient.getInstance().lastCommandContext);
+            return;
+        }
+
         if ("退出登陆".equals(status)) {
             Thread.sleep(1000L);
             hhdService.login();

@@ -470,10 +470,21 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if (!$scope.report.hpv || !$scope.report.lct) {
             return 0.5;
         }
-
+        if($scope.report.lct == "SCC" || $scope.report.lct == "AGC"){
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+                return 1;
+            }
+            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
+                return 1;
+            }
+            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "阴性") {
+                return 1;
+            }
+        }
 
         //["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"]
-        if ($scope.report.lct == "ASC-H" || $scope.report.lct == "HSIL" || $scope.report.lct == "SCC" || $scope.report.lct == "AGC") {
+        if ($scope.report.lct == "ASC-H" || $scope.report.lct == "HSIL" ) {
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
                 || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
@@ -486,6 +497,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 return 0.7;
             }
         }
+
+
+
         if ($scope.report.lct == "LSIL" || $scope.report.lct == "ASCUS") {
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
@@ -499,6 +513,8 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 return 0.3;
             }
         }
+
+
 
         if ($scope.report.lct == "NILM") {
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
