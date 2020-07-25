@@ -4,7 +4,7 @@
     <!-- create report -->
     <fieldset id="main" ng-show="newCreateReport">
 
-        <fieldset  width="100%" hidden="true">
+        <fieldset  width="100%" style="display: none">
             <legend><b><font color="#296B3C">手持设备</font></b></legend>
             <table>
                 <tr>
@@ -165,7 +165,7 @@
         <table>
             <tr>
                 <td>
-                    <button ng-click="stash()">录入完成</button>
+                    <button ng-click="stash()">START</button>
                 </td>
             </tr>
         </table>
@@ -955,8 +955,8 @@
                 </tr>
                 <tr>
                     <td><label>HPV:</label></td>
-                    <td colspan="5">
-                        <input type="text" ng-model="report.hpv">
+                    <td colspan="5" >
+                        <input type="text" ng-model="report.hpv" style="width:70%">
                         <!-- <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
                         </select> -->
                     </td>

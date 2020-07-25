@@ -442,7 +442,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 
     $scope.lcts = ["无","NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
-    $scope.hpvs = ["16+","18+","31+","33+","52+","58+","其他高危型+","阴性","无"];
+    $scope.hpvs = ["16+","18+","31+","33+","52+","58+","其他高危型+","其他低危型","阴性","无"];
 
     if ($cookieStore.get("doctor") == null) {
         //$("#logout").show();
@@ -1291,7 +1291,8 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
 
     $scope.getBoolean = function(value){
-        if (value instanceof  Boolean){
+        var type = typeof value;
+        if (type === 'boolean'){
             return Boolean(value);
         }else{
              return value === 'true';
