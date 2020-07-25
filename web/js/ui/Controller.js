@@ -446,9 +446,24 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
     }
 
+
+
+
+
+
     $scope.doctor = $cookieStore.get("doctor");
     $scope.hospital;
     $scope.showLogo = false;
+
+    $scope.getBoolean = function (value) {
+         var type = typeof value;
+           if (type === 'boolean'){
+                return Boolean(value);
+           }else{
+                return value === 'true';
+           }
+    }
+
     $scope.pnormalThreshold = function(){
 
         if(!$scope.report.hpv || !$scope.report.lct){
@@ -625,7 +640,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if(report.age >= 35){
             if(report.uid && report.uid.length == 6){
                 //可见癌 不规则流血 可疑癌 接触性流血
-                if(Boolean(report.visableCancer) || Boolean(report.isCancer ) || Boolean(report.touchbleeding )) {
+                if(Boolean(report.visableCancer) || Boolean(report.isCancer ) || $scope.getBoolean(report.touchbleeding )) {
                    $scope.report.checkResult = "异常";
                 }
                 // else{
@@ -795,7 +810,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if (Boolean(report.isBleed)) {
             complaints += "性交出血/";
         }
-        report.unregularBleed =   Boolean(report.unregularBleed);
+        report.unregularBleed =   $scope.getBoolean(report.unregularBleed);
         if (Boolean(report.unregularBleed)) {
             complaints += "不规则流血/";
         }
@@ -834,7 +849,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if (Boolean(report.isCancer )) {
             clinical += "阴道排液/";
         }
-        report.touchbleeding = Boolean(report.touchbleeding);
+        report.touchbleeding = $scope.getBoolean(report.touchbleeding);
         if(Boolean(report.touchbleeding )){
             clinical += "接触性出血/";
         }
@@ -1249,8 +1264,8 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.readonly = true;
         $scope.disabled = true;
         $scope.report = report;
-        report.unregularBleed =   Boolean(report.unregularBleed);
-        report.touchbleeding = Boolean(report.touchbleeding);
+        report.unregularBleed =   $scope.getBoolean(report.unregularBleed);
+        report.touchbleeding = $scope.getBoolean(report.touchbleeding);
 
         $scope.checkDate4Detial = $scope.formatTime($scope.report.checkDate);
         $scope.modifyDate4Detial = $scope.formatTime($scope.report.modifyDate);
