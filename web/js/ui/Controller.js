@@ -591,6 +591,45 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         // )
     }
 
+    /**
+     * 当hhd设备未能产出结果时 ， 手动填入7位数字，前6位是uid，第七位是检测结果 1 表示 正常 ， 0 表示异常
+     */
+    $scope.getPNormManual = function () {
+        if (!$scope.report) {
+            return;
+        }
+        var uid = $scope.report.uid;
+        if (!uid) {
+            // alert("请输入UID");
+            return;
+        }
+        if (uid.length < 6) {
+            return;
+        }
+
+        if(uid.length != 7 ){
+            //alert("uid长度不为7位");
+            return;
+        }
+
+        //第七位 0 为 失败 1 为成功
+       var result = uid.substr(6,1);
+
+        if (result === '0') {
+            $scope.report.isComplete = '完成';
+            $scope.doesCheckCompleted = true;
+            $scope.report.checkResult = "异常"
+
+        } else if(result === '1'){
+            $scope.report.isComplete = '完成';
+            $scope.doesCheckCompleted = true;
+            $scope.report.checkResult = "正常"
+
+        }else {
+           // alert("uid格式不对");
+        }
+    }
+
 
     $scope.getPNormPregenancy = function () {
         if (!$scope.report) {
@@ -679,6 +718,8 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 $scope.report.checkResult = null;
             }
         }
+
+        $scope.getPNormManual();
     }
 
 
