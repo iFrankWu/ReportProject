@@ -1273,6 +1273,15 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     $scope.printReport = function (rep, $event) {
 
         $scope.report = rep;
+
+        var uid = rep.uid;
+
+        if(uid.length == 7){
+            $scope.report.uid = uid.substr(0,6);
+        }else{
+            $scope.report.uid = uid.substr(uid.length - 6,6);
+        }
+
         $scope.doesCheckComplete();
         $scope.checkDatePrint = $scope.formatChineseDate(rep.checkDate);
         $scope.lastTimeMenstruationPrint = $scope.formatChineseDate(rep.lastTimeMenstruation);

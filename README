@@ -33,49 +33,10 @@ version=1.4
 6. 前端轮询获取pnorm值，医生完成操作 []
 7. 医生点击保存 其实是更新操作。
 
-connect server  成功---------
-hdd:POST
-login_1='TruScreenSKT'
-login_2='Socket123'
-socket_request='login'
+#08/03/2020
+1、登陆成功 进行导航页
+2、开始可以选择下拉 报告(非妊娠)/报告单(妊娠) --> 跳转到资料录入页
+3、查找报告单， 到列表页
+4、退出
+5、UID打印的时候 仅展示6位（系统和手工区分）
 
-Body is : socket_status='退出登陆'
-
-hdd:POST
-login_1='TruScreenSKT'
-login_2='Socket123'
-socket_request='login'
-
-Body is : socket_status='登陆成功'
-
-hdd:POST
-socket_request='ready'
-
-Body is : socket_status='设备就绪'
-
-hdd:POST
-patient_05='lina'
-patient_06='32'
-socket_request='start'
-
-Body is : patient_01='18D853-000073'
-patient_02=''
-patient_03=''
-patient_05='lina'
-patient_06='32'
-screening_result=''
-screening_pnorm=''
-screening_nSpots=''
-socketDataChecksum='0xD005'
-
-Body is : socket_status='检查过程中...'
-
-hdd:POST
-socket_request='socket_status'
-
-socket_request='socket_status'
-
-hdd:POST
-socket_request='socket_status'
-
-socket_request='socket_status'
