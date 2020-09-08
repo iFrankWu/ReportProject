@@ -615,12 +615,12 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         //第七位 0 为 失败 1 为成功
        var result = uid.substr(6,1);
 
-        if (result === '0') {
+        if (result === '1') {
             $scope.report.isComplete = '完成';
             $scope.doesCheckCompleted = true;
             $scope.report.checkResult = "异常"
 
-        } else if(result === '1'){
+        } else if(result === '0'){
             $scope.report.isComplete = '完成';
             $scope.doesCheckCompleted = true;
             $scope.report.checkResult = "正常"
