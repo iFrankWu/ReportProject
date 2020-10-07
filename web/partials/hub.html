@@ -1,0 +1,115 @@
+<style>
+
+    .sysInfo ul li {
+        float: none;
+        text-align: left;
+        background: none;
+        list-style-type: disc;
+        line-height: 20px
+    }
+
+    .sysInfo ul {
+        background-color: #fff;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .sysInfo label {
+        font-size: large;
+        background-color: #fff;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        text-align: left;
+        clear: both;
+        color: #0088cc
+    }
+
+    .nav ul li {
+        background: none;
+    }
+
+    .btn1 {
+        outline: auto;
+        display: block;
+        width: 180px;
+        background: none;
+
+    }
+
+    /*设置盒子的样式*/
+    .menuDiv {
+        color: black;
+        background-color: #EEF5F9;
+        text-align: center;
+        display: block;
+    }
+    /*隐藏二级菜单*/
+    .menuUL {
+        position: absolute;
+        display: none;
+
+    }
+    /*鼠标移到盒子，显示二级菜单*/
+    .menuDiv:hover ul {
+        display: block;
+    }
+    /*盒子伪类样式*/
+    .menuDiv:hover {
+        color: #ff0000;
+    }
+
+    /*二级菜单样式*/
+    .menuLI {
+        float: none;
+        width: 60px;
+        text-align: left;
+        display: block;
+    }
+    /*二级菜单伪类*/
+    .menuLI:hover {
+        color: #ff0000;
+        /*background-color: #6f7fe2;*/
+    }
+
+</style>
+
+<script>
+    $(".menuDiv a").attr("disabled",true).css("pointer-events","none");
+</script>
+
+<div class="sysInfo">
+    <label>设备信息</label>
+    <ul>
+        <li>手控器编号: xx</li>
+        <li>手控器韧件: aaa</li>
+        <li>主机韧件: ccc</li>
+        <li>癌症运算法则: D2.03G</li>
+    </ul>
+</div>
+
+<div class="sysInfo">
+    <label>应校准日期</label>
+    <ul>
+        <li>2020-09-20</li>
+    </ul>
+</div>
+
+<div class="nav">
+    <ul>
+    <li class="list-inline-item menuDiv">
+        <a href="#" class="btn1">开始</a>
+        <ul class="menuUL">
+            <li class="menuLI"><button class="btn1" ng-click="gotoReport('/truscreen/reports_woman')">非孕妇</button></li>
+            <li class="menuLI"><button class="btn1" ng-click="gotoReport('/truscreen/reports_pregnancy')">孕妇</button></li>
+        </ul>
+    </li>
+    <li id="find" class="list-inline-item menuDiv">
+        <a href="#" class="btn1">查找报告</a>
+        <ul class="menuUL">
+            <li class="menuLI"><button class="btn1" ng-click="gotoFind('/truscreen/reports_woman')">非孕妇</button></li>
+            <li class="menuLI"><button class="btn1" ng-click="gotoFind('/truscreen/reports_pregnancy')">孕妇</button></li>
+        </ul>
+
+    </li>
+    <li id="logout"><a href="" class="btn1" onclick="logout()">退出</a></li>
+    </ul>
+
+</div>

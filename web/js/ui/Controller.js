@@ -189,7 +189,7 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
                     $location.path("/truscreen/hospital");
                 } else {
                     $("#doctorLink").show();
-                    $location.path("/truscreen/doctors");//.search({'isSuccess':result.isSuccess});
+                    $location.path("/truscreen/hub");//.search({'isSuccess':result.isSuccess});
                 }
             } else {
                 alert("登录失败，详情： " + result.description);
@@ -441,6 +441,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
 
 
+
     $scope.lcts = ["无","NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
     $scope.hpvs = ["16+","18+","31+","33+","52+","58+","其他高危型+","其他低危型","阴性","无"];
 
@@ -453,7 +454,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             $("#createbtn").css("margin-left", "570px");
         }
         $("#mypageLink").show();
-        $("#reportLink").show();
+        $("#reportLink2").show();
+        $("#reportLink1").show();
+        $("#gotohub").show();
+
         $("#logout").show();
 //		$scope.getPageNumber();
         if (doctor.type == "系统管理员") {
@@ -1570,12 +1574,27 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             $scope.saveReport(true);
         }
     }
+
+    console.log("refer:"+$cookieStore.get("refer"));
+    if("hub" == $cookieStore.get("refer")){
+        $scope.newCreate();
+        $cookieStore.put("refer",null);
+    }
 }
 ;
 HospitalController = function ($scope, $location, HospitalService, $locale, $cookieStore, $http, CommonService) {
     if ($cookieStore.get("doctor") == null) {
         $("#logout").show();
-    } else {
+    } else if(location.href.endsWith("hub")) {
+        $("#logout").hide();
+        $("#reportLink2").hide();
+        $("#reportLink1").hide();
+        $("#doctorLink").hide();
+        $("#gotohub").hide();
+        $("#mypageLink").hide();
+
+    }else{
+
         var doctor = $cookieStore.get("doctor");
         if (doctor.type != CommonService.types[1].name) {
             $("#doctorLink").show();
@@ -1690,6 +1709,16 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
         return false;
     }
     $scope.getHospital();
+
+    $scope.gotoReport = function(path){
+        $cookieStore.put("refer", "hub");
+        $location.path(path);
+        $cookieStore.put("path", path);
+    }
+
+    $scope.gotoFind = function(path){
+        $location.path(path);
+    }
 
     $scope.unauthorizedCallBack = function (response) {
         if (response.status == 401) {
