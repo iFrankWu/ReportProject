@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * class description goes here.
  *
- * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
+ * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
  * @version 1.0.0
  */
 public class Report {

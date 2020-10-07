@@ -106,3 +106,6 @@ ALTER TABLE report ADD uid VARCHAR(128);/** add 患者id  V1.7 2018.09.05 */
 
 ALTER TABLE report ADD visableCancer boolean;/** add 是否肉眼可见病变 V1.8 2019.04.01 */
 
+alter table hospital add algorithm VARCHAR(128); /** 癌症算法版本 V1.8 2020.10.07*/
+alter table hospital add adjustDate VARCHAR(128); /** 应校准日期 V1.8 2020.10.07*/
+

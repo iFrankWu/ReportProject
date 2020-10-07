@@ -240,6 +240,7 @@ function logout() {
                 $("#reportLink").hide();
                 $("#mypageLink").hide();
                 $("#doctorLink").hide();
+                $("#gotohub").hide();
                 $("#logout").hide();
                 $("#systemsetting").hide();
             } else {

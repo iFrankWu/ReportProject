@@ -78,17 +78,17 @@
 <div class="sysInfo">
     <label>设备信息</label>
     <ul>
-        <li>手控器编号: xx</li>
-        <li>手控器韧件: aaa</li>
-        <li>主机韧件: ccc</li>
-        <li>癌症运算法则: D2.03G</li>
+        <li>手控器编号:   {{hospital.handController}}</li>
+        <li>手控器韧件:   {{hospital.firmwareVersion}}</li>
+        <li>主机韧件:     {{hospital.machineNumber}}</li>
+        <li>癌症运算法则: {{hospital.algorithm}}</li>
     </ul>
 </div>
 
 <div class="sysInfo">
     <label>应校准日期</label>
     <ul>
-        <li>2020-09-20</li>
+        <li>{{hospital.adjustDate}}</li>
     </ul>
 </div>
 
@@ -101,14 +101,13 @@
             <li class="menuLI"><button class="btn1" ng-click="gotoReport('/truscreen/reports_pregnancy')">孕妇</button></li>
         </ul>
     </li>
-    <li id="find" class="list-inline-item menuDiv">
-        <a href="#" class="btn1">查找报告</a>
-        <ul class="menuUL">
-            <li class="menuLI"><button class="btn1" ng-click="gotoFind('/truscreen/reports_woman')">非孕妇</button></li>
-            <li class="menuLI"><button class="btn1" ng-click="gotoFind('/truscreen/reports_pregnancy')">孕妇</button></li>
-        </ul>
-
+    <li id="find">
+        <a href="#/truscreen/reports_woman" class="btn1">查找报告</a>
     </li>
+
+       <li id="doctorHub" style="display: none">
+            <a href="#/truscreen/doctors" class="btn1">医生</a>
+        </li>
     <li id="logout"><a href="" class="btn1" onclick="logout()">退出</a></li>
     </ul>
 

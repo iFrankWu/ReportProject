@@ -31,7 +31,7 @@ import com.tibco.service.LogRecordService;
 import com.tibco.util.Const;
 
 /*
- * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
+ * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
  * @version 1.0.0
  */
 @Path("/doctor")

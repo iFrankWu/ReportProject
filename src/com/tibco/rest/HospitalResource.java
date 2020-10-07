@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 /**
  * class description goes here.
  *
- * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
+ * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
  * @version 1.0.0
  */
 @Path("/hospital")
@@ -56,8 +56,9 @@ public class HospitalResource {
                                    @FormDataParam("handController") String handController,
                                    @FormDataParam("firmwareVersion") String firmwareVersion,
                                    @FormDataParam("hospitalId") Integer hospitalId,
-                                   @FormDataParam("department") String department
-//				@FormDataParam("prescribingDoctorName") String prescribingDoctorName
+                                   @FormDataParam("department") String department,
+                                   @FormDataParam("algorithm") String algorithm,
+                                   @FormDataParam("adjustDate") String adjustDate
     ) {
 
         if (!restUnit.isSystemAdmin(request)) {
@@ -87,7 +88,8 @@ public class HospitalResource {
             hospital.setHospitalId(hospitalId);
             hospital.setMachineNumber(machineNumber);
             hospital.setDepartment(department);
-//		    		hospital.setPrescribingDoctorName(prescribingDoctorName);
+            hospital.setAlgorithm(algorithm);
+            hospital.setAdjustDate(adjustDate);
             if (uploadedFileLocation != null) {
                 hospital.setHospitalLogo(uploadedFileLocation);
             }
@@ -139,6 +141,8 @@ public class HospitalResource {
                 hospital.setHandController("ASDF-FDES-SSDF-SSSS");
                 hospital.setMachineNumber("100002");
                 hospital.setName("北京市第一人民医院");
+                hospital.setAlgorithm("D2.03G");
+                hospital.setAdjustDate("2021-01-01");
                 Integer hospitalId = hospitalService.addHospital(hospital);
                 hospital.setHospitalId(hospitalId);
             }

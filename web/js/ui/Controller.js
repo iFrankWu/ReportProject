@@ -39,6 +39,7 @@ MainController = function ($scope, $location, $rootScope, $cookieStore, $http, C
         }
     }
     $scope.unauthorizedCallBack = function (response) {
+        $("#gotohub").hide();
         if (response.status == 401) {
             alert("登陆已超时，请重新登陆。");
             $cookieStore.put("doctor", null);// = null;
@@ -50,6 +51,8 @@ MainController = function ($scope, $location, $rootScope, $cookieStore, $http, C
         }
     }
 
+    $("#reportLink2").hide();
+    $("#reportLink1").hide();
 };
 
 
@@ -63,6 +66,7 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
         $("#reportLink1").hide();
         $("#reportLink2").hide();
         $("#logout").hide();
+        $("#gotohub").hide();
     } else {
         var doctor = $cookieStore.get("doctor");
         if (doctor.type != CommonService.types[1].name) {// not normal doctor
@@ -79,7 +83,14 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
             $("#systemsetting").show();
             $scope.showExport = true;
         }
+        $("#gotohub").show();
     }
+
+
+
+    $("#reportLink2").hide();
+    $("#reportLink1").hide();
+
     $scope.date5;
     $scope.date6;
     $scope.abletosummit = false;
@@ -122,6 +133,7 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 
     $scope.unauthorizedCallBack = function (response) {
+        $("#gotohub").hide();
         if (response.status == 401) {
             alert("登陆已超时，请重新登陆。");
             $cookieStore.put("doctor", null);
@@ -860,6 +872,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 // $scope.report = null;
 
     $scope.unauthorizedCallBack = function (response) {
+        $("#gotohub").hide();
         if (response.status == 401) {
             alert("登陆已超时，请重新登陆。");
             $cookieStore.put("doctor", null);
@@ -1575,6 +1588,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
     }
 
+    $("#reportLink2").hide();
+    $("#reportLink1").hide();
+
     console.log("refer:"+$cookieStore.get("refer"));
     if("hub" == $cookieStore.get("refer")){
         $scope.newCreate();
@@ -1587,11 +1603,17 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
         $("#logout").show();
     } else if(location.href.endsWith("hub")) {
         $("#logout").hide();
-        $("#reportLink2").hide();
-        $("#reportLink1").hide();
         $("#doctorLink").hide();
         $("#gotohub").hide();
         $("#mypageLink").hide();
+        $("#systemsetting").hide();
+
+        var doctor = $cookieStore.get("doctor");
+        if (doctor.type == CommonService.types[0].name) {
+            $("#doctorHub").show();
+        }else{
+            $("#doctorHub").hide();
+        }
 
     }else{
 
@@ -1607,6 +1629,10 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
             $("#systemsetting").show();
         }
     }
+
+    $("#reportLink2").hide();
+    $("#reportLink1").hide();
+
     $scope.hospital;
     $scope.readonly = true;
     $scope.isModify = false;
@@ -1717,10 +1743,12 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
     }
 
     $scope.gotoFind = function(path){
+        $cookieStore.put("refer", null);
         $location.path(path);
     }
 
     $scope.unauthorizedCallBack = function (response) {
+        $("#gotohub").hide();
         if (response.status == 401) {
             alert("登陆已超时，请重新登陆。");
             $cookieStore.put("doctor", null);
