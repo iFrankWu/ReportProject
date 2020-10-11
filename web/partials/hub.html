@@ -19,7 +19,7 @@
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         text-align: left;
         clear: both;
-        color: #0088cc
+        color: #00a6ce
     }
 
     .nav ul li {
@@ -31,6 +31,7 @@
         display: block;
         width: 180px;
         background: none;
+        color: #00a6ce;
 
     }
 
@@ -59,9 +60,10 @@
     /*二级菜单样式*/
     .menuLI {
         float: none;
-        width: 60px;
+        width: 40px;
         text-align: left;
         display: block;
+
     }
     /*二级菜单伪类*/
     .menuLI:hover {
@@ -92,17 +94,17 @@
     </ul>
 </div>
 
-<div class="nav">
+<div class="nav" style="margin-top:40px">
     <ul>
     <li class="list-inline-item menuDiv">
-        <a href="#" class="btn1">开始</a>
+        <a href="#" class="btn1">开始 V</a>
         <ul class="menuUL">
-            <li class="menuLI"><button class="btn1" ng-click="gotoReport('/truscreen/reports_woman')">非孕妇</button></li>
-            <li class="menuLI"><button class="btn1" ng-click="gotoReport('/truscreen/reports_pregnancy')">孕妇</button></li>
+            <li class="menuLI"><button class="btn1" style="color: #00a6ce;" ng-click="gotoReport('/truscreen/reports_woman')">非孕妇</button></li>
+            <li class="menuLI"><button class="btn1" style="color: #00a6ce;" ng-click="gotoReport('/truscreen/reports_pregnancy')">孕妇</button></li>
         </ul>
     </li>
     <li id="find">
-        <a href="#/truscreen/reports_woman" class="btn1">查找报告</a>
+        <a class="btn1" style="color: #00a6ce;line-height: 30px" ng-click="gotoFind('/truscreen/reports_woman')">查找报告</a>
     </li>
 
        <li id="doctorHub" style="display: none">

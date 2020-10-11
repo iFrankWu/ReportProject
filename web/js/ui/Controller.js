@@ -1595,6 +1595,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     if("hub" == $cookieStore.get("refer")){
         $scope.newCreate();
         $cookieStore.put("refer",null);
+        $("#createbtn").show();
+    }else if("search" ==  $cookieStore.get("refer")){
+        $("#createbtn").hide();
     }
 }
 ;
@@ -1743,7 +1746,7 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
     }
 
     $scope.gotoFind = function(path){
-        $cookieStore.put("refer", null);
+        $cookieStore.put("refer", "search");
         $location.path(path);
     }
 

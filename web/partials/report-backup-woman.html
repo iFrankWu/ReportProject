@@ -922,8 +922,11 @@
                     <td><input type="text" ng-model="report.patientName" required="required"></td>
                     <td style="width:60px">年龄:</td>
                     <td><input type="text" ng-model="report.age" style="width:30px"></td>
-                    <td style="width:80px"> 绝经:</td>
-                    <td><input type="checkbox" ng-model="report.isMenopause"></td>
+
+
+                    <td style="width:80px"> 病历号:</td>
+                    <td><input type="text" ng-model="report.caseNumber"></td>
+
 
                 </tr>
                 <tr>
@@ -939,12 +942,8 @@
                     <!--<td ng-show="report.pregnancyStatus"><label>周数:</label></td>-->
                     <!--<td ng-show="report.pregnancyStatus"><input type="number" ng-model="report.pregnancyTime"></td>-->
 
-                    <td><label>LCT:</label></td>
-                    <td>
-                        <input  type="text" ng-model="report.lct">
-                        <!-- <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
-                        </select> -->
-                    </td>
+                    <td style="width:80px"> 绝经:</td>
+                    <td><input type="checkbox" ng-model="report.isMenopause"></td>
 
 
                     <!--<td style="width:40%" >-->
@@ -954,8 +953,17 @@
                     <!--</td>-->
                 </tr>
                 <tr>
+
+
+                    <td><label>LCT:</label></td>
+                    <td>
+                        <input  type="text" ng-model="report.lct">
+                        <!-- <select style="width:100%" ng-model="report.lct" ng-options="v for v in lcts">
+                        </select> -->
+                    </td>
+
                     <td><label>HPV:</label></td>
-                    <td colspan="5" >
+                    <td colspan="3" >
                         <input type="text" ng-model="report.hpv" style="width:70%">
                         <!-- <select style="width:100%" ng-model="report.hpv" ng-options="v for v in hpvs">
                         </select> -->
