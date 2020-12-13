@@ -466,13 +466,26 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
     $scope.pnormalThreshold = function(){
 
-        if(!$scope.report.hpv || !$scope.report.lct){
+        //hpv 和 lct 都为🈳️空 默认 0.5
+        if(!$scope.report.hpv && !$scope.report.lct){
             return 0.5;
+        }
+
+        //lCT  未检测时 下列值默认0.6
+        if(!$scope.report.lct){
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+                return 0.6;
+            }
         }
 
 
         //["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"]
         if($scope.report.lct  =="ASC-H" || $scope.report.lct ==  "HSIL" || $scope.report.lct ==  "SCC" || $scope.report.lct ==  "AGC" ){
+            //HPV 未检测时 默认 0.9
+            if(!$scope.report.hpv){
+                return 0.9;
+            }
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
                 || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
@@ -484,6 +497,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
                 return 0.7;
             }
+
         }
         if($scope.report.lct  =="LSIL" || $scope.report.lct ==  "ASCUS"){
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
@@ -512,6 +526,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 return 0;
             }
         }
+
+
+
         return 0.5;
     }
 
