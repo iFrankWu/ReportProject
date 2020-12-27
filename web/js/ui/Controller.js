@@ -1074,7 +1074,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             $("#nextpage").css("display", "");
         }
     }
-    $scope.getDetail = function () {
+    $scope.getDetail = function (showDetailFunction) {
        var reportId =  $scope.report.reportId;
         ReportService.getDetail(reportId, 1, 10, 'getDetail', function (result) {
             console.log(result);
@@ -1088,6 +1088,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                         $scope.getPNorm();
                     }
                     $scope.report.isComplete = '完成';
+                    showDetailFunction( $scope.report);
                 }else{
                     $timeout($scope.getDetail, 15000);
                 }
@@ -1598,6 +1599,87 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $("#createbtn").show();
     }else if("search" ==  $cookieStore.get("refer")){
         $("#createbtn").hide();
+    }
+
+
+    $scope.getQueryVariable = function(variable)
+    {
+        var query = window.location.href.substring(location.href.indexOf("?")+1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
+
+
+    $scope.showDetail = function (rep, $event) {
+
+        $scope.report = rep;
+
+        var uid = rep.uid;
+        if(!(uid == null)){
+            if(uid.length == 7){
+                $scope.report.uid = uid.substr(0,6);
+            }else{
+                $scope.report.uid = uid.substr(uid.length - 6,6);
+            }
+        }
+
+
+        $scope.doesCheckComplete();
+        $scope.report.checkDate = $scope.formatChineseDate($scope.report.checkDate);
+
+
+        $scope.lastTimeMenstruationPrint = $scope.formatChineseDate(rep.lastTimeMenstruation);
+        var window = $('#printframe').get(0).contentWindow;
+        // window.location.href =  window.location.href+"_"+rep.reportId;
+        var doc = window.document;
+        doc.title = rep.reportId;
+
+        if ($scope.report.hpv) {
+            if (!($scope.report.hpv instanceof Array)) {
+                $scope.report.hpv = $scope.report.hpv.split(',');
+            }
+        }
+
+
+        $scope.report.unregularBleed = 'true' === $scope.report.unregularBleed;
+        $scope.report.touchbleeding = "true" === $scope.report.touchbleeding ;
+
+        var $body = $('body', doc);
+        var prefix = '<div style="width:1050px;margin:auto;">';
+        var suffix = "<div>";
+        var modifyHtml = $("#printdiv").html();
+        var html = prefix + modifyHtml + suffix;
+        // $body.html(html);
+       // $compile($("#printframe").contents())($scope);
+        $scope.doesCheckComplete();
+        // setTimeout(function () {
+        //     $('#printframe').get(0).contentWindow.focus();
+        //      // $('#printframe').get(0).contentWindow.print();
+        // }, 1000);
+
+        // if ($event != null) {
+        //     $event.stopPropagation();
+        // }
+        return false;
+    }
+
+    if(location.href.indexOf("detail") >= 0) {
+
+        $("#navigation").hide();
+        if (!$scope.report) {
+            $scope.report = {};
+        }
+
+        $scope.report.reportId = $scope.getQueryVariable('reportId');
+        $scope.getDetail(    $scope.showDetail );
+
+
+
     }
 }
 ;
