@@ -10,8 +10,7 @@ package com.tibco.test;
 
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
-import com.tibco.integration.hhd.HHDClient;
-import com.tibco.service.HHDService;
+import com.tibco.integration.QuzhouWonmanHospital;
 import com.tibco.util.Const;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -30,13 +29,11 @@ import java.util.Map;
 /**
  * class description goes here.
  *
- * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
+ * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
  * @version 1.0.0
  */
 public class Jetty {
     public static void main(String[] args) throws Exception {
-
-
         Const.initLogger();
         Server server = new Server(8081);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -69,21 +66,6 @@ public class Jetty {
         server.start();
         System.out.println(context.getResourceBase());
 
-//        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-//            private HHDService hhdService = new HHDService();
-//
-//            @Override
-//            public void run() {
-////                hhdService.logout();
-////                hhdService.terminate();
-////                hhdService.terminate();
-////                System.out.println("正常关闭手持设备");
-//            }
-//        }));
-
-//        HHDClient client = HHDClient.getInstance();
-//        client.connect();
-
 
 //		Server server = new Server(8082);
 //		ServletContextHandler context = new ServletContextHandler(
@@ -98,6 +80,9 @@ public class Jetty {
 //		context.addServlet(new ServletHolder(new DefaultServlet()), "/*");
 //		server.start();
         System.out.println("http://localhost:8081");
+
+        QuzhouWonmanHospital quzhouWonmanHospital = new QuzhouWonmanHospital();
+        quzhouWonmanHospital.init();
 
     }
 
