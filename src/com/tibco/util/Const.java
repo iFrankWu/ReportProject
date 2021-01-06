@@ -51,6 +51,7 @@ public class Const {
     public static Integer SESSION_TIMEOUT_IN_MINUTE = 4 * 60;
 
     public static String INTEGRATION_SERICE_URL = "";
+    public static String INTEGRATION_SERICE_GET_PATIENT_INFO = "";
 
     public static void initLogger() {
         if (!doesLoggerInited) {
@@ -67,6 +68,10 @@ public class Const {
 
                 INTEGRATION_SERICE_URL = pro.getProperty("default.integrationServiceUrl");
                 System.out.println("INTEGRATION_SERICE_URL:" + INTEGRATION_SERICE_URL);
+
+                INTEGRATION_SERICE_GET_PATIENT_INFO = pro.getProperty( "default.integrationServiceGetPatientInfo");
+                System.out.println("INTEGRATION_SERICE_GET_PATIENT_INFO:" + INTEGRATION_SERICE_GET_PATIENT_INFO);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {

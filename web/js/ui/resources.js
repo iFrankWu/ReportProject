@@ -22,7 +22,7 @@ CommonResourceImpl = function ($resource) {
 };
 
 ReportResourceImpl = function ($resource) {
-    return $resource('truscreen/report/:reportId/:preOrNext/:size/:page/:sortColumn/:uid', {}, {
+    return $resource('truscreen/report/:reportId/:preOrNext/:size/:page/:sortColumn/:uid/:patientName/:caseNumber/:idCard', {}, {
       //  login:{method:'POST',params:{}},
         //logout:{method:'GET',params:{id:'id'}},
         getDetail:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
@@ -34,7 +34,8 @@ ReportResourceImpl = function ($resource) {
         deleteReport:{method:"DELETE",params:{reportId:'reportId'}},
         updateReport:{method:"PUT",params:{reportId:"reportId"}},
         advanceSearch:{method:"POST",params:{}},
-        getPNorm:{method:"GET",params:{reportId:'1',preOrNext:'Next',size:'1',page:'1',sortColumn:'1',uid:'uid'}}
+        getPNorm:{method:"GET",params:{reportId:'1',preOrNext:'Next',size:'1',page:'1',sortColumn:'1',uid:'uid'}},
+        getPatientInfo:{method:"GET",params:{reportId:'1',preOrNext:'Next',size:'1',page:'1',sortColumn:'1',uid:'1',patientName:'patientName',caseNumber:'caseNumber',idCard:'idCard'}}
     });
 };
 HospitalResourceImpl = function ($resource) {

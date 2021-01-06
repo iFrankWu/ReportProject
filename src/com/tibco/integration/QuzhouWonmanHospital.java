@@ -8,10 +8,11 @@ import com.tibco.dao.HospitalDAO;
 import com.tibco.dao.ReportDAO;
 import com.tibco.integration.net.HttpSender;
 import com.tibco.service.LogRecordService;
-<<<<<<< Updated upstream
+ 
 import com.tibco.util.RSAToolUtil;
-=======
->>>>>>> Stashed changes
+ 
+import org.apache.commons.codec.binary.Base64;
+ 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -52,8 +53,14 @@ public class QuzhouWonmanHospital {
 
         reportJson.putAll(hospitalJson);
 
-<<<<<<< Updated upstream
-        String data = RSAToolUtil.RSAEncode(reportJson.toJSONString());
+ 
+      
+ 
+        String utf8data = new String(Base64.encodeBase64(reportJson.toJSONString().getBytes("UTF-8")));
+
+//        String data = RSAToolUtil.RSAEncode(reportJson.toJSONString());
+        String data = RSAToolUtil.RSAEncode(utf8data);
+ 
         logger.info("commit.report: " + reportJson);
 
 
@@ -64,11 +71,10 @@ public class QuzhouWonmanHospital {
 
         String result = HttpSender.sendPost(serviceUrl, rsaData.toJSONString());
 
-=======
+ 
         String result = HttpSender.sendPost(serviceUrl, reportJson.toJSONString());
 
-        logger.info("commit.repott: " + reportJson);
->>>>>>> Stashed changes
+ 
 
         JSONObject rst = (JSONObject) JSONObject.parse(result);
         if (StringUtils.isNotBlank(rst.toString()) && "1".equals(rst.getString("code"))) {
@@ -84,11 +90,9 @@ public class QuzhouWonmanHospital {
             try {
                 commitReport(report.getReportId());
             } catch (Exception e) {
-<<<<<<< Updated upstream
+ 
                 logger.error("commit serivce error :"+ JSONObject.toJSONString(report), e);
-=======
-                logger.error("commit serivce error", e);
->>>>>>> Stashed changes
+ 
             }
         }
     }
@@ -109,10 +113,7 @@ public class QuzhouWonmanHospital {
                     logger.error("timer error", e);
                 }
             }
-<<<<<<< Updated upstream
-        }, 0, 2, TimeUnit.MINUTES);
-=======
         }, 10, 240, TimeUnit.MINUTES);
->>>>>>> Stashed changes
+ 
     }
 }
