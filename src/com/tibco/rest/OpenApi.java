@@ -8,8 +8,10 @@
  */
 package com.tibco.rest;
 
+import com.tibco.bean.Report;
 import com.tibco.service.LogRecordService;
 import com.tibco.service.ReportService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -32,24 +34,25 @@ import java.util.Map;
 public class OpenApi {
     private ReportService service = new ReportService();
     private LogRecordService logService = new LogRecordService();
+
+    private Logger logger = Logger.getLogger(this.getClass());
+
     @Context
     HttpServletRequest request;
 
-    @Path("{caseNumber}/Pre/{size}/")
+    @Path("{caseNumber}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> getPrePage(@PathParam("caseNumber") String caseNumber) {
+    public Map<String, Object> getReportList(@PathParam("caseNumber") String caseNumber) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-//	 			logService.addLogRecord(request, "开发API，开始获取报告单", caseNumber);
             List reportList = service.getReportByCaseNumber(caseNumber);
             map.put("reports", reportList);
             map.put("isSuccess", true);
             map.put("description", "获取报告单成功");
-            //	 logService.addLogRecord(request, "开发API，获取报告单成功", caseNumber);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("获取报告单失败，原因", e);
             map.put("description", "获取报告单失败，原因：" + e.getMessage());
             map.put("isSuccess", false);
             map.put("reports", null);
@@ -57,7 +60,25 @@ public class OpenApi {
         return map;
     }
 
+    @Path("detail/{no}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<String, Object> getReport(@PathParam("no") String no) {
 
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            Report report = service.getReportsByOutpatientNoOrAdmissionNo(no);
+            map.put("report", report);
+            map.put("isSuccess", true);
+            map.put("description", "获取报告单成功");
+        } catch (Exception e) {
+            logger.error("获取报告单失败，原因", e);
+            map.put("description", "获取报告单失败，原因：" + e.getMessage());
+            map.put("isSuccess", false);
+            map.put("report", null);
+        }
+        return map;
+    }
 
 
 }

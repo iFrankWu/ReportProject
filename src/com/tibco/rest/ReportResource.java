@@ -8,14 +8,9 @@
  */
 package com.tibco.rest;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
 import com.tibco.bean.Result;
 import com.tibco.bean.Search;
-import com.tibco.integration.net.HttpSender;
 import com.tibco.service.LogRecordService;
 import com.tibco.service.ReportService;
 import com.tibco.util.Const;
@@ -26,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +51,7 @@ public class ReportResource {
             logService.addLogRecord(request, "增加报告单", report.toString());
         } catch (Exception e) {
             String msg = "创建报告单失败： " + e.getMessage();
-            logger.error(msg,e);
+            logger.error(msg, e);
             result = new Result(false, e.getMessage());
         }
         return result;
@@ -79,7 +73,7 @@ public class ReportResource {
             }
         } catch (Exception e) {
             String msg = "删除该报告单失败： " + e.getMessage();
-            logger.error(msg,e);
+            logger.error(msg, e);
             return new Result(false, e.getMessage());
         }
     }
@@ -108,7 +102,7 @@ public class ReportResource {
             }
         } catch (Exception e) {
             String msg = "更新报告单内容失败，报告单ID: " + report.getReportId() + "，错误原因： " + e.getMessage();
-            logger.error(msg,e);
+            logger.error(msg, e);
             return new Result(false, msg);
         }
     }
@@ -135,7 +129,7 @@ public class ReportResource {
             logService.addLogRecord(request, "获取下一页报告单", maxId + "" + size + "" + page + "" + sortColumn);
             return service.getNextPage(maxId, size, page, sortColumn);
         } catch (Exception e) {
-            logger.error("",e);
+            logger.error("", e);
         }
         return null;
     }
@@ -148,7 +142,7 @@ public class ReportResource {
             logService.addLogRecord(request, "获取上一页报告单", minId + "" + size + "" + page + "" + sortColumn);
             return service.getPrePage(minId, size, page, sortColumn);
         } catch (Exception e) {
-            logger.error("",e);
+            logger.error("", e);
         }
         return null;
     }
@@ -164,7 +158,7 @@ public class ReportResource {
             logService.addLogRecord(request, "获取当前页报告单", minId + "" + size + "" + page + "" + sortColumn);
             return service.getCurrentPage(minId, size, page, sortColumn);
         } catch (Exception e) {
-            logger.error("",e);
+            logger.error("", e);
         }
         return null;
     }
@@ -177,7 +171,7 @@ public class ReportResource {
             logService.addLogRecord(request, "获得第一页报告单", minId + "" + size + "" + page + "" + sortColumn);
             return service.getTopPage(size, sortColumn);
         } catch (Exception e) {
-            logger.error("",e);
+            logger.error("", e);
         }
         return null;
     }
@@ -195,7 +189,7 @@ public class ReportResource {
             map.put("data", report);
             return map;
         } catch (Exception e) {
-            logger.error("",e);
+            logger.error("", e);
             map.put("isSuccess", false);
             map.put("data", e.getMessage());
         }
@@ -212,7 +206,7 @@ public class ReportResource {
             map.put("reportList", service.advanceSerach(search));
             logService.addLogRecord(request, "高级搜索", search.toString());
         } catch (Exception e) {
-            logger.error("",e);
+            logger.error("", e);
 
         }
         return map;
@@ -245,61 +239,35 @@ public class ReportResource {
         return null;
     }
 
-    @Path("{reportId}/Next/{size}/{page}/{sortColumn}/{uid}/{patientName}/{caseNumber}/{idCard}")
+    @Path("{reportId}/Next/{size}/{page}/{sortColumn}/{uid}/{patientName}/{outpatientNo}/{admissionNo}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Result getPatientInfo(@PathParam("reportId") Integer minId, @PathParam("size") Integer size, @PathParam("page") Integer page,
+    public Result getPatientInfo(@PathParam("reportId") Integer minId,
+                                 @PathParam("size") Integer size, @PathParam("page") Integer page,
                                  @PathParam("sortColumn") String sortColumn, @PathParam("uid") String uid,
                                  @PathParam("patientName") String patientName,
-                                 @PathParam("caseNumber") String caseNumber,
-                                 @PathParam("idCard") String idCard
+                                 @PathParam("outpatientNo") String outpatientNo,
+                                 @PathParam("admissionNo") String admissionNo
     ) {
-        Report report = new Report();
         try {
-            logger.info("patientName:" + patientName + ",caseNumber:" + caseNumber + ",idCard:" + idCard);
+            //outpatientNo： 门诊  admissionNo：住院
+            logger.info("outpatientNo:" + outpatientNo + ",admissionNo:" +admissionNo );
 
-            String url = Const.INTEGRATION_SERICE_GET_PATIENT_INFO ;
-            if (StringUtils.isNotBlank(patientName)) {
-                url = url + "&patientName=" + patientName;
+            if(StringUtils.equals(outpatientNo,"-2")){
+                outpatientNo = "";
             }
-
-            if (StringUtils.isNotBlank(caseNumber)) {
-                url = url + "&caseNumber=" + caseNumber;
-            }
-
-            if (StringUtils.isNotBlank(idCard)) {
-                url = url + "&idCard=" + idCard;
+            if(StringUtils.equals(admissionNo,"-2")){
+                admissionNo = "";
             }
 
 
-            logger.info("request url : " + url);
-
-            String response = HttpSender.sendGet(url, null);
-//            System.out.println(response);
-            if (StringUtils.isNotBlank(response)) {
-
-
-                JSONObject json = (JSONObject) JSON.parse(response);
-                JSONObject result = json.getJSONObject("result");
-
-
-                if (result != null) {
-                    JSONArray users = result.getJSONArray("users");
-                    if (users != null && users.size() > 0) {
-                        JSONObject user = users.getJSONObject(0);
-
-                         report = JSONObject.toJavaObject(user, Report.class);
-
-                    }
-                }
-            }
-
+            Report report = service.getPatientInfo(outpatientNo, admissionNo);
+            return new Result(true, report);
         } catch (Exception e) {
             logger.error("aa", e);
         }
-        return new Result(true, report);
 
-
+        return null;
     }
 }
 

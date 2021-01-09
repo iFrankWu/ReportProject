@@ -10,7 +10,6 @@ package com.tibco.test;
 
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
-import com.tibco.integration.QuzhouWonmanHospital;
 import com.tibco.util.Const;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -80,9 +79,6 @@ public class Jetty {
 //		context.addServlet(new ServletHolder(new DefaultServlet()), "/*");
 //		server.start();
         System.out.println("http://localhost:8081");
-
-        QuzhouWonmanHospital quzhouWonmanHospital = new QuzhouWonmanHospital();
-        quzhouWonmanHospital.init();
 
     }
 

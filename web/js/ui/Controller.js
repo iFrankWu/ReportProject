@@ -87,7 +87,6 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
 
 
-
     $("#reportLink2").hide();
     $("#reportLink1").hide();
 
@@ -282,7 +281,7 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 //	    $scope.$watch('confirmed1', function(newValue, oldValue) {
 //	        console.log("old value: %s and new value: %s", oldValue, newValue);
-    $scope.getDoctorList();
+//     $scope.getDoctorList();
 //	    });
     $scope.modify = function (doctor) {
         $scope.doctorName = doctor.doctorName;
@@ -438,24 +437,23 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 };
 
 
-ReportController = function ($scope, $routeParams, $location, $filter, $http, DoctorService, $cookieStore, CommonService, ReportService, $compile, HospitalService,HHDService,$timeout) {
+ReportController = function ($scope, $routeParams, $location, $filter, $http, DoctorService, $cookieStore, CommonService, ReportService, $compile, HospitalService, HHDService, OpenApiService, $timeout) {
 
-   $scope.commands = ["current","socket_status","system_report","terminate","connect","login","exit"];
+    $scope.commands = ["current", "socket_status", "system_report", "terminate", "connect", "login", "exit"];
     $scope.command = "current";
     $scope.hhdStatus = "INIT";
-    $scope.executeCommand = function (){
-        HHDService.executeHHDCommand( $scope.command,function (result) {
+    $scope.executeCommand = function () {
+        HHDService.executeHHDCommand($scope.command, function (result) {
             $scope.hhdStatus = result.description;
-       },function (error) {
-           console.log(error)
+        }, function (error) {
+            console.log(error)
             $scope.hhdStatus = "ERROR";
-       });
+        });
     }
 
 
-
-    $scope.lcts = ["无","NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
-    $scope.hpvs = ["16+","18+","31+","33+","52+","58+","其他高危型+","其他低危型","阴性","无"];
+    $scope.lcts = ["无", "NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
+    $scope.hpvs = ["16+", "18+", "31+", "33+", "52+", "58+", "其他高危型+", "其他低危型", "阴性", "无"];
 
     if ($cookieStore.get("doctor") == null) {
         //$("#logout").show();
@@ -486,9 +484,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if (!$scope.report.hpv || !$scope.report.lct) {
             return 0.5;
         }
-        if($scope.report.lct == "SCC" || $scope.report.lct == "AGC"){
-            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+        if ($scope.report.lct == "SCC" || $scope.report.lct == "AGC") {
+            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
                 return 1;
             }
             if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
@@ -500,10 +498,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         //["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"]
-        if ($scope.report.lct == "ASC-H" || $scope.report.lct == "HSIL" ) {
+        if ($scope.report.lct == "ASC-H" || $scope.report.lct == "HSIL") {
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
-            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
                 return 1;
             }
             if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
@@ -515,11 +513,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
 
-
         if ($scope.report.lct == "LSIL" || $scope.report.lct == "ASCUS") {
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
-            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
                 return 0.65;
             }
             if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
@@ -531,11 +528,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
 
-
         if ($scope.report.lct == "NILM") {
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
-            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
                 return 0.6;
             }
             if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
@@ -570,40 +566,40 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         // ReportService.getPNorm(uid, function (response) {
         //         if (response.isSuccess) {
-                    if ($scope.report.visableCancer) {
-                        $scope.report.checkResult = "异常"
-                        $scope.doesCheckCompleted = true;
-                        $scope.report.isComplete = '完成';
-                    } else {
-                        // $scope.report.pnorValueResult = response.description;
-                        //非孕妇
-                        if (!$scope.report.pregnancyStatus) {
-                            if ($scope.report.pnorValueResult >= $scope.pnormalThreshold()) {
-                                $scope.report.checkResult = "正常"
-                            } else {
-                                $scope.report.checkResult = "异常"
-                            }
-                        } else {
-                            //孕妇
-                            if ($scope.report.pnorValueResult >= 0.25) {
-                                $scope.report.checkResult = "正常"
-                            } else {
-                                $scope.report.checkResult = "异常"
-                            }
-                        }
-                        $scope.isNormal();
-                        $scope.doesCheckCompleted = true;
-                        $scope.report.isComplete = '完成';
-                    }
+        if ($scope.report.visableCancer) {
+            $scope.report.checkResult = "异常"
+            $scope.doesCheckCompleted = true;
+            $scope.report.isComplete = '完成';
+        } else {
+            // $scope.report.pnorValueResult = response.description;
+            //非孕妇
+            if (!$scope.report.pregnancyStatus) {
+                if ($scope.report.pnorValueResult >= $scope.pnormalThreshold()) {
+                    $scope.report.checkResult = "正常"
+                } else {
+                    $scope.report.checkResult = "异常"
+                }
+            } else {
+                //孕妇
+                if ($scope.report.pnorValueResult >= 0.25) {
+                    $scope.report.checkResult = "正常"
+                } else {
+                    $scope.report.checkResult = "异常"
+                }
+            }
+            $scope.isNormal();
+            $scope.doesCheckCompleted = true;
+            $scope.report.isComplete = '完成';
+        }
 
-                    $scope.isVisableCancer();
-            //     }
-            //     else {
-            //         alert(response.description);
-            //     }
-            // }, function (response) {
-            //     console.log(response);// just log it
-            // }
+        $scope.isVisableCancer();
+        //     }
+        //     else {
+        //         alert(response.description);
+        //     }
+        // }, function (response) {
+        //     console.log(response);// just log it
+        // }
         // )
     }
 
@@ -623,26 +619,26 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             return;
         }
 
-        if(uid.length != 7 ){
+        if (uid.length != 7) {
             //alert("uid长度不为7位");
             return;
         }
 
         //第七位 0 为 失败 1 为成功
-       var result = uid.substr(6,1);
+        var result = uid.substr(6, 1);
 
         if (result === '1') {
             $scope.report.isComplete = '完成';
             $scope.doesCheckCompleted = true;
             $scope.report.checkResult = "异常"
 
-        } else if(result === '0'){
+        } else if (result === '0') {
             $scope.report.isComplete = '完成';
             $scope.doesCheckCompleted = true;
             $scope.report.checkResult = "正常"
 
-        }else {
-           // alert("uid格式不对");
+        } else {
+            // alert("uid格式不对");
         }
     }
 
@@ -669,31 +665,31 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         // ReportService.getPNorm(uid, function (response) {
         //         if (response.isSuccess) {
-                    if ($scope.report.visableCancer) {
-                        $scope.report.checkResult = "异常"
-                        $scope.doesCheckCompleted = true;
-                        $scope.report.isComplete = '完成';
-                    } else {
-                        // $scope.report.pnorValueResult = response.description;
-                        //非孕妇
-                        if (!$scope.report.pregnancyStatus) {
-                            if ($scope.report.pnorValueResult >= 0.5) {
-                                $scope.report.checkResult = "正常"
-                            } else {
-                                $scope.report.checkResult = "异常"
-                            }
-                        } else {
-                            //孕妇
-                            if ($scope.report.pnorValueResult >= 0.25) {
-                                $scope.report.checkResult = "正常"
-                            } else {
-                                $scope.report.checkResult = "异常"
-                            }
-                        }
-                        $scope.isNormal();
-                        $scope.doesCheckCompleted = true;
-                        $scope.report.isComplete = '完成';
-                    }
+        if ($scope.report.visableCancer) {
+            $scope.report.checkResult = "异常"
+            $scope.doesCheckCompleted = true;
+            $scope.report.isComplete = '完成';
+        } else {
+            // $scope.report.pnorValueResult = response.description;
+            //非孕妇
+            if (!$scope.report.pregnancyStatus) {
+                if ($scope.report.pnorValueResult >= 0.5) {
+                    $scope.report.checkResult = "正常"
+                } else {
+                    $scope.report.checkResult = "异常"
+                }
+            } else {
+                //孕妇
+                if ($scope.report.pnorValueResult >= 0.25) {
+                    $scope.report.checkResult = "正常"
+                } else {
+                    $scope.report.checkResult = "异常"
+                }
+            }
+            $scope.isNormal();
+            $scope.doesCheckCompleted = true;
+            $scope.report.isComplete = '完成';
+        }
         //         }
         //         else {
         //             alert(response.description);
@@ -710,58 +706,58 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             return;
         }
 
-        if(report.age >= 35){
-            if(report.uid && report.uid.length >= 6){
+        if (report.age >= 35) {
+            if (report.uid && report.uid.length >= 6) {
                 //可见癌 不规则流血 可疑癌 接触性流血
-                if(Boolean(report.visableCancer) || Boolean(report.isCancer ) || $scope.getBoolean(report.touchbleeding) ) {
-                   $scope.report.checkResult = "异常";
+                if (Boolean(report.visableCancer) || Boolean(report.isCancer) || $scope.getBoolean(report.touchbleeding)) {
+                    $scope.report.checkResult = "异常";
                 }
                 // else{
                 //      $scope.report.checkResult = "正常";
                 // }
-            }else{
+            } else {
                 $scope.report.checkResult = null;
             }
-        }else{
-            if(report.uid  && report.uid.length >= 6){
-                if(Boolean(report.visableCancer) || Boolean(report.isCancer )){
-                     $scope.report.checkResult = "异常";
+        } else {
+            if (report.uid && report.uid.length >= 6) {
+                if (Boolean(report.visableCancer) || Boolean(report.isCancer)) {
+                    $scope.report.checkResult = "异常";
                 }
                 // else{
                 //     $scope.report.checkResult = "正常";
                 // }
-            }else{
+            } else {
                 $scope.report.checkResult = null;
             }
         }
 
         $scope.getPNormManual();
     }
- 
+
     $scope.getPatientInfo = function () {
-        var patientName = "aaa";
-        var caseNumber = "111";
-        var idCard = "222";
-        if($scope.report && $scope.report.patientName){
+        var patientName = "defaultName";
+        var outpatientNo = "-2";
+        var admissionNo = "-2";
+        if ($scope.report && $scope.report.patientName) {
             patientName = $scope.report.patientName;
         }
 
-        if($scope.report && $scope.report.caseNumber){
-            caseNumber = $scope.report.caseNumber;
+        if ($scope.report && $scope.report.outpatientNo) {
+            outpatientNo = $scope.report.outpatientNo;
         }
 
-        if($scope.report && $scope.report.idCard){
-            idCard = $scope.report.idCard;
+        if ($scope.report && $scope.report.admissionNo) {
+            admissionNo = $scope.report.admissionNo;
         }
 
-        ReportService.getPatientInfo(patientName,caseNumber,idCard,function (result) {
+        ReportService.getPatientInfo(patientName, outpatientNo, admissionNo, function (result) {
             console.log(result);// just log it
             $scope.report = result.description;
-        },function (response) {
+        }, function (response) {
             console.log(response);// just log it
         });
     }
- 
+
     $scope.getHospital = function () {
         HospitalService.getHospital($scope.hospital, function (result) {
             if (result != null) {
@@ -915,7 +911,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         if (Boolean(report.isBleed)) {
             complaints += "性交出血/";
         }
-        report.unregularBleed =  $scope.getBoolean(report.unregularBleed);
+        report.unregularBleed = $scope.getBoolean(report.unregularBleed);
         if (Boolean(report.unregularBleed)) {
             complaints += "不规则流血/";
         }
@@ -927,39 +923,39 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
     $scope.getClinical = function (report) {
         var clinical = "";
-        if (Boolean(report.isSmooth )) {
+        if (Boolean(report.isSmooth)) {
             clinical += "光滑/";
         }
-        if (Boolean(report.isAcuteInflammation )) {
+        if (Boolean(report.isAcuteInflammation)) {
             clinical += "慢性炎症/";
         }
-        if (Boolean(report.isHypertrophy )) {
+        if (Boolean(report.isHypertrophy)) {
             clinical += "肥大/";
         }
-        if (Boolean(report.isPolyp )) {
+        if (Boolean(report.isPolyp)) {
             clinical += "息肉/";
         }
         if (report.erosion != null) {
             clinical += "柱状上皮异位:" + report.erosion + "/";
         }
-        if (Boolean(report.isTear )) {
+        if (Boolean(report.isTear)) {
             clinical += "撕裂/";
         }
-        if (Boolean(report.isNesslersGlandCyst )) {
+        if (Boolean(report.isNesslersGlandCyst)) {
             clinical += "纳氏腺囊肿/";
         }
         if (Boolean(report.isWhite)) {
             clinical += "白斑/";
         }
-        if (Boolean(report.isCancer )) {
+        if (Boolean(report.isCancer)) {
             clinical += "阴道排液/";
         }
 
         report.touchbleeding = $scope.getBoolean(report.touchbleeding);
-        if(Boolean(report.touchbleeding )){
+        if (Boolean(report.touchbleeding)) {
             clinical += "接触性出血/";
         }
-        if(Boolean(report.visableCancer)){
+        if (Boolean(report.visableCancer)) {
             clinical += "肉眼可见病变/";
         }
         if (report.otherClinical != null) {
@@ -1037,7 +1033,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 for (var i = 0; i < result.reportList.length; i++) {
                     var rept = result.reportList[i];
                     rept.unregularBleed = 'true' === rept.unregularBleed;
-                    rept.touchbleeding = "true" === rept.touchbleeding ;
+                    rept.touchbleeding = "true" === rept.touchbleeding;
                 }
                 $scope.reports = result.reportList;
                 $scope.maxId = result.maxId;
@@ -1061,7 +1057,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 for (var i = 0; i < result.reportList.length; i++) {
                     var rept = result.reportList[i];
                     rept.unregularBleed = 'true' === rept.unregularBleed;
-                    rept.touchbleeding = "true" === rept.touchbleeding ;
+                    rept.touchbleeding = "true" === rept.touchbleeding;
                 }
                 $scope.reports = result.reportList;
                 $scope.maxId = result.maxId;
@@ -1098,28 +1094,28 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
     }
     $scope.getDetail = function (showDetailFunction) {
-       var reportId =  $scope.report.reportId;
+        var reportId = $scope.report.reportId;
         ReportService.getDetail(reportId, 1, 10, 'getDetail', function (result) {
             console.log(result);
-            if(result.isSuccess){
+            if (result.isSuccess) {
                 if (result.data.pnorValueResult && result.data.pnorValueResult > 0) {
                     console.log("stop timer");
                     $scope.report = result.data;
-                    if(location.href.endsWith("reports_pregnancy")){
+                    if (location.href.endsWith("reports_pregnancy")) {
                         $scope.getPNormPregenancy();
-                    }else{
+                    } else {
                         $scope.getPNorm();
                     }
                     $scope.report.isComplete = '完成';
-                    showDetailFunction( $scope.report);
-                }else{
+                    showDetailFunction($scope.report);
+                } else {
                     $timeout($scope.getDetail, 15000);
                 }
-            }else{
+            } else {
                 alert(result.data);
             }
         }, function (response) {
-            alert("返回错误"+response);
+            alert("返回错误" + response);
         })
     }
 
@@ -1133,7 +1129,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             for (var i = 0; i < result.reportList.length; i++) {
                 var rept = result.reportList[i];
                 rept.unregularBleed = 'true' === rept.unregularBleed;
-                rept.touchbleeding = "true" === rept.touchbleeding ;
+                rept.touchbleeding = "true" === rept.touchbleeding;
             }
             $scope.reports = result.reportList;
             $scope.maxId = result.maxId;
@@ -1152,7 +1148,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             for (var i = 0; i < result.reportList.length; i++) {
                 var rept = result.reportList[i];
                 rept.unregularBleed = 'true' === rept.unregularBleed;
-                rept.touchbleeding = "true" === rept.touchbleeding ;
+                rept.touchbleeding = "true" === rept.touchbleeding;
             }
             $scope.reports = result.reportList;
             $scope.maxId = result.maxId;
@@ -1262,7 +1258,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         ReportService.updateReport($scope.report.reportId, $scope.report, function (result) {
             if (result.isSuccess) {
-                if(!$scope.report.reportId){
+                if (!$scope.report.reportId) {
                     return;
                 }
                 alert("修改报告单成功");
@@ -1316,11 +1312,11 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.report = rep;
 
         var uid = rep.uid;
-        if(!(uid == null)){
-            if(uid.length == 7){
-                $scope.report.uid = uid.substr(0,6);
-            }else{
-                $scope.report.uid = uid.substr(uid.length - 6,6);
+        if (!(uid == null)) {
+            if (uid.length == 7) {
+                $scope.report.uid = uid.substr(0, 6);
+            } else {
+                $scope.report.uid = uid.substr(uid.length - 6, 6);
             }
         }
 
@@ -1383,12 +1379,12 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
     }
 
-    $scope.getBoolean = function(value){
+    $scope.getBoolean = function (value) {
         var type = typeof value;
-        if (type === 'boolean'){
+        if (type === 'boolean') {
             return Boolean(value);
-        }else{
-             return value === 'true';
+        } else {
+            return value === 'true';
         }
     }
     $scope.doesCheckCompleted = false;
@@ -1418,7 +1414,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.readonly = true;
         $scope.disabled = true;
         $scope.report = report;
-        report.unregularBleed =  $scope.getBoolean(report.unregularBleed);
+        report.unregularBleed = $scope.getBoolean(report.unregularBleed);
         report.touchbleeding = $scope.getBoolean(report.touchbleeding);
 
         $scope.checkDate4Detial = $scope.formatTime($scope.report.checkDate);
@@ -1502,8 +1498,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         $scope.report = null;
     }
-//init page
-    $scope.getTopPage(1);
+
 
     $scope.showAdvance = false;
     $scope.openAdvanceSearch = function () {
@@ -1541,10 +1536,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         ReportService.advanceSearch($scope.search, function (result) {
             if (result.isSuccess) {
-                for(var i = 0; i< result.reportList.length;i++){
+                for (var i = 0; i < result.reportList.length; i++) {
                     var rept = result.reportList[i];
                     rept.unregularBleed = 'true' === rept.unregularBleed;
-                    rept.touchbleeding = "true" === rept.touchbleeding ;
+                    rept.touchbleeding = "true" === rept.touchbleeding;
                 }
                 $scope.reports = result.reportList;
                 $scope.cancelAdvanceSearch();
@@ -1572,7 +1567,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         //report.outpatientNo && report.admissionNo &&
-        var isFull =  report.patientName;
+        var isFull = report.patientName;
         if (!isFull) {
             alert("报告单不完整,请先填写完整的报告单");
             return;
@@ -1595,7 +1590,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
         if ($scope.getComplaints($scope.report) == "") {
             alert("请填写报告单主诉信息");
-            return ;
+            return;
         }
 
         if ($scope.getClinical($scope.report) == "") {
@@ -1615,27 +1610,27 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     $("#reportLink2").hide();
     $("#reportLink1").hide();
 
-    console.log("refer:"+$cookieStore.get("refer"));
-    if("hub" == $cookieStore.get("refer")){
+    console.log("refer:" + $cookieStore.get("refer"));
+    if ("hub" == $cookieStore.get("refer")) {
         $scope.newCreate();
-        $cookieStore.put("refer",null);
+        $cookieStore.put("refer", null);
         $("#createbtn").show();
-    }else if("search" ==  $cookieStore.get("refer")){
+    } else if ("search" == $cookieStore.get("refer")) {
         $("#createbtn").hide();
     }
 
 
-    $scope.getQueryVariable = function(variable)
-    {
-        var query = window.location.href.substring(location.href.indexOf("?")+1);
+    $scope.getQueryVariable = function (variable) {
+        var query = window.location.href.substring(location.href.indexOf("?") + 1);
         var vars = query.split("&");
-        for (var i=0;i<vars.length;i++) {
+        for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+            if (pair[0] == variable) {
+                return pair[1];
+            }
         }
-        return(false);
+        return (false);
     }
-
 
 
     $scope.showDetail = function (rep, $event) {
@@ -1643,11 +1638,11 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.report = rep;
 
         var uid = rep.uid;
-        if(!(uid == null)){
-            if(uid.length == 7){
-                $scope.report.uid = uid.substr(0,6);
-            }else{
-                $scope.report.uid = uid.substr(uid.length - 6,6);
+        if (!(uid == null)) {
+            if (uid.length == 7) {
+                $scope.report.uid = uid.substr(0, 6);
+            } else {
+                $scope.report.uid = uid.substr(uid.length - 6, 6);
             }
         }
 
@@ -1670,7 +1665,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 
         $scope.report.unregularBleed = 'true' === $scope.report.unregularBleed;
-        $scope.report.touchbleeding = "true" === $scope.report.touchbleeding ;
+        $scope.report.touchbleeding = "true" === $scope.report.touchbleeding;
 
         var $body = $('body', doc);
         var prefix = '<div style="width:1050px;margin:auto;">';
@@ -1678,7 +1673,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         var modifyHtml = $("#printdiv").html();
         var html = prefix + modifyHtml + suffix;
         // $body.html(html);
-       // $compile($("#printframe").contents())($scope);
+        // $compile($("#printframe").contents())($scope);
         $scope.doesCheckComplete();
         // setTimeout(function () {
         //     $('#printframe').get(0).contentWindow.focus();
@@ -1691,25 +1686,40 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         return false;
     }
 
-    if(location.href.indexOf("detail") >= 0) {
+    $scope.getReportDetail = function (no, showDetailFunction) {
+        OpenApiService.getReport(no, function (result) {
+            console.log(result);
+            if (result.isSuccess) {
+                $scope.report = result.report;
+                showDetailFunction($scope.report);
+            } else {
+                alert(result.description);
+            }
+        }, function (response) {
+            alert("返回错误" + response);
+        })
+    }
+
+    if (location.href.indexOf("detail") >= 0) {
 
         $("#navigation").hide();
         if (!$scope.report) {
             $scope.report = {};
         }
 
-        $scope.report.reportId = $scope.getQueryVariable('reportId');
-        $scope.getDetail(    $scope.showDetail );
-
-
-
+        var no = $scope.getQueryVariable('no');
+        $scope.getReportDetail(no, $scope.showDetail);
+    }else{
+        //init page
+        $scope.getTopPage(1);
     }
+
 }
 ;
 HospitalController = function ($scope, $location, HospitalService, $locale, $cookieStore, $http, CommonService) {
     if ($cookieStore.get("doctor") == null) {
         $("#logout").show();
-    } else if(location.href.endsWith("hub")) {
+    } else if (location.href.endsWith("hub")) {
         $("#logout").hide();
         $("#doctorLink").hide();
         $("#gotohub").hide();
@@ -1719,11 +1729,11 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
         var doctor = $cookieStore.get("doctor");
         if (doctor.type == CommonService.types[0].name) {
             $("#doctorHub").show();
-        }else{
+        } else {
             $("#doctorHub").hide();
         }
 
-    }else{
+    } else {
 
         var doctor = $cookieStore.get("doctor");
         if (doctor.type != CommonService.types[1].name) {
@@ -1844,13 +1854,13 @@ HospitalController = function ($scope, $location, HospitalService, $locale, $coo
     }
     $scope.getHospital();
 
-    $scope.gotoReport = function(path){
+    $scope.gotoReport = function (path) {
         $cookieStore.put("refer", "hub");
         $location.path(path);
         $cookieStore.put("path", path);
     }
 
-    $scope.gotoFind = function(path){
+    $scope.gotoFind = function (path) {
         $cookieStore.put("refer", "search");
         $location.path(path);
     }

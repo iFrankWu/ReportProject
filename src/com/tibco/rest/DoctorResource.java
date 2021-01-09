@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.shinetech.sql.exception.DBException;
@@ -157,7 +158,7 @@ public class DoctorResource {
 	    public List<Doctor> getDoctorList() {
 	    	try {
 	    		Boolean withSystemAmin = false;
-	    		if(request.getSession().getAttribute(Const.CURRENT_USER_TYPE).equals(Const.TYPE_SystemAdmin)){
+	    		if(StringUtils.equals(""+request.getSession().getAttribute(Const.CURRENT_USER_TYPE),Const.TYPE_SystemAdmin)){
 	    			withSystemAmin = true;
 	    		}
 	    		logService.addLogRecord(request,"获取医生列表",null);

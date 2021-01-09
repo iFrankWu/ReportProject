@@ -34,9 +34,9 @@
                     <td colspan="1"><input type="text" ng-model="hospital.department" required="required"
                                            style="width:150px" ng-readonly="stashDone"></td>
                     <td>门诊号:</td>
-                    <td><input type="text" ng-model="report.outpatientNo" ng-readonly="stashDone"></td>
+                    <td><input type="text" ng-model="report.outpatientNo" ng-readonly="stashDone" ng-change="getPatientInfo()"></td>
                     <td>住院号:</td>
-                    <td colspan="1"><input type="text" ng-model="report.admissionNo" ng-readonly="stashDone"></td>
+                    <td colspan="1"><input type="text" ng-model="report.admissionNo" ng-readonly="stashDone" ng-change="getPatientInfo()"></td>
                     <td><label>电话:</label></td>
                     <td><input type="text" ng-model="report.phone" ng-readonly="stashDone"></td>
                 </tr>

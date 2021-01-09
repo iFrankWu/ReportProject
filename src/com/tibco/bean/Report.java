@@ -28,7 +28,8 @@ public class Report {
     private Integer pregnancyNumber;
     private Integer childbirthNumber;
     private Boolean isMenopause;
-    private String department;//检查部门
+    //检查部门
+    private String department;
     private String phone;
     /**
      * 主诉

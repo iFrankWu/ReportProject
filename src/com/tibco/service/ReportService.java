@@ -13,6 +13,7 @@ import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
 import com.tibco.bean.Result;
 import com.tibco.bean.Search;
+import com.tibco.dao.PatientDAO;
 import com.tibco.dao.ReportDAO;
 import com.tibco.handle.ExportReportHandler;
 import com.tibco.integration.hhd.HHDClient;
@@ -42,6 +43,8 @@ import java.util.Map;
  */
 public class ReportService {
     private ReportDAO reportDAO = new ReportDAO();
+
+    private PatientDAO patientDAO = new PatientDAO();
 
     private HHDService hhdService = new HHDService();
 
@@ -428,6 +431,10 @@ public class ReportService {
         return reportDAO.getReportsByCaseNumber(caseNumber);
     }
 
+   public Report getReportsByOutpatientNoOrAdmissionNo(String no) throws DBException{
+        return reportDAO.getReportsByOutpatientNoOrAdmissionNo(no);
+    }
+
     public String parsePnormFromCsv(String file) {
 //       String file = "/Users/frank/Downloads/1333B2-000181-result.csv";
         //声明流对象
@@ -457,6 +464,10 @@ public class ReportService {
             }
         }
         return "0";
+    }
+
+    public Report getPatientInfo(String mzh, String zyid) throws DBException {
+        return patientDAO.getPatientInfo(mzh, zyid);
     }
 }
 

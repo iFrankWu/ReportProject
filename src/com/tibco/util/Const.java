@@ -8,12 +8,15 @@
  */
 package com.tibco.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.xml.DOMConfigurator;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -50,8 +53,8 @@ public class Const {
 
     public static Integer SESSION_TIMEOUT_IN_MINUTE = 4 * 60;
 
-    public static String INTEGRATION_SERICE_URL = "";
-    public static String INTEGRATION_SERICE_GET_PATIENT_INFO = "";
+    public static List<String> WHITE_ACCESS_IP_LIST ;
+
 
     public static void initLogger() {
         if (!doesLoggerInited) {
@@ -66,11 +69,13 @@ public class Const {
                 SESSION_TIMEOUT_IN_MINUTE = Integer.parseInt(sessionTimeOuts);
                 System.out.println("SESSION_TIMEOUT_IN_MINUTE:" + SESSION_TIMEOUT_IN_MINUTE);
 
-                INTEGRATION_SERICE_URL = pro.getProperty("default.integrationServiceUrl");
-                System.out.println("INTEGRATION_SERICE_URL:" + INTEGRATION_SERICE_URL);
+                String whiteAccesssIp = pro.getProperty("default.whiteAccessIp");
+                if (StringUtils.isNotBlank(whiteAccesssIp)) {
+                    WHITE_ACCESS_IP_LIST = Arrays.asList(whiteAccesssIp.split(","));
+                }
 
-                INTEGRATION_SERICE_GET_PATIENT_INFO = pro.getProperty( "default.integrationServiceGetPatientInfo");
-                System.out.println("INTEGRATION_SERICE_GET_PATIENT_INFO:" + INTEGRATION_SERICE_GET_PATIENT_INFO);
+                System.out.println("WHITE_ACCESS_IP_LIST:" + WHITE_ACCESS_IP_LIST);
+
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

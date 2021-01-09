@@ -249,7 +249,7 @@ public class ReportDAO {
         db.execute(sql, fpList);
     }
 
-    public void updateReport( int pointNumber, float pnorValueResult, String uid) throws DBException {
+    public void updateReport(int pointNumber, float pnorValueResult, String uid) throws DBException {
         String sql = "update report  set pnorValueResult=?,pointNumber=? where uid = ? ";
         List<FieldParameter> fpList = new ArrayList<FieldParameter>();
         fpList.add(new FieldParameter(1, pnorValueResult, FieldTypes.FLOAT));
@@ -464,8 +464,17 @@ public class ReportDAO {
         return db.queryPrepareList(Report.class, sql, fpList);
     }
 
+    public Report getReportsByOutpatientNoOrAdmissionNo(String outpatientNoOrAdmissionNo) throws DBException {
+        String sql = "select * from report where outpatientNo = ? or admissionNo= ? order by reportId desc limit 1";
+        List<FieldParameter> fpList = new ArrayList<FieldParameter>();
+        fpList.add(new FieldParameter(1, outpatientNoOrAdmissionNo, FieldTypes.VARCHAR));
+        fpList.add(new FieldParameter(2, outpatientNoOrAdmissionNo, FieldTypes.VARCHAR));
+        return (Report) db.queryPrepareFirst(Report.class, sql, fpList);
+    }
+
     /**
      * 获取最近更新的一条数据
+     *
      * @return
      * @throws DBException
      */
