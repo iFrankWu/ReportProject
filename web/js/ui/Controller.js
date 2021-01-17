@@ -1652,10 +1652,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 
         $scope.lastTimeMenstruationPrint = $scope.formatChineseDate(rep.lastTimeMenstruation);
-        var window = $('#printframe').get(0).contentWindow;
+        // var window = $('#printframe').get(0).contentWindow;
         // window.location.href =  window.location.href+"_"+rep.reportId;
-        var doc = window.document;
-        doc.title = rep.reportId;
+        // var doc = window.document;
+        // doc.title = rep.reportId;
 
         if ($scope.report.hpv) {
             if (!($scope.report.hpv instanceof Array)) {
@@ -1667,11 +1667,11 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         $scope.report.unregularBleed = 'true' === $scope.report.unregularBleed;
         $scope.report.touchbleeding = "true" === $scope.report.touchbleeding;
 
-        var $body = $('body', doc);
-        var prefix = '<div style="width:1050px;margin:auto;">';
-        var suffix = "<div>";
-        var modifyHtml = $("#printdiv").html();
-        var html = prefix + modifyHtml + suffix;
+        // var $body = $('body', doc);
+        // var prefix = '<div style="width:1050px;margin:auto;">';
+        // var suffix = "<div>";
+        // var modifyHtml = $("#printdiv").html();
+        // var html = prefix + modifyHtml + suffix;
         // $body.html(html);
         // $compile($("#printframe").contents())($scope);
         $scope.doesCheckComplete();
@@ -1713,6 +1713,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         //init page
         $scope.getTopPage(1);
     }
+
 
 }
 ;

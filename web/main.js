@@ -7,6 +7,8 @@ require(["js/ui/user_customize"]);
 require(["js/bootstrap/js/bootstrap.min"]);
 require(["js/bootstrap/js/bootstrap-modal"]);
 
+require(["js/ui/dom-to-image.js"])
+
 
 
 
