@@ -185,10 +185,10 @@
 <!--<tr><td><label>    韧体版本:</label></td>-->
 	<!--<td style="text-align:left">{{hospital.firmwareVersion}}</td>-->
 <!--</tr>-->
-    <!--<tr>-->
-        <!--<td>UID:</td>-->
-                    <!--<td colspan="1"><input type="text" ng-model="report.uid"  ng-change="getPNormManual()" ng-readonly="!stashDone"></td>-->
-    <!--</tr>-->
+    <tr>
+        <td>UID:</td>
+                    <td colspan="1"><input type="text" ng-model="report.uid"  ng-change="getPNormManual()" ng-readonly="!stashDone"></td>
+    </tr>
 
 <tr><td><label>    检查类型:</label></td>
 	<td style="text-align:left">筛查 </td>
@@ -198,21 +198,21 @@
                                        <!--onChange="checkPointNumber(event,this)"/><font size="1">请输入15到32间的数值</font></td>-->
 <!--</tr>-->
 <tr><td><label>检查是否完成:</label></td>
-	<td style="text-align:left">
-		完成<input type="radio" name="isCompleted" value="完成" ng-model="report.isComplete" ng-change="doesCheckComplete()"
-                 style="margin-right:15px"/>
-        未完成<input type="radio" name="isCompleted" value="未完成" ng-model="report.isComplete"
-                         ng-change="doesCheckComplete()"/>
-
-		</td>
-    <!--<td colspan="2">-->
-     <!--<input type="text" ng-model="report.isComplete" ng-readonly="true"-->
-            <!--style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/>-->
-    <!--</td>-->
+	<!--<td style="text-align:left">-->
+		<!--完成<input type="radio" name="isCompleted" value="完成" ng-model="report.isComplete" ng-change="doesCheckComplete()"-->
+                 <!--style="margin-right:15px"/>-->
+	           <!--未完成<input type="radio" name="isCompleted" value="未完成" ng-model="report.isComplete"-->
+                         <!--ng-change="doesCheckComplete()"/>-->
+		<!---->
+		<!--</td>-->
+    <td colspan="2">
+     <input type="text" ng-model="report.isComplete" ng-readonly="true"
+            style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/>
+    </td>
 </tr>
     <tr valign="top" ng-show="!doesCheckCompleted">
-	<td colspan="2"><span style="width:30%">未完成原因: </span>
-        <textarea rows="5" cols="60" name="other" style="width:70%" ng-model="report.reason4doesNotComplete"/></td>
+	<td colspan="2"><span style="width:30%">未完成原因: </span><textarea rows="5" cols="60" name="other" style="width:70%"
+                                                                    ng-model="report.reason4doesNotComplete"/></td>
 </tr>
 <!--<tr><td><label>    PNOR值:</label></td>-->
 	<!--<td style="text-align:left"><input type="number" style="width: 50px;" ng-model="report.pnorValueResult"-->
@@ -227,21 +227,21 @@
     <!--</tr>-->
 <tr ng-show="doesCheckCompleted"><td><label>    检查结果:</label></td>
 	<td style="text-align:left">
-		正常<input type="radio" name="result" value="正常" ng-model="report.checkResult" ng-change="isNormal()"
-                  style="margin-right:15px"/>
-		异常<input type="radio" name="result" value="异常" ng-model="report.checkResult" ng-change="isNormal()"
-                /></td>
+		<!--正常(Normal)<input type="radio" name="result" value="正常" ng-model="report.checkResult" ng-change="isNormal()"-->
+                 <!--ng-disabled="!doesCheckCompleted" style="margin-right:15px"/>-->
+		<!--异常(Abnormal)<input type="radio" name="result" value="异常" ng-model="report.checkResult" ng-change="isNormal()"-->
+                 <!--ng-disabled="!doesCheckCompleted"/></td>-->
         <!--<td colspan="2"><span ng-model="report.checkResult"></span></td>-->
-    <!--<input type="text" ng-model="report.checkResult" ng-readonly="true"-->
-           <!--style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/>-->
+    <input type="text" ng-model="report.checkResult" ng-readonly="true"
+           style="border:1px;border-bottom-style:none;border-top-style:none;border-left-style:none;border-right-style:none;"/>
 </tr>
 <tr style="height:30px"></tr>
-<tr class="normal" ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2"  style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常</font></b></p>
+<tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
+	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
-<tr class="exception" ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
-	<td colspan="2"  style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
+<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
+	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
     <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->
 	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->

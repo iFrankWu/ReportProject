@@ -42,28 +42,28 @@ public class PatientDAO {
      */
     private final static String COLUMN_LXDH = "lxdh";
 
-
-    private final  static String CUST_NAME = "cust_name";
-    private final  static String CUST_BIRTHDAY = "cust_birthday";
-    private final  static String CUST_AGE = "cust_age";
-
-
-    private IDatabaseAccess db = (new DatabaseAccessBuilder()).getDatabaseAccess("mysql");
+    private IDatabaseAccess db = (new DatabaseAccessBuilder()).getDatabaseAccess("sqlserver");
 
     public Report getPatientInfo(String mzh, String zyid) throws DBException {
-        if (StringUtils.isBlank(mzh)) {
+        if (StringUtils.isBlank(mzh) && StringUtils.isBlank(zyid)) {
             return null;
         }
 
-        if(mzh.equals("-1") ){
+        if(mzh.equals("-1") || zyid.equals("-1")){
             return mockReport();
         }
 
         final Report report = new Report();
 
-        String sql = "select  * from order_info_view where order_info_view where order_code = ? limit 1";
+        String sql = "select top 1 * from [WK_Interface].[dbo].[WK_ZYBRJBXX]";
         List<FieldParameter> fpList = new ArrayList<FieldParameter>();
-        fpList.add(new FieldParameter(1, mzh, FieldTypes.VARCHAR));
+        if (StringUtils.isNotBlank(mzh)) {
+            sql = sql + " where MZH = ? ";
+            fpList.add(new FieldParameter(1, mzh, FieldTypes.VARCHAR));
+        } else {
+            sql = sql + " where ZYID = ? ";
+            fpList.add(new FieldParameter(1, zyid, FieldTypes.VARCHAR));
+        }
 
         db.handleList(sql, fpList, new ResultSetHandler() {
             @Override
@@ -76,20 +76,18 @@ public class PatientDAO {
                         logger.info(rsmd.getColumnName(i) + ":\t" + r);
                     }
 
-                    report.setPatientName(resultSet.getString(CUST_NAME));
-                    report.setAge(resultSet.getInt(CUST_AGE));
-//                    report.setPatientName(resultSet.getString(COLUMN_XM));
-//                    report.setOutpatientNo(resultSet.getString(COLUMN_MZH));
-//                    report.setAdmissionNo(resultSet.getString(COLUMN_ZYID));
-//                    report.setAddress(resultSet.getString(COLUMN_JTZZ));
-//                    report.setPhone(resultSet.getString(COLUMN_LXDH));
-//                    String csrq = resultSet.getString(COLUMN_CSRQ);
-//                    if (StringUtils.isNotBlank(csrq)) {
-//                        int csrqYear = DateUtil.getYear(csrq);
-//                        int thisYear = DateUtil.getYear(new Date());
-//                        int age = thisYear - csrqYear;
-//                        report.setAge(age);
-//                    }
+                    report.setPatientName(resultSet.getString(COLUMN_XM));
+                    report.setOutpatientNo(resultSet.getString(COLUMN_MZH));
+                    report.setAdmissionNo(resultSet.getString(COLUMN_ZYID));
+                    report.setAddress(resultSet.getString(COLUMN_JTZZ));
+                    report.setPhone(resultSet.getString(COLUMN_LXDH));
+                    String csrq = resultSet.getString(COLUMN_CSRQ);
+                    if (StringUtils.isNotBlank(csrq)) {
+                        int csrqYear = DateUtil.getYear(csrq);
+                        int thisYear = DateUtil.getYear(new Date());
+                        int age = thisYear - csrqYear;
+                        report.setAge(age);
+                    }
                 } catch (Exception e) {
                     logger.error(e);
                 }
@@ -99,8 +97,6 @@ public class PatientDAO {
         return report;
 
     }
-
-
 
     private Report mockReport(){
         Report report = new Report();
