@@ -1,19 +1,60 @@
-<div class="row span10">
-            <form ng-submit="login()">
-            	<label name="s" for="aantalUren">用户名:	</label>
-                <input id="aantalUren" type="text" class="span4" placeholder="用户名" required="required" ng-model="doctorName">
-               	<br>
-                <label name="sq" for="activiteit">密码:	</label>
-                <input id="activiteit" type="Password" class="span4" ng-model="password" required="required">
-               <input type="submit"  value="登录" class="span1 btn btn-success">
-            </form>
+<style>
+    label {
+        display: inline;
+    }
+
+    .login_label {
+        font-family: "Microsoft Yahei", "微软雅黑", GothamRoundedBook, Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        color: #00a6ce;
+    }
+
+    .button-border {
+        text-transform: uppercase;
+        font-weight: bold;
+        border: 1px #00a6ce solid;
+        width: 130px;
+        height: 28px;
+        background-color: #ffffff;
+        color: #00a6ce;
+        margin: 20px 10px 10px 10px;
+    }
+
+
+</style>
+
+<div style="float:left;width: 200px;height: 200px">
+    <img src="../images/logo-1.png">
 </div>
-<!-- 
-<div class="row span10">
-            <form ng-submit="login2()">
-                <input id="aantalUren" type="text" class="span1" placeholder="User Name" required="required" ng-model="username">
-                <input id="activiteit" type="password" class="span4" ng-model="password" required="required">
-                <input type="Login" value="+" class="span1 btn btn-success">
-            </form>
+<div style="float:left;margin-left: 60px;margin-right: 10px;width: 1px;height: 200px; background: darkgray;"></div>
+
+<div style="float: left;width: 60%">
+    <label class="login_label">用户登录</label><br>
+
+    请登录连接你的宫颈癌筛查系统
+    <div class="row span10">
+        <form ng-submit="login()">
+            <table>
+                <tr>
+                    <td style="width:300px;">用户名:</td>
+                    <td style="width:500px;"><input id="aantalUren" type="text" class="span4" placeholder="用户名"
+                                                    required="required" ng-model="doctorName"
+                                                    style="border-color: #00a6ce;"></td>
+                </tr>
+
+                <tr>
+                    <td>密码:</td>
+                    <td><input id="activiteit" type="Password" class="span4" ng-model="password" required="required"
+                               style="border-color: #00a6ce;">
+                    </td>
+                </tr>
+
+
+            </table>
+
+            <input type="submit" value="登录 >"  class="button-border" style="width: 150px;text-align: center;    color: #00a6ce;
+    background: none;
+    border-color:#00a6ce;">
+        </form>
+    </div>
 </div>
- -->

@@ -91,6 +91,16 @@ ReportServiceImpl = function (ReportResource) {
                 sortColumn: sortColumns
             }, callback, failurecallback);
         },
+        getDetail :  function(startId, sizes, pages, sortColumns, callback, failurecallback){
+            if (startId == null) alert("请求参数错误");
+            ReportResource.getDetail({
+                reportId: startId,
+                preOrNext: 'Detail',
+                size: sizes,
+                page: pages,
+                sortColumn: sortColumns
+            }, callback, failurecallback);
+        },
         addReport: function (report, callback, failurecallback) {
             ReportResource.addReport(report, callback, failurecallback);
         },
@@ -105,6 +115,9 @@ ReportServiceImpl = function (ReportResource) {
         },
         getPNorm: function (uid, callback, failurecallback) {
             ReportResource.getPNorm({uid:uid}, callback, failurecallback);
+        },
+        getPatientInfo: function (patientName,outpatientNo,admissionNo, callback, failurecallback) {
+            ReportResource.getPatientInfo({patientName:patientName,outpatientNo:outpatientNo,admissionNo:admissionNo}, callback, failurecallback);
         }
     }
 };
@@ -140,3 +153,22 @@ RecordServiceImpl = function (RecordResource) {
 
     }
 };
+
+HHDServiceImpl = function (HHDResource) {
+    return {
+        executeHHDCommand: function (command, callback, failurecallback) {
+            HHDResource.executeHHDCommand({command:command}, callback, failurecallback);
+        }
+    }
+};
+
+
+OpenApiServiceImpl = function (OpenApiResource) {
+    return {
+        getReport: function (no, callback, failurecallback) {
+            OpenApiResource.getReport({no:no}, callback, failurecallback);
+        }
+    }
+};
+
+

@@ -3,7 +3,7 @@
     <button id="createbtn" class="btn" ng-click="newCreate()">创建报告单</button>
     <!-- create report -->
     <fieldset id="main" ng-show="newCreateReport">
-        <legend>创建报告单</legend>
+        <legend>创建报告单(单机)</legend>
         <fieldset width="100%">
             <legend><b><font color="#296B3C">资料</font></b></legend>
             <table style="width:100%">
@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <td><label>姓名:</label></td>
-                    <td><input type="text" ng-model="report.patientName" required="required"></td>
+                    <td><input type="text" ng-model="report.patientName" required="required" ng-mouseleave="getPatientInfo()"></td>
                     <td><label>年龄:</label></td>
                     <td><input type="text" ng-model="report.age" onChange="checkNumber(event,this)"></td>
                     <td><label>病历号:</label></td>
@@ -135,7 +135,7 @@
 
                     <!--</td>-->
 
-                    <td><label>肉眼可见癌:</label></td>
+                    <td><label>肉眼可见病变:</label></td>
                     <td><input type="checkbox" ng-model="report.visableCancer" ng-change="isVisableCancer()"></input></td>
 
                     <td><label>其他:</label></td>
@@ -206,11 +206,11 @@
 </tr>
 <tr style="height:30px"></tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
     <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->
 	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
@@ -665,7 +665,7 @@
 
                     <!--</td>-->
 
-                    <td><label>肉眼可见癌:</label></td>
+                    <td><label>肉眼可见病变:</label></td>
                     <td><input type="checkbox" ng-model="report.visableCancer" ng-change="isVisableCancer()"></input></td>
 
                     <td><label>其他:</label></td>
@@ -734,11 +734,11 @@
 
 <tr style="height:30px"></tr>
 <tr ng-show="doesCheckCompleted &&  (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:left;text-indent: 20px;font-family:黑体;"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
        <!--<tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">-->
 	<!--<td colspan="2" style="text-align:left;font-family:黑体;text-indent: 20px;"><p><b><font size="5">&ge;LSIL</font></b></p>-->
@@ -1052,11 +1052,11 @@
 </tr>
 
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td></td><td style="text-align:left;font-family:黑体;font-size:22;font-weight:bold;text-indent: 20px;">未发现异常细胞或组织
+	<td></td><td style="text-align:left;font-family:黑体;font-size:22;font-weight:bold;text-indent: 20px;">未发现异常
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;font-size:22;font-weight:bold;">发现异常细胞或组织
+	<td></td><td  style="text-align:left;font-family:黑体;text-indent: 20px;font-size:22;font-weight:bold;">可能有异常，应进一步检查
 </td>
 </tr>
      <!--<tr ng-show="doesCheckCompleted &&  (report.checkResult == '异常')">-->

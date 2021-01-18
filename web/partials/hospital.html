@@ -10,12 +10,11 @@
 				<tr>
 					<td>医院名称:</td><td style="text-align:center"><input type="text" ng-model="hospital.name" ng-readonly="readonly" name="name"/></td></tr><tr>
 					<td>科室:</td><td style="text-align:center"><input type="text" ng-model="hospital.department" ng-readonly="readonly" name="department" /></td></tr><tr>
-					<td>主机序列号:</td><td style="text-align:center"><input type="text" ng-model="hospital.machineNumber" ng-readonly="readonly" name="machineNumber"/></td></tr><tr>
-					<td>手控器序列号:</td><td style="text-align:center"><input type="text" ng-model="hospital.handController" ng-readonly="readonly"name="handController"/></td></tr><tr>
-					<td>韧体版本:</td><td style="text-align:center"><input type="text" ng-model="hospital.firmwareVersion" ng-readonly="readonly" name="firmwareVersion"/></td></tr><tr>
-
-					
-
+					<td>手控器编号:</td><td style="text-align:center"><input type="text" ng-model="hospital.handController" ng-readonly="readonly"name="handController"/></td></tr><tr>
+					<td>手控器韧件:</td><td style="text-align:center"><input type="text" ng-model="hospital.firmwareVersion" ng-readonly="readonly" name="firmwareVersion"/></td></tr><tr>
+					<td>主机韧件:</td><td style="text-align:center"><input type="text" ng-model="hospital.machineNumber" ng-readonly="readonly" name="machineNumber"/></td></tr><tr>
+					<td>癌症运算法则:</td><td style="text-align:center"><input type="text" ng-model="hospital.algorithm" ng-readonly="readonly" name="algorithm"/></td></tr><tr>
+					<td>应校准日期:</td><td style="text-align:center"><input type="date" ng-model="hospital.adjustDate" ng-readonly="readonly" name="adjustDate"/></td></tr><tr>
 					<td>医院Logo:</td><td><img src="{{hospital.hospitalLogo}}" width="200px" height="160px"></img></td></tr><tr>
 					<td>上传新Logo:</td><td style="text-align:center"><input class="btn" type="file" ng-model="hospital.hospitalLogo" ng-readonly="readonly" name="file" multiple accept='image/*' onChange="isImage(event,this)"/></td>
 				</tr>

@@ -22,9 +22,10 @@ CommonResourceImpl = function ($resource) {
 };
 
 ReportResourceImpl = function ($resource) {
-    return $resource('truscreen/report/:reportId/:preOrNext/:size/:page/:sortColumn/:uid', {}, {
+    return $resource('truscreen/report/:reportId/:preOrNext/:size/:page/:sortColumn/:uid/:patientName/:outpatientNo/:admissionNo', {}, {
       //  login:{method:'POST',params:{}},
         //logout:{method:'GET',params:{id:'id'}},
+        getDetail:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
         getNextPage:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
         getPrePage:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
         getCurrentPage:{method:'GET',params:{reportId:'reportId',preOrNext:'preOrNext',size:'size',page:'page',sortColumn:'sortColumn'}},
@@ -33,7 +34,8 @@ ReportResourceImpl = function ($resource) {
         deleteReport:{method:"DELETE",params:{reportId:'reportId'}},
         updateReport:{method:"PUT",params:{reportId:"reportId"}},
         advanceSearch:{method:"POST",params:{}},
-        getPNorm:{method:"GET",params:{reportId:'1',preOrNext:'Next',size:'1',page:'1',sortColumn:'1',uid:'uid'}}
+        getPNorm:{method:"GET",params:{reportId:'1',preOrNext:'Next',size:'1',page:'1',sortColumn:'1',uid:'uid'}},
+        getPatientInfo:{method:"GET",params:{reportId:'1',preOrNext:'Next',size:'1',page:'1',sortColumn:'1',uid:'1',patientName:'patientName',outpatientNo:'outpatientNo',admissionNo:'admissionNo'}}
     });
 };
 HospitalResourceImpl = function ($resource) {
@@ -53,6 +55,17 @@ RecordResourceImpl = function ($resource) {
     });
 };
 
+HHDResourceImpl = function ($resource) {
+    return $resource('truscreen/hdd/:command', {}, {
+         executeHHDCommand:{method:'GET',params:{ command:'command' }}
+    });
+};
+
+OpenApiResourceImpl = function ($resource) {
+    return $resource('truscreen/openapi/detail/:no', {}, {
+        getReport:{method:'GET',params:{ no:'no' }}
+    });
+};
  
 
  

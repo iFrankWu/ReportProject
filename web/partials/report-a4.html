@@ -3,7 +3,7 @@
 <button id="createbtn" class="btn" ng-click="newCreate()" >创建报告单</button>
 <!-- create report -->
 <fieldset  id="main" ng-show="newCreateReport">
-<legend>创建报告单</legend>
+<legend>创建报告单(A4)</legend>
 <fieldset width="100%">
 <legend><b><font color="#296B3C">资料</font></b></legend>
 <table style="width:100%">
@@ -115,7 +115,7 @@
 				Ⅰ&#176;<input type="radio" value="重" name="erosion" ng-model="report.erosion" style="margin-right:2px"/>
 		</td>
 
-		<td><label>肉眼可见癌:</label></td>
+		<td><label>肉眼可见病变:</label></td>
 		<td><input type="checkbox" ng-model="report.visableCancer" ng-change="isVisableCancer()"></input></td>
 
 		<td style="width:8%"><label>息肉:</label></td>
@@ -186,11 +186,11 @@
 </tr>
 <tr style="height:30px"  ></tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:center;font-family:黑体" ><p><b><font size="5">未发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:center;font-family:黑体" ><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
 </tr>
 
@@ -403,7 +403,7 @@
 	<td><input type="checkbox" ng-model="search.isWhite"/></td>
 	<td width="100px"><label>阴道排液:</label></td>
 	<td><input type="checkbox" ng-model="search.isCancer" ng-change="isVisableCancer()"></input></td>
-	<td><label>肉眼可见癌:</label></td>
+	<td><label>肉眼可见病变:</label></td>
 	<td><input type="checkbox" ng-model="report.visableCancer" ng-change="isVisableCancer()"></input></td>
 	<td width="100px"><label>其他:</label></td>
 	<td><input type="text" ng-model="search.otherClinical"/></td>
@@ -694,11 +694,11 @@
 </tr>
 <tr style="height:30px"></tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">未发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">未发现异常</font></b></p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">发现异常细胞或组织</font></b></p>
+	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="5">可能有异常，应进一步检查</font></b></p>
 </td>
 </tr>
 <!--
@@ -1067,11 +1067,11 @@
 <tr style="height:30px"><td colspan="2"></td></tr>
 
 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="6">未发现异常细胞或组织</font></b><p>
+	<td colspan="2" style="text-align:center;font-family:黑体"><p><b><font size="6">未发现异常</font></b><p>
 	</td>
 </tr>
 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-	<td colspan="2" style="text-align:center;font-family:黑体"><p style="margin-left:-50px"><b><font size="6">发现异常细胞或组织</font></b></p><p style="margin-left:110px">
+	<td colspan="2" style="text-align:center;font-family:黑体"><p style="margin-left:-50px"><b><font size="6">可能有异常，应进一步检查</font></b></p><p style="margin-left:110px">
 </td>
 </tr>
 <tr valign="top" ng-show="!doesCheckCompleted">

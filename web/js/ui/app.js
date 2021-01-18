@@ -49,6 +49,10 @@ var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies',
             templateUrl:"partials/report-backup-woman.html",
             controller:ReportController
         })
+        .when("/truscreen/detail",{
+            templateUrl:"partials/detail.html",
+            controller:ReportController
+        })
         .when("/truscreen/reports_pregnancy",{
             templateUrl:"partials/report-pregnancy.html",
             controller:ReportController
@@ -57,6 +61,10 @@ var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies',
 	    	templateUrl:"partials/mypage.html",
 	    	controller:DoctorController
     	})
+        .when("/truscreen/hub",{
+            templateUrl:"partials/hub.html",
+            controller:HospitalController
+        })
     	.when("/truscreen/hospital",{
 	    	templateUrl:"partials/hospital.html",
 	    	controller:HospitalController
@@ -72,12 +80,18 @@ var userControl = angular.module('userControl', ['ui', 'ngResource','ngCookies',
     .factory("CommonResource",CommonResourceImpl)
     .factory("ReportResource",ReportResourceImpl)  
     .factory("HospitalResource",HospitalResourceImpl)
-     .factory("RecordResource",RecordResourceImpl)
+	.factory("RecordResource",RecordResourceImpl)
+    .factory("HHDResource",HHDResourceImpl)
+    .factory("OpenApiResource",OpenApiResourceImpl)
+
     .service('DoctorService',DoctorServiceImpl)
     .service('ReportService',ReportServiceImpl)
     .service('CommonService',CommonServiceImpl)
     .service('HospitalService',HospitalServiceImpl)
-    .service('RecordService',RecordServiceImpl);
+    .service('RecordService',RecordServiceImpl)
+	.service('HHDService',HHDServiceImpl)
+	.service('OpenApiService',OpenApiServiceImpl);
+;
 
 
 //var app = angular.module('myApp', []);

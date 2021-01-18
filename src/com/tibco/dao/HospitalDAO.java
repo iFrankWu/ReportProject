@@ -19,17 +19,18 @@ public class HospitalDAO {
 	 * @throws DBException
 	 */
 	public void updateHospital(Hospital hospitalBean) throws DBException{
-		String sql="update hospital  set name = ?,  hospitalLogo = ?, machineNumber =? ,handController = ?,firmwareVersion = ?,department = ? where hospitalId = ?";
+		String sql="update hospital  set name = ?,  hospitalLogo = ?, machineNumber =? ,handController = ?,firmwareVersion = ?,department = ?,algorithm=?,adjustDate=? where hospitalId = ?";
 		if(hospitalBean.getHospitalLogo() == null){
-			 sql="update hospital  set name = ?,   machineNumber =? ,handController = ?,firmwareVersion = ?, department =? where hospitalId = ?";
+			 sql="update hospital  set name = ?,   machineNumber =? ,handController = ?,firmwareVersion = ?, department =?,algorithm = ? ,adjustDate =? where hospitalId = ?";
 			 List<FieldParameter> fpList = new ArrayList<FieldParameter>();
 				fpList.add(new FieldParameter(1, hospitalBean.getName(), FieldTypes.VARCHAR));
 				fpList.add(new FieldParameter(2, hospitalBean.getMachineNumber(), FieldTypes.VARCHAR));
 				fpList.add(new FieldParameter(3, hospitalBean.getHandController(), FieldTypes.VARCHAR));
 				fpList.add(new FieldParameter(4, hospitalBean.getFirmwareVersion(), FieldTypes.VARCHAR));
 				fpList.add(new FieldParameter(5, hospitalBean.getDepartment(), FieldTypes.VARCHAR));
-				//fpList.add(new FieldParameter(6, hospitalBean.getPrescribingDoctorName(), FieldTypes.VARCHAR));
-				fpList.add(new FieldParameter(6, hospitalBean.getHospitalId(), FieldTypes.INTEGER));
+				fpList.add(new FieldParameter(6, hospitalBean.getAlgorithm(), FieldTypes.VARCHAR));
+				fpList.add(new FieldParameter(7, hospitalBean.getAdjustDate(), FieldTypes.VARCHAR));
+				fpList.add(new FieldParameter(8, hospitalBean.getHospitalId(), FieldTypes.INTEGER));
 				
 				db.execute(sql, fpList);
 				return;
@@ -41,15 +42,16 @@ public class HospitalDAO {
 		fpList.add(new FieldParameter(4, hospitalBean.getHandController(), FieldTypes.VARCHAR));
 		fpList.add(new FieldParameter(5, hospitalBean.getFirmwareVersion(), FieldTypes.VARCHAR));
 		fpList.add(new FieldParameter(6, hospitalBean.getDepartment(), FieldTypes.VARCHAR));
-//		fpList.add(new FieldParameter(7, hospitalBean.getPrescribingDoctorName(), FieldTypes.VARCHAR));
-		fpList.add(new FieldParameter(7, hospitalBean.getHospitalId(), FieldTypes.INTEGER));
+		fpList.add(new FieldParameter(7, hospitalBean.getAlgorithm(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(8, hospitalBean.getAdjustDate(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(9, hospitalBean.getHospitalId(), FieldTypes.INTEGER));
 		db.execute(sql, fpList);
 	}
 	
 	public Integer addHospital(Hospital hospitalBean) throws DBException{
 		String getNextAutoIdSql = "select auto_increment from information_schema.`TABLES` where table_name='hospital'";
 		Integer hospitalId =  (Integer)db.queryFirst(Integer.class, getNextAutoIdSql);
-		String sql="insert into hospital  (name,hospitalLogo,machineNumber,handController,firmwareVersion,hospitalId,department)  values(?,?,?,?,?,?,?)";
+		String sql="insert into hospital  (name,hospitalLogo,machineNumber,handController,firmwareVersion,hospitalId,department,algorithm,adjustDate)  values(?,?,?,?,?,?,?,?,?)";
 		List<FieldParameter> fpList = new ArrayList<FieldParameter>();
 		fpList.add(new FieldParameter(1, hospitalBean.getName(), FieldTypes.VARCHAR));
 		fpList.add(new FieldParameter(2, hospitalBean.getHospitalLogo(), FieldTypes.VARCHAR));
@@ -58,7 +60,8 @@ public class HospitalDAO {
 		fpList.add(new FieldParameter(5, hospitalBean.getFirmwareVersion(), FieldTypes.VARCHAR));
 		fpList.add(new FieldParameter(6, hospitalId, FieldTypes.INTEGER));
 		fpList.add(new FieldParameter(7, hospitalBean.getDepartment(), FieldTypes.VARCHAR));
-//		fpList.add(new FieldParameter(7, hospitalBean.getPrescribingDoctorName(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(8, hospitalBean.getAlgorithm(), FieldTypes.VARCHAR));
+		fpList.add(new FieldParameter(9, hospitalBean.getAdjustDate(), FieldTypes.VARCHAR));
 		db.execute(sql, fpList);
 		return hospitalId;
 	}

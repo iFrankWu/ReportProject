@@ -63,12 +63,12 @@ isSmooth boolean,
 isAcuteInflammation boolean,
 isHypertrophy boolean,
 isPolyp boolean,
-erosion varchar(128),
+erosion varchar(128) COMMENT '柱状上皮异位',
 isTear boolean,
 isNesslersGlandCyst boolean,
 isWhite boolean,
 isCancer boolean,
-otherClinical varchar(256),
+otherClinical varchar(256) COMMENT '其他临床',
 
 /**检查内容*/
 pointNumber int,
@@ -103,6 +103,10 @@ ALTER TABLE report ADD pnorValueResult FLOAT ;/** add PNOR值  V1.6 2018.02.09 *
 
 ALTER TABLE report ADD transformArea VARCHAR(128);/** add 可转换区域 V1.7 2018.09.05 */
 ALTER TABLE report ADD uid VARCHAR(128);/** add 患者id  V1.7 2018.09.05 */
+ALTER TABLE report ADD report_status VARCHAR(32) DEFAULT 'INIT' COMMENT 'INIT or SYNCED';/** add report status INIT/SYNCED v1.8 2019.02.18 */
 
-ALTER TABLE report ADD visableCancer boolean;/** add 是否肉眼可见癌 V1.8 2019.04.01 */
+ALTER TABLE report ADD visableCancer boolean;/** add 是否肉眼可见病变 V1.8 2019.04.01 */
+
+alter table hospital add algorithm VARCHAR(128); /** 癌症算法版本 V1.8 2020.10.07*/
+alter table hospital add adjustDate VARCHAR(128); /** 应校准日期 V1.8 2020.10.07*/
 

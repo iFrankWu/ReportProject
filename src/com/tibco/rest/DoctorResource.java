@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.shinetech.sql.exception.DBException;
@@ -31,7 +32,7 @@ import com.tibco.service.LogRecordService;
 import com.tibco.util.Const;
 
 /*
- * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
+ * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
  * @version 1.0.0
  */
 @Path("/doctor")
@@ -56,10 +57,9 @@ public class DoctorResource {
 	    		if(result.getIsSuccess())
 	    			logService.addLogRecord(request, "登陆", doctor.toString());
 	    		return result;
-			} catch (DBException e) {
-				String msg = "登录失败: "+doctor.getDoctorName()+":"+e.getMessage();
-				logger.error(msg);
-				e.printStackTrace();
+			} catch (Exception e) {
+				String msg = "登录失败: "+doctor.getDoctorName();
+				logger.error(msg,e);
 				return new Result(false,msg);
 			}
 	    }
@@ -72,8 +72,8 @@ public class DoctorResource {
 				logService.addLogRecord(request,"退出",null);
 				request.getSession().invalidate();//直接销毁session
 			} catch (DBException e) {
-//				e.printStackTrace();
-			}
+				logger.error("",e);
+	    	}
 	    	return new Result(true,"Logout success");
 	    }
 	    
@@ -86,10 +86,9 @@ public class DoctorResource {
 	    	try {
 	    		logService.addLogRecord(request,"增加医生",doctor.toString());
 				return doctorService.addDoctor(doctor);
-			} catch (DBException e) {
+			} catch (Exception e) {
 				String msg = "增加医生失败，医生名字 : "+doctor.getDoctorName()+":"+e.getMessage();
-				logger.error(msg);
-				e.printStackTrace();
+				logger.error(msg,e);
 				return new Result(false,msg);
 			}
 	    }
@@ -119,10 +118,9 @@ public class DoctorResource {
 		    		}
 		    		logService.addLogRecord(request,"更新医生信息",doctor.toString());
 					return doctorService.updateDoctor(doctor,modifyPasswd);
-				} catch (DBException e) {
+				} catch (Exception e) {
 					String msg = "更新医生信息失败，医生名字 : "+doctor.getDoctorName()+":"+e.getMessage();
-					logger.error(msg);
-					e.printStackTrace();
+					logger.error(msg,e);
 					return new Result(false,msg);
 				}
 	    	}else{
@@ -147,10 +145,9 @@ public class DoctorResource {
 	    		}
 	    		logService.addLogRecord(request,"删除医生",id+"");
 				return doctorService.removeDoctor(id);
-			} catch (DBException e) {
+			} catch (Exception e) {
 				String msg = "删除失败，医生Id: "+id+":"+e.getMessage();
-				logger.error(msg);
-				e.printStackTrace();
+				logger.error(msg,e);
 				return new Result(false,msg);
 				
 			}
@@ -161,15 +158,14 @@ public class DoctorResource {
 	    public List<Doctor> getDoctorList() {
 	    	try {
 	    		Boolean withSystemAmin = false;
-	    		if(request.getSession().getAttribute(Const.CURRENT_USER_TYPE).equals(Const.TYPE_SystemAdmin)){
+	    		if(StringUtils.equals(""+request.getSession().getAttribute(Const.CURRENT_USER_TYPE),Const.TYPE_SystemAdmin)){
 	    			withSystemAmin = true;
 	    		}
 	    		logService.addLogRecord(request,"获取医生列表",null);
 				return doctorService.getDoctorList(withSystemAmin);
 			} catch (DBException e) {
 				String msg = "获取医生列表失败： "+e.getMessage();
-				logger.error(msg);
-				e.printStackTrace();
+				logger.error(msg,e);
 				return null;
 			}
 	    	

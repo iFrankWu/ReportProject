@@ -240,6 +240,7 @@ function logout() {
                 $("#reportLink").hide();
                 $("#mypageLink").hide();
                 $("#doctorLink").hide();
+                $("#gotohub").hide();
                 $("#logout").hide();
                 $("#systemsetting").hide();
             } else {
@@ -327,3 +328,5 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 };
+
+

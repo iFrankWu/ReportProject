@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * class description goes here.
  *
- * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
+ * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
  * @version 1.0.0
  */
 public class Report {
@@ -28,7 +28,8 @@ public class Report {
     private Integer pregnancyNumber;
     private Integer childbirthNumber;
     private Boolean isMenopause;
-    private String department;//检查部门
+    //检查部门
+    private String department;
     private String phone;
     /**
      * 主诉
@@ -112,7 +113,7 @@ public class Report {
     private String uid;
 
     /**
-     * 是否肉眼可见癌
+     * 是否肉眼可见病变
      */
     private Boolean visableCancer;
 
@@ -862,6 +863,9 @@ public class Report {
                 ", pregnancyStatus=" + pregnancyStatus +
                 ", pregnancyTime=" + pregnancyTime +
                 ", pnorValueResult=" + pnorValueResult +
+                ", transformArea='" + transformArea + '\'' +
+                ", uid='" + uid + '\'' +
+                ", visableCancer=" + visableCancer +
                 '}';
     }
 }

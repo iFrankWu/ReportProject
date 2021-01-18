@@ -42,7 +42,7 @@ import com.tibco.util.Const;
 /**
  * class description goes here.
  *
- * @author <a href="mailto:swu@tibco-support.com">Frank Wu</a>
+ * @author <a href="mailto:wushexin@gmail.com">Frank Wu</a>
  * @version 1.0.0
  */
 @Path("/record")
@@ -95,11 +95,10 @@ public class LogRecordResource {
 				map.put("isSuccess", true);
 				map.put("recordList", logs);
 				service.addLogRecord(request,"获取日志",para.toJSONString());
-			} catch (DBException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
 				map.put("isSuccess", false);
 				map.put("description", "获取日志失败："+e.getMessage());
-				logger.error("获取日志失败："+e.getMessage());
+				logger.error("获取日志失败："+e.getMessage(),e);
 			}
 	    	return map;
 	    }
@@ -112,10 +111,10 @@ public class LogRecordResource {
 	    	try {
 				map.put("statisticResult", reportService.statistic(data));
 				service.addLogRecord(request,"统计检查结果",data.toJSONString());
-			} catch (DBException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
 				map.put("isSuccess", false);
 				map.put("descrption", "获取统计结果失败");
+				logger.error("",e);
 			}
 	    	return map;
 	    }
