@@ -64,9 +64,9 @@ public class ReportService {
             reportId = reportDAO.addReport(report);
             logger.info(new Date() + "\t" + "点击录入完成,新建报告单\t" + reportId);
             //只要当前的检查结果未获取成功 即可以触发
-            if (report.getPnorValueResult() == null || StringUtils.isBlank(report.getUid())) {
-                hhdService.socketStatus();
-            }
+//            if (report.getPnorValueResult() == null || StringUtils.isBlank(report.getUid())) {
+//                hhdService.socketStatus();
+//            }
         }
         return new Result(true, reportId);
     }
@@ -90,7 +90,7 @@ public class ReportService {
                 HHDClient.IS_CHECK_FINISH = false;
 
 
-                hhdService.socketStatus();
+//                hhdService.socketStatus();
                 //设备就绪不能发请求
 //                if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
 ////                    HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
