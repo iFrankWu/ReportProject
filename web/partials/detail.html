@@ -88,7 +88,7 @@
                     <td> 产次:</td>
                     <td>{{report.childbirthNumber}}</td>
                     <td style="width:80px"> 绝经:</td>
-                    <td><input type="checkbox"style="zoom:150%;" ng-model="report.isMenopause"></td>
+                    <td><input type="checkbox" ng-model="report.isMenopause"></td>
 
                 </tr>
 
@@ -214,11 +214,11 @@
 
                 <tr ng-show="doesCheckCompleted && (report.checkResult == '正常')">
                     <td></td>
-                    <td style="text-align:left;font-size:22px;font-weight:bold;text-indent: 20px;">未发现异常
+                    <td style="text-align:left;font-size:22px;font-weight:bold;text-indent: 20px;">未发现异常细胞和组织
                     </td>
                 </tr>
                 <tr ng-show="doesCheckCompleted && (report.checkResult == '异常')">
-                    <td></td><td style="text-align:left;text-indent: 20px;font-size:22px;font-weight:bold;">可能有异常，应进一步检查
+                    <td></td><td style="text-align:left;text-indent: 20px;font-size:22px;font-weight:bold;">可能有异常细胞或组织
                 </td>
                 </tr>
 
@@ -292,6 +292,20 @@
                 var a = document.createElement('a')
                 a.setAttribute('href', dataUrl)
                 a.setAttribute('download', caseNo + ".png")
+                a.click()
+            })
+            .catch(function (error) {
+                console.error('转图片失败!', error);
+            });
+
+        domtoimage.toSvg(document.getElementById('p1'))
+            .then(function (dataUrl) {
+                var img = new Image();
+                img.src = dataUrl;
+//                document.body.appendChild(img);
+                var a = document.createElement('a')
+                a.setAttribute('href', dataUrl)
+                a.setAttribute('download', caseNo + ".svg")
                 a.click()
             })
             .catch(function (error) {
