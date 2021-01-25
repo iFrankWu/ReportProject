@@ -88,7 +88,7 @@
                     <td> 产次:</td>
                     <td>{{report.childbirthNumber}}</td>
                     <td style="width:80px"> 绝经:</td>
-                    <td><input type="checkbox" ng-model="report.isMenopause"></td>
+                    <td><input type="checkbox" ng-checked="report.isMenopause"></td>
 
                 </tr>
 
@@ -116,19 +116,19 @@
 
                     <td style="width:3%">
 
-                        <input type="checkbox" style="zoom:150%;"ng-model="report.isLeucorrhea" ng-readonly="true"/>
+                        <input type="checkbox" ng-checked="report.isLeucorrhea" ng-readonly="true"/>
                     </td>
 
 
                     <td style="width:6%"><label>性交出血:</label></td>
                     <td style="width:5%">
-                        <input type="checkbox" style="zoom:150%;"ng-model="report.isBleed" ng-readonly="true"/>
+                        <input type="checkbox" ng-checked="report.isBleed" ng-readonly="true"/>
                     </td>
 
 
                     <td style="width:6%"><label>不规则流血:</label></td>
                     <td style="width:3%">
-                        <input type="checkbox" style="zoom:150%;"ng-model="report.unregularBleed" ng-readonly="true"/>
+                        <input type="checkbox" ng-checked="report.unregularBleed" ng-readonly="true"/>
                     </td>
 
                     <td style="width:6%"><label>其他:</label></td>
@@ -148,39 +148,39 @@
                 <tr style="height:10px"></tr>
                 <tr>
                     <td style="width:6%"><label>光滑:</label></td>
-                    <td style="width:6%"><input type="checkbox" style="zoom:150%;"ng-model="report.isSmooth" ng-readonly="true"/></td>
+                    <td style="width:6%"><input type="checkbox" ng-checked="report.isSmooth" ng-readonly="true"/></td>
                     <td style="width:12%"><label>慢性炎症:</label></td>
-                    <td style="width:6%"><input type="checkbox" style="zoom:150%;"ng-model="report.isAcuteInflammation"
+                    <td style="width:6%"><input type="checkbox" ng-checked="report.isAcuteInflammation"
                                                 ng-readonly="true"/></td>
                     <td style="width:12%"><label>肥大:</label></td>
-                    <td style="width:6%"><input type="checkbox" style="zoom:150%;"ng-model="report.isHypertrophy" ng-readonly="true"/>
+                    <td style="width:6%"><input type="checkbox" ng-checked="report.isHypertrophy" ng-readonly="true"/>
                     </td>
                     <td style="width:20%"><label>柱状上皮异位:</label></td>
                     <td>
-                        Ⅲ&#176;<input type="radio" value="重" name="erosion" ng-model="report.erosion"
+                        Ⅲ&#176;<input type="radio" value="重" name="erosion" ng-checked="report.erosion"
                                       style="margin-right:1px" ng-readonly="true"/>
-                        Ⅱ&#176;<input type="radio" value="中" name="erosion" ng-model="report.erosion"
+                        Ⅱ&#176;<input type="radio" value="中" name="erosion" ng-checked="report.erosion"
                                       style="margin-right:1px" ng-readonly="true"/>
-                        Ⅰ&#176;<input type="radio" value="轻" name="erosion" ng-model="report.erosion"
+                        Ⅰ&#176;<input type="radio" value="轻" name="erosion" ng-checked="report.erosion"
                                       style="margin-right:1px" ng-readonly="true"/>
                     </td>
 
                 </tr>
                 <tr>
                     <td><label>撕裂:</label></td>
-                    <td><input type="checkbox" style="zoom:150%;"ng-model="report.isTear" ng-readonly="true"/></td>
+                    <td><input type="checkbox" ng-checked="report.isTear" ng-readonly="true"/></td>
                     <td><label>白斑:</label></td>
-                    <td><input type="checkbox" style="zoom:150%;"ng-model="report.isWhite" ng-readonly="true"/></td>
+                    <td><input type="checkbox" ng-checked="report.isWhite" ng-readonly="true"/></td>
                     <td><label>纳博特囊:</label></td>
-                    <td><input type="checkbox" style="zoom:150%;"ng-model="report.isNesslersGlandCyst" ng-readonly="true"/></td>
+                    <td><input type="checkbox" ng-checked="report.isNesslersGlandCyst" ng-readonly="true"/></td>
                     <td><label>接触性出血:</label></td>
-                    <td><input type="checkbox" style="zoom:150%;"ng-model="report.touchbleeding" ng-readonly="true"/></td>
+                    <td><input type="checkbox" ng-checked="report.touchbleeding" ng-readonly="true"/></td>
                 </tr>
                 <tr>
                     <td><label>息肉:</label></td>
-                    <td><input type="checkbox" style="zoom:150%;"ng-model="report.isPolyp" ng-readonly="true"/></td>
+                    <td><input type="checkbox" ng-checked="report.isPolyp" ng-readonly="true"/></td>
                     <td><label>阴道排液:</label></td>
-                    <td><input type="checkbox" style="zoom:150%;"ng-model="report.isCancer" ng-readonly="true"></input></td>
+                    <td><input type="checkbox"  ng-checked="report.isCancer" ng-readonly="true"></input></td>
                     <td><label>其他:</label></td>
                     <td colspan="5">
                         {{report.otherClinical}}
@@ -242,12 +242,12 @@
                 <tr style="height:10px" style="width:100%"></tr>
                 <tr>
                     <td>按照国家宫颈癌筛查指南定期筛查:</td>
-                    <td style="text-align:left"><input type="checkbox" style="zoom:150%;"name="regular" ng-model="report.screening"
+                    <td style="text-align:left"><input type="checkbox" name="regular" ng-checked="report.screening"
                                                        ng-readonly="true"></td>
                 </tr>
                 <tr>
                     <td>进行阴道镜或阴道镜下活检:</td>
-                    <td style="text-align:left"><input type="checkbox" style="zoom:150%;"name="colposcopy" ng-model="report.checking"
+                    <td style="text-align:left"><input type="checkbox" name="colposcopy" ng-checked="report.checking"
                                                        ng-readonly="true">
                     </td>
                 </tr>
@@ -292,20 +292,6 @@
                 var a = document.createElement('a')
                 a.setAttribute('href', dataUrl)
                 a.setAttribute('download', caseNo + ".png")
-                a.click()
-            })
-            .catch(function (error) {
-                console.error('转图片失败!', error);
-            });
-
-        domtoimage.toSvg(document.getElementById('p1'))
-            .then(function (dataUrl) {
-                var img = new Image();
-                img.src = dataUrl;
-//                document.body.appendChild(img);
-                var a = document.createElement('a')
-                a.setAttribute('href', dataUrl)
-                a.setAttribute('download', caseNo + ".svg")
                 a.click()
             })
             .catch(function (error) {
