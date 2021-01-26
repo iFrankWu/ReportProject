@@ -175,9 +175,9 @@
     }
 
     function cloneNode(node, filter, root) {
-        if(node == null){
-            return;
-        }
+        // if(node == null){
+        //     return;
+        // }
         if (!root && filter && !filter(node)) return Promise.resolve();
 
         return Promise.resolve(node)
@@ -190,10 +190,10 @@
             });
 
         function makeNodeCopy(node) {
-            if(node == null){
-                console.log("node is null")
-                return;
-            }
+            // if(node == null){
+            //     console.log("node is null")
+            //     return;
+            // }
             if (node instanceof HTMLCanvasElement) return util.makeImage(node.toDataURL());
             return node.cloneNode(false);
         }
