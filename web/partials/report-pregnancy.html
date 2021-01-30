@@ -28,7 +28,7 @@
                     <!--<td><label>住址:</label></td>-->
                     <!--<td ><input type="text" ng-model="report.address" ></td>-->
 
-                    <td><label>是否取样:</label></td>
+                    <td><label>妊娠状态:</label></td>
                     <td><input type="checkbox" ng-model="report.pregnancyStatus" ng-change="getPNormPregenancy()" ng-disabled="stashDone"></td>
                     <td><label>周数:</label></td>
                     <td><input type="number" ng-model="report.pregnancyTime" ng-readonly="stashDone"></td>
@@ -549,7 +549,7 @@
                     <td><label>住址:</label></td>
                     <td><input type="text" ng-model="report.address" ng-readonly='readonly'></td>
 
-                    <td><label>是否取样:</label></td>
+                    <td><label>妊娠状态:</label></td>
                     <td><input type="checkbox" ng-model="report.pregnancyStatus"></td>
                     <td><label>周数:</label></td>
                     <td><input type="number" ng-model="report.pregnancyTime"></td>
@@ -898,7 +898,7 @@
                     <td> 产次:</td>
                     <td><input type="text" ng-model="report.childbirthNumber"></td>
 
-                    <td><label>是否取样:</label></td>
+                    <td><label>妊娠状态:</label></td>
                     <td ng-show="report.pregnancyStatus">是</td>
                     <td ng-show="!report.pregnancyStatus">否</td>
                     <td ng-show="report.pregnancyStatus"><label>周数:</label></td>

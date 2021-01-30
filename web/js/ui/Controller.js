@@ -612,7 +612,11 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         if( $scope.report.hpv){
-            if($scope.report.hpv.length > 1 && $scope.report.hpv.includes("阴性")){
+            var hpvTmp = $scope.report.hpv;
+            if(! (hpvTmp instanceof  Array)){
+                hpvTmp= hpvTmp.split(',');
+            }
+            if(hpvTmp.length > 1 && hpvTmp.includes("阴性")){
                 alert("HPV 阴性和其他配置冲突");
                 return;
             }
