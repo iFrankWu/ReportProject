@@ -500,6 +500,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         }
         if($scope.report.lct  =="LSIL" || $scope.report.lct ==  "ASCUS"){
+            if(!$scope.report.hpv){
+                return 0.9;
+            }
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
                 || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
@@ -514,6 +517,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         }
 
         if($scope.report.lct  =="NILM"){
+            if(!$scope.report.hpv){
+                return 0.9;
+            }
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
                 || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
