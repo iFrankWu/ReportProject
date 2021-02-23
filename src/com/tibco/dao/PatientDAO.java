@@ -61,7 +61,7 @@ public class PatientDAO {
 
         final Report report = new Report();
 
-        String sql = "select  * from order_info_view where order_info_view where order_code = ? limit 1";
+        String sql = "select  * from order_info_view  where order_code = ? limit 1";
         List<FieldParameter> fpList = new ArrayList<FieldParameter>();
         fpList.add(new FieldParameter(1, mzh, FieldTypes.VARCHAR));
 
