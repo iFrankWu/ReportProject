@@ -264,10 +264,9 @@ public class ReportResource {
             Report report = service.getPatientInfo(outpatientNo, admissionNo);
             return new Result(true, report);
         } catch (Exception e) {
-            logger.error("aa", e);
+            logger.error("抛出异常", e);
         }
-
-        return null;
+        return new Result(true, new Report());
     }
 }
 

@@ -752,7 +752,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         ReportService.getPatientInfo(patientName, outpatientNo, admissionNo, function (result) {
             console.log(result);// just log it
-            $scope.report = result.description;
+
+            if(result.description.outpatientNo){
+                $scope.report = result.description;
+            }
         }, function (response) {
             console.log(response);// just log it
         });
