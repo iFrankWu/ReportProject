@@ -52,7 +52,7 @@ public class PatientDAO {
 
     public Report getPatientInfo(String mzh, String zyid) throws DBException {
         if (StringUtils.isBlank(mzh)) {
-            return null;
+            return new Report();
         }
 
         if(mzh.equals("-1") ){
