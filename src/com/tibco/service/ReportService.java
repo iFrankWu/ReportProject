@@ -85,43 +85,7 @@ public class ReportService {
      */
     public Report getReportByID(Integer reportId) throws Exception {
         Report report = reportDAO.getReportByID(reportId);
-        try {
-            if (report.getUid() == null || report.getPnorValueResult() == null) {
-                HHDClient.IS_CHECK_FINISH = false;
-
-
-//                hhdService.socketStatus();
-                //设备就绪不能发请求
-//                if ("检查过程中...".equals(currentStatus) || "检查结束".equals(currentStatus) || "筛查错误".equals(currentStatus)) {
-////                    HHDOpreationDTO hddOpreationDTO = new HHDOpreationDTO();
-////                    hddOpreationDTO.setSocket_request("system_report");
-////                    hhdService.commonRequest(hddOpreationDTO);
-//                    hhdService.socketStatus();
-//                } else if ("设备未就绪...".equals(currentStatus)) {
-//                    hhdService.socketStatus();
-//                } else {
-//                    logger.error("currentStatus invalid : " + currentStatus + " :" + report);
-//                    if ("登陆成功".equals(currentStatus) && LoginSuccessTimes++ > 5) {
-//
-//                        logger.error("手持设备未就绪，当前状态: " + currentStatus + " 已经超过次数" + LoginSuccessTimes + "，因此退出登陆，重试");
-//                        LoginSuccessTimes = 0;
-//                        hhdService.socketStatus();
-//                        return report;
-//                    }
-//
-//                    //检查结束 退出登陆等都不应该弹出
-//                    if (StringUtils.isBlank(currentStatus) || "SocketChannel-Null".equals(currentStatus)) {
-//                        throw new Exception("状态异常，建议断开WI-FI连接，重启手持设备，再连接WI-FI,点击'录入完成'按钮重试");
-//                    }
-//                }
-            } else {
-                logger.info("check finished for report : " + HHDClient.IS_CHECK_FINISH + " :" + report);
-                HHDClient.IS_CHECK_FINISH = true;
-            }
-        } catch (Exception e) {
-            logger.error("get detail got error : " + report, e);
-            throw e;
-        }
+        //庆阳医院不需要连hhd
         return report;
     }
 
