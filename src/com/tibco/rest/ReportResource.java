@@ -262,6 +262,8 @@ public class ReportResource {
 
 
             Report report = service.getPatientInfo(outpatientNo, admissionNo);
+            report.setAdmissionNo(admissionNo);
+            report.setOutpatientNo(outpatientNo);
             return new Result(true, report);
         } catch (Exception e) {
             logger.error("抛出异常", e);
