@@ -13,6 +13,7 @@ import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Hospital;
 import com.tibco.dao.HospitalDAO;
 import com.tibco.util.XLSExport;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.ResultSet;
@@ -69,7 +70,7 @@ public class ExportReportHandler implements ResultSetHandler {
              */
             xlsExport.setCell(12, rs.getBoolean("isLeucorrhea") == true ? "是" : "否");
             xlsExport.setCell(13, rs.getBoolean("isBleed") == true ? "是" : "否");
-            xlsExport.setCell(14, rs.getString("unregularBleed"));
+            xlsExport.setCell(14, "true".equalsIgnoreCase(rs.getString("unregularBleed")) ? "是" : "否");
             xlsExport.setCell(15, rs.getString("otherComplaints"));
 
             /**
@@ -91,7 +92,7 @@ public class ExportReportHandler implements ResultSetHandler {
 
             xlsExport.setCell(28, rs.getString("lct"));
             xlsExport.setCell(29, rs.getString("hpv"));
-            xlsExport.setCell(30, rs.getString("touchbleeding"));
+            xlsExport.setCell(30, "true".equalsIgnoreCase(rs.getString("touchbleeding")) ? "是" :"否" );
 
 
             String nextStepSuggestion = "";
@@ -155,8 +156,9 @@ public class ExportReportHandler implements ResultSetHandler {
         if (isBleed) {
             compliants += "性交出血/";
         }
-        if (unregularBleed != null) {
-            compliants += "不规则流血:" + unregularBleed + "/";
+        //仅当选择了 才导出
+        if ("true".equalsIgnoreCase(unregularBleed)) {
+            compliants += "不规则流血:是/";
         }
         if (otherComplaints != null) {
             compliants += otherComplaints;
@@ -196,6 +198,9 @@ public class ExportReportHandler implements ResultSetHandler {
         Boolean isCancer = rs.getBoolean("isCancer");
         clinical = getBooleanValue(clinical, isCancer, "阴道排液");
 
+        String touchbleeding = rs.getString("touchbleeding");
+        clinical = getBooleanValue(clinical, "true".equalsIgnoreCase(touchbleeding), "接触性出血");
+
         String otherClinical = rs.getString("otherClinical");
         if (otherClinical != null) {
             clinical += otherClinical;
@@ -206,8 +211,8 @@ public class ExportReportHandler implements ResultSetHandler {
         return clinical;
     }
 
-    private String getBooleanValue(String resultStr, Boolean isTure, String lableName) {
-        if (isTure) {
+    private String getBooleanValue(String resultStr, boolean isTrue, String lableName) {
+        if (isTrue) {
             resultStr += lableName + "/";
         }
         return resultStr;
