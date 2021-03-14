@@ -492,7 +492,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 return 1;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
-                return 0.8;
+                return 1;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
                 return 0.7;
@@ -518,7 +518,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         if($scope.report.lct  =="NILM"){
             if(!$scope.report.hpv){
-                return 0.9;
+                return 0.4;
             }
             // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
             if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
@@ -526,7 +526,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 return 0.6;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
-                return 0.4;
+                return 0.5;
             }
             if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
                 return 0;
