@@ -541,6 +541,10 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 return 0;
             }
         }
+
+        if($scope.report.erosion){
+            return 0.3;
+        }
         return 0.5;
     }
 

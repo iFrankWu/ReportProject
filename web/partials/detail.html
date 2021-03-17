@@ -41,7 +41,7 @@
     <button onclick="saveToImage( {{ getQueryVariable('no') }} )">下载图片</button>
 </div>
 
-<div style="margin-bottom:10px;margin-top:0px;" id="p1">
+<div style="margin-bottom:10px;margin-top:0px;background-color: white" id="p1">
     <div style="margin-bottom:0px;margin-top:0px;" id="p2">
 
         <h1 style="margin:35px 20px 5px;font-size:32px;line-height:34px;text-align:center;" id="p3">
@@ -289,14 +289,14 @@
     saveToImage = function (caseNo) {
 
         //下载图片
-        domtoimage.toPng(document.getElementById('p1'))
+        domtoimage.toJpeg(document.getElementById('p1'))
             .then(function (dataUrl) {
                 var img = new Image();
                 img.src = dataUrl;
 //                document.body.appendChild(img);
                 var a = document.createElement('a')
                 a.setAttribute('href', dataUrl)
-                a.setAttribute('download', caseNo + ".png")
+                a.setAttribute('download', caseNo + ".jpg")
                 a.click()
             })
             .catch(function (error) {
