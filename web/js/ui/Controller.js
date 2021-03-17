@@ -533,7 +533,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
             }
         }
 
-
+        if($scope.report.erosion){
+            return 0.3;
+        }
 
         return 0.5;
     }
