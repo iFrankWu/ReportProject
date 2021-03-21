@@ -468,6 +468,9 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         //hpv 和 lct 都为🈳️空 默认 0.5
         if(!$scope.report.hpv && !$scope.report.lct){
+            if($scope.report.erosion){
+                return 0.3;
+            }
             return 0.5;
         }
 

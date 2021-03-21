@@ -31,7 +31,7 @@ public class ExportReportHandler implements ResultSetHandler {
             "初善仪点探数量,是否绝经,主诉/白带多,主诉/性交出血,主诉/不规则流血,主诉/其他,临床表现/光滑,临床表现/慢性炎症,临床表现/肥大,临床表现/息肉," +
             "临床表现/柱状上皮异位,临床表现/撕裂,临床表现/纳氏腺囊肿,临床表现/白斑,临床表现/阴道排液,临床表现/其他,操作人员,申请医生,主诉/LCT,主诉/HPV," +
             "临床表现/接触性出血,处理意见,门诊号,住院号,是否取样,已取周数,PNOR值,妊娠状态,孕周,转化区类型," +
-            "uid,肉眼可见病变")
+            "uid,肉眼可见病变,电话号码")
             .split(",");
 
     public ExportReportHandler(XLSExport xlsExport) throws DBException {
@@ -137,6 +137,7 @@ public class ExportReportHandler implements ResultSetHandler {
             xlsExport.setCell(39, rs.getString("transformArea"));
             xlsExport.setCell(40, rs.getString("uid"));
             xlsExport.setCell(41, rs.getBoolean("visableCancer") ? "是" : "否");
+            xlsExport.setCell(42, rs.getString("phone") );
 
             rowIndex++;
         } catch (Exception e) {
