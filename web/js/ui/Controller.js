@@ -452,7 +452,7 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     }
 
 
-    $scope.lcts = ["无", "NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"];
+    $scope.lcts = ["无","CA","NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "AGC"];
     $scope.hpvs = ["16+", "18+", "31+", "33+", "52+", "58+", "其他高危型+", "其他低危型", "阴性", "无"];
 
     if ($cookieStore.get("doctor") == null) {
@@ -479,71 +479,95 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
     $scope.doctor = $cookieStore.get("doctor");
     $scope.hospital;
     $scope.showLogo = false;
-    $scope.pnormalThreshold = function () {
-
-        if (!$scope.report.hpv || !$scope.report.lct) {
+    $scope.pnormalThreshold = function ()  {
+        //hpv 和 lct 都为🈳️空 默认 0.5
+        if(!$scope.report.hpv && !$scope.report.lct){
+            if($scope.report.erosion){
+                return 0.3;
+            }
             return 0.5;
         }
-        if ($scope.report.lct == "SCC" || $scope.report.lct == "AGC") {
-            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
-                return 1;
-            }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
-                return 1;
-            }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "阴性") {
-                return 1;
-            }
-        }
 
-        //["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"]
-        if ($scope.report.lct == "ASC-H" || $scope.report.lct == "HSIL") {
-            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
-            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
-                return 1;
-            }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
-                return 0.8;
-            }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "阴性") {
-                return 0.7;
-            }
-        }
-
-
-        if ($scope.report.lct == "LSIL" || $scope.report.lct == "ASCUS") {
-            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
-            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
-                return 0.65;
-            }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
+        //lCT  未检测时 下列值默认0.6
+        if(!$scope.report.lct){
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
                 return 0.6;
             }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "阴性") {
+            if($scope.report.hpv.includes("其他高危型+")){
+                return 0.5;
+            }
+            if($scope.report.hpv.includes("阴性")){
+                return 0.3;
+            }
+
+        }
+
+        if($scope.report.lct  =="CA" && !$scope.report.hpv){
+            return 1;
+        }
+
+
+        //["NILM", "ASCUS", "LSIL", "HSIL", "ASC-H", "SCC", "AGC"]
+        if($scope.report.lct  =="ASC-H" || $scope.report.lct ==  "HSIL" || $scope.report.lct ==  "AGC" ){
+            //HPV 未检测时 默认 0.9
+            if(!$scope.report.hpv){
+                return 0.9;
+            }
+            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+                return 1;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
+                return 1;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
+                return 0.8;
+            }
+
+        }
+        if($scope.report.lct  =="LSIL" || $scope.report.lct ==  "ASCUS"){
+            if(!$scope.report.hpv){
+                return 0.5;
+            }
+            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+                return 0.65;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
+                return 0.6;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
                 return 0.3;
             }
         }
 
-
-        if ($scope.report.lct == "NILM") {
-            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
-            if ($scope.report.hpv.includes("16+") || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
-                || $scope.report.hpv.includes("33+") || $scope.report.hpv.includes("52+") || $scope.report.hpv.includes("58+")) {
-                return 0.6;
-            }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "其他高危型+") {
+        if($scope.report.lct  =="NILM"){
+            if(!$scope.report.hpv){
                 return 0.4;
             }
-            if ($scope.report.hpv.length == 1 && $scope.report.hpv[0] == "阴性") {
+            // $scope.hpvs = ["阴性", "16+","18+","其他高危型+"];
+            if( $scope.report.hpv.includes("16+")  || $scope.report.hpv.includes("18+") || $scope.report.hpv.includes("31+")
+                || $scope.report.hpv.includes("33+")  || $scope.report.hpv.includes("52+")  || $scope.report.hpv.includes("58+")){
+                return 0.6;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "其他高危型+" ){
+                return 0.5;
+            }
+            if( $scope.report.hpv.length == 1 &&  $scope.report.hpv[0] == "阴性" ){
                 return 0;
             }
         }
+
+        //柱状上皮易位 0.3
+        if($scope.report.erosion){
+            return 0.3;
+        }
+
         return 0.5;
     }
-
     $scope.getPNorm = function () {
         if (!$scope.report) {
             return;
@@ -1337,6 +1361,15 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
                 $scope.report.hpv = $scope.report.hpv.split(',');
             }
         }
+
+        if($scope.report.pregnancyNumber == 0 ){
+            $scope.report.pregnancyNumber = "-";
+        }
+        if($scope.report.childbirthNumber == 0 ){
+            $scope.report.childbirthNumber = "-";
+        }
+
+
 
 
         var $body = $('body', doc);
