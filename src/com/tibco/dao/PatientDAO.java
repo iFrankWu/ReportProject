@@ -47,6 +47,15 @@ public class PatientDAO {
     private final  static String CUST_BIRTHDAY = "cust_birthday";
     private final  static String CUST_AGE = "cust_age";
 
+    /**
+     * 姓名
+     */
+    private final  static String XM0000 = "XM0000";
+    /**
+     * 出生日期
+     */
+    private final  static String CSRQ00 = "CSRQ00";
+
 
     private IDatabaseAccess db = (new DatabaseAccessBuilder()).getDatabaseAccess("mysql");
 
@@ -61,7 +70,7 @@ public class PatientDAO {
 
         final Report report = new Report();
 
-        String sql = "select  * from order_info_view  where order_code = ? limit 1";
+        String sql = "select  XM0000, CSRQ00  from vw_esi_hmgnyq_tjz000 where TJH000 = ？ limit 1";
         List<FieldParameter> fpList = new ArrayList<FieldParameter>();
         fpList.add(new FieldParameter(1, mzh, FieldTypes.VARCHAR));
 
@@ -76,20 +85,20 @@ public class PatientDAO {
                         logger.info(rsmd.getColumnName(i) + ":\t" + r);
                     }
 
-                    report.setPatientName(resultSet.getString(CUST_NAME));
-                    report.setAge(resultSet.getInt(CUST_AGE));
+                    report.setPatientName(resultSet.getString(XM0000));
+//                    report.setAge(resultSet.getInt(CUST_AGE));
 //                    report.setPatientName(resultSet.getString(COLUMN_XM));
 //                    report.setOutpatientNo(resultSet.getString(COLUMN_MZH));
 //                    report.setAdmissionNo(resultSet.getString(COLUMN_ZYID));
 //                    report.setAddress(resultSet.getString(COLUMN_JTZZ));
 //                    report.setPhone(resultSet.getString(COLUMN_LXDH));
-//                    String csrq = resultSet.getString(COLUMN_CSRQ);
-//                    if (StringUtils.isNotBlank(csrq)) {
-//                        int csrqYear = DateUtil.getYear(csrq);
-//                        int thisYear = DateUtil.getYear(new Date());
-//                        int age = thisYear - csrqYear;
-//                        report.setAge(age);
-//                    }
+                    String csrq = resultSet.getString(CSRQ00);
+                    if (StringUtils.isNotBlank(csrq)) {
+                        int csrqYear = DateUtil.getYear(csrq);
+                        int thisYear = DateUtil.getYear(new Date());
+                        int age = thisYear - csrqYear;
+                        report.setAge(age);
+                    }
                 } catch (Exception e) {
                     logger.error(e);
                 }
