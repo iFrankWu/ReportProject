@@ -152,7 +152,7 @@ public class LogRecordResource {
 	        };
 	    	service.addLogRecord(request,"导出报告单",requestStr);
 	    	
-	    	String exportName = "truscreen_"+hospitalService.getHospital().getName();//+startDate+"_"+endDate+".xls";
+	    	String exportName = hospitalService.getHospital().getName();//+startDate+"_"+endDate+".xls";
 	     
 	    	if(startDate != null){
 	    		exportName += "_s_"+startDate;
