@@ -667,26 +667,16 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
 
         var clinical = $scope.report.otherClinical ;
         if(clinical != null){
-            var spaceCount  = 0;
-            var clinicalArray = clinical.split("");
-            for(var i =  clinicalArray.length-1; i >=0; i-- ){
-                if(clinicalArray[i] == '.'){
-                    spaceCount ++;
-                    continue;
-                }
-                if(clinicalArray[i] != '.'){
-                    break;
-                }
-            }
-
-            if(spaceCount >= 2){
-                $scope.report.isComplete = '完成';
-                $scope.doesCheckCompleted = true;
-                $scope.report.checkResult = "异常"
-            }else if(spaceCount == 1){
+            if(clinical.endWith("无.")){
                 $scope.report.isComplete = '完成';
                 $scope.doesCheckCompleted = true;
                 $scope.report.checkResult = "正常"
+            }
+
+            if(clinical.endWith("/.")){
+                $scope.report.isComplete = '完成';
+                $scope.doesCheckCompleted = true;
+                $scope.report.checkResult = "异常"
             }
         }
     }
