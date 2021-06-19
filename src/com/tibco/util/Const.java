@@ -53,7 +53,38 @@ public class Const {
 
     public static Integer SESSION_TIMEOUT_IN_MINUTE = 4 * 60;
 
-    public static List<String> WHITE_ACCESS_IP_LIST ;
+    public static List<String> WHITE_ACCESS_IP_LIST;
+
+    /**
+     * 住院ID
+     */
+    public static String PATIENT_INFO_SQL = "";
+
+    /**
+     * 住院ID
+     */
+    public static String COLUMN_ZYID = "ZYID";
+    /**
+     * 姓名
+     */
+    public static String COLUMN_XM = "XM";
+    /**
+     * 门诊号
+     */
+    public static String COLUMN_MZH = "MZH";
+    /**
+     * 出生日期
+     */
+    public static String COLUMN_CSRQ = "csrq";
+
+    /**
+     * 家庭住址
+     */
+    public static String COLUMN_JTZZ = "jtzz";
+    /**
+     * 联系电话
+     */
+    public static String COLUMN_LXDH = "lxdh";
 
 
     public static void initLogger() {
@@ -75,6 +106,30 @@ public class Const {
                 }
 
                 System.out.println("WHITE_ACCESS_IP_LIST:" + WHITE_ACCESS_IP_LIST);
+
+
+                 PATIENT_INFO_SQL = pro.getProperty("default.patientInfoSql");
+                System.out.println("patientInfoSql:" + PATIENT_INFO_SQL);
+
+                COLUMN_XM = pro.getProperty("default.patientXM");
+                System.out.println("patientXM:" + COLUMN_XM);
+
+                COLUMN_MZH = pro.getProperty("default.patientMZH");
+                System.out.println("patientMZH:" + COLUMN_MZH);
+
+                COLUMN_ZYID = pro.getProperty("default.patientZYID");
+                System.out.println("patientZYID:" + COLUMN_ZYID);
+
+
+                COLUMN_CSRQ = pro.getProperty("default.patientCSRQ");
+                System.out.println("patientCSRQ:" + COLUMN_CSRQ);
+
+
+                COLUMN_JTZZ = pro.getProperty("default.patientJTZZ");
+                System.out.println("patientJTZZ:" + COLUMN_JTZZ);
+
+                COLUMN_LXDH = pro.getProperty("default.patientLXDH");
+                System.out.println("patientLXDH:" + COLUMN_LXDH);
 
 
             } catch (FileNotFoundException e) {

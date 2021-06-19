@@ -3,6 +3,7 @@ package com.tibco.dao;
 import com.shinetech.sql.*;
 import com.shinetech.sql.exception.DBException;
 import com.tibco.bean.Report;
+import com.tibco.util.Const;
 import com.tibco.util.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -16,31 +17,7 @@ import java.util.List;
 public class PatientDAO {
 
     private Logger logger = Logger.getLogger(this.getClass());
-    /**
-     * 住院ID
-     */
-    private final static String COLUMN_ZYID = "ZYID";
-    /**
-     * 姓名
-     */
-    private final static String COLUMN_XM = "XM";
-    /**
-     * 门诊号
-     */
-    private final static String COLUMN_MZH = "MZH";
-    /**
-     * 出生日期
-     */
-    private final static String COLUMN_CSRQ = "csrq";
 
-    /**
-     * 家庭住址
-     */
-    private final static String COLUMN_JTZZ = "jtzz";
-    /**
-     * 联系电话
-     */
-    private final static String COLUMN_LXDH = "lxdh";
 
     private IDatabaseAccess db = (new DatabaseAccessBuilder()).getDatabaseAccess("sqlserver");
 
@@ -49,21 +26,16 @@ public class PatientDAO {
             return null;
         }
 
-        if(mzh.equals("-1") || zyid.equals("-1")){
+        if (mzh.equals("-1") || zyid.equals("-1")) {
             return mockReport();
         }
 
         final Report report = new Report();
 
-        String sql = "select top 1 * from [WK_Interface].[dbo].[WK_ZYBRJBXX]";
+        //"select top 1 * from [WK_Interface].[dbo].[WK_ZYBRJBXX] where mzh = ?";
+        String sql = Const.PATIENT_INFO_SQL;
         List<FieldParameter> fpList = new ArrayList<FieldParameter>();
-        if (StringUtils.isNotBlank(mzh)) {
-            sql = sql + " where MZH = ? ";
-            fpList.add(new FieldParameter(1, mzh, FieldTypes.VARCHAR));
-        } else {
-            sql = sql + " where ZYID = ? ";
-            fpList.add(new FieldParameter(1, zyid, FieldTypes.VARCHAR));
-        }
+        fpList.add(new FieldParameter(1, mzh, FieldTypes.VARCHAR));
 
         db.handleList(sql, fpList, new ResultSetHandler() {
             @Override
@@ -76,17 +48,23 @@ public class PatientDAO {
                         logger.info(rsmd.getColumnName(i) + ":\t" + r);
                     }
 
-                    report.setPatientName(resultSet.getString(COLUMN_XM));
-                    report.setOutpatientNo(resultSet.getString(COLUMN_MZH));
-                    report.setAdmissionNo(resultSet.getString(COLUMN_ZYID));
-                    report.setAddress(resultSet.getString(COLUMN_JTZZ));
-                    report.setPhone(resultSet.getString(COLUMN_LXDH));
-                    String csrq = resultSet.getString(COLUMN_CSRQ);
+                    report.setPatientName(resultSet.getString(Const.COLUMN_XM));
+                    report.setOutpatientNo(resultSet.getString(Const.COLUMN_MZH));
+                    report.setAdmissionNo(resultSet.getString(Const.COLUMN_ZYID));
+                    report.setAddress(resultSet.getString(Const.COLUMN_JTZZ));
+                    report.setPhone(resultSet.getString(Const.COLUMN_LXDH));
+                    String csrq = resultSet.getString(Const.COLUMN_CSRQ);
+
                     if (StringUtils.isNotBlank(csrq)) {
-                        int csrqYear = DateUtil.getYear(csrq);
-                        int thisYear = DateUtil.getYear(new Date());
-                        int age = thisYear - csrqYear;
-                        report.setAge(age);
+                        try {
+                            //yyyy-MM-dd HH:mm:ss
+                            int csrqYear = DateUtil.getYear(csrq);
+                            int thisYear = DateUtil.getYear(new Date());
+                            int age = thisYear - csrqYear;
+                            report.setAge(age);
+                        } catch (Exception e) {
+                            logger.error(e);
+                        }
                     }
                 } catch (Exception e) {
                     logger.error(e);
@@ -98,7 +76,7 @@ public class PatientDAO {
 
     }
 
-    private Report mockReport(){
+    private Report mockReport() {
         Report report = new Report();
         report.setAge(22);
         report.setPhone("18899996666");
@@ -106,6 +84,6 @@ public class PatientDAO {
         report.setOutpatientNo("-1");
         report.setPatientName("测试姓名");
         report.setAddress("北京市西长安街3号");
-        return  report;
+        return report;
     }
 }
