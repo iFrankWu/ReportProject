@@ -281,7 +281,7 @@ DoctorController = function ($scope, $routeParams, $location, $filter, $http, Do
 
 //	    $scope.$watch('confirmed1', function(newValue, oldValue) {
 //	        console.log("old value: %s and new value: %s", oldValue, newValue);
-//     $scope.getDoctorList();
+    $scope.getDoctorList();
 //	    });
     $scope.modify = function (doctor) {
         $scope.doctorName = doctor.doctorName;
@@ -648,22 +648,22 @@ ReportController = function ($scope, $routeParams, $location, $filter, $http, Do
         //     return;
         // }
         //
-        // //第七位 0 为 失败 1 为成功
-        // var result = uid.substr(6, 1);
-        //
-        // if (result === '1') {
-        //     $scope.report.isComplete = '完成';
-        //     $scope.doesCheckCompleted = true;
-        //     $scope.report.checkResult = "异常"
-        //
-        // } else if (result === '0') {
-        //     $scope.report.isComplete = '完成';
-        //     $scope.doesCheckCompleted = true;
-        //     $scope.report.checkResult = "正常"
-        //
-        // } else {
-        //     // alert("uid格式不对");
-        // }
+        if (uid.length >= 7) {
+            //第七位 0 为 失败 1 为成功
+            var result = uid.substr(6, 1);
+
+            if (result === '1') {
+                $scope.report.isComplete = '完成';
+                $scope.doesCheckCompleted = true;
+                $scope.report.checkResult = "异常"
+
+            } else if (result === '0') {
+                $scope.report.isComplete = '完成';
+                $scope.doesCheckCompleted = true;
+                $scope.report.checkResult = "正常"
+
+            } 
+        }
 
         var clinical = $scope.report.otherClinical ;
         if(clinical != null){
