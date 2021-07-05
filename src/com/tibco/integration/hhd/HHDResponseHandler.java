@@ -181,7 +181,9 @@ public class HHDResponseHandler {
                 }
                 Float pnormValue = Float.parseFloat(pnorm);
 
-                reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid);
+                String calculateResult = calculateResult(uid,checkResult);
+
+                reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid,calculateResult);
 
                 logger.info(new Date() + "\t本地报告单存在更新报告单成功 report：\t" + report + "\tresponseMap：" + responseMap);
 
@@ -198,6 +200,17 @@ public class HHDResponseHandler {
 //                hhdService.terminate();
             }
         }
+
+    }
+
+    private String calculateResult(String uid,String checkResult){
+        Integer uidValue = Integer.parseInt(uid);
+        int normalValue = uidValue*3548%9000+1000;
+        int screeningResult = Integer.parseInt(checkResult);
+        if(normalValue == screeningResult){
+            return "正常";
+        }
+        return "异常";
 
     }
 

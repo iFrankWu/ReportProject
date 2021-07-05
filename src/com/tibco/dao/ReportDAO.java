@@ -259,6 +259,16 @@ public class ReportDAO {
         db.execute(sql, fpList);
     }
 
+    public void updateReport(int pointNumber, float pnormValueResult, String uid,String checkResult) throws DBException {
+        String sql = "update report  set pnorValueResult=?, pointNumber=?, checkResult = ? where uid = ? ";
+        List<FieldParameter> fpList = new ArrayList<FieldParameter>();
+        fpList.add(new FieldParameter(1, pnormValueResult, FieldTypes.FLOAT));
+        fpList.add(new FieldParameter(2, pointNumber, FieldTypes.INTEGER));
+        fpList.add(new FieldParameter(3, checkResult, FieldTypes.VARCHAR));
+        fpList.add(new FieldParameter(4, uid, FieldTypes.VARCHAR));
+
+        db.execute(sql, fpList);
+    }
 
     private void volidateCheckResult(String checkResult) {
         if (StringUtils.isNotBlank(checkResult)) {
