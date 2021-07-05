@@ -43,8 +43,8 @@ public class HHDResponseHandler {
             HHDClient.getInstance().setCurrecntStatus(status);
         }
 
-        if(HHDClient.getInstance().lastCommandContext.isFromTimer){
-            logger.info(new Date() + "\t定时任务发送的请求 不触发后续操作 它仅仅是为了设备不进入充电状态" +  HHDClient.getInstance().lastCommandContext);
+        if (HHDClient.getInstance().lastCommandContext.isFromTimer) {
+            logger.info(new Date() + "\t定时任务发送的请求 不触发后续操作 它仅仅是为了设备不进入充电状态" + HHDClient.getInstance().lastCommandContext);
             return;
         }
 
@@ -102,7 +102,7 @@ public class HHDResponseHandler {
                 //如最后一条是今天的 则发起start检测
                 if (report.getModifyDate().after(DateUtil.getTodayDate())) {
                     hhdService.start(report.getPatientName(), report.getAge());
-                }else{
+                } else {
                     logger.info(new Date() + "\t设备刚刚就绪 上次检查没结束，但是不是今天的 退出下试试 创建日期：" + report.getModifyDate());
                     hhdService.exit();
                 }
@@ -123,7 +123,7 @@ public class HHDResponseHandler {
                     hhdService.systemReport();
                     return;
                 } else {
-                    logger.info(new Date() + "\t报告单未结束,但hhd返回数据中已经包括检查结果，因此不发送system-report获取报告单" + responseMap + "requireSendSystemReportCmd："+requireSendSystemReportCmd);
+                    logger.info(new Date() + "\t报告单未结束,但hhd返回数据中已经包括检查结果，因此不发送system-report获取报告单" + responseMap + "requireSendSystemReportCmd：" + requireSendSystemReportCmd);
                 }
             } else {
                 //注：一个报告单检查完了后 系统会一直返回检查结束，如果此时继续发送systemReport那么则会陷入死循环
@@ -146,6 +146,9 @@ public class HHDResponseHandler {
         if (responseMap.containsKey("patient_01")) {
             String uid = responseMap.get("patient_01");
             Report report = reportDAO.getReportByUID(uid);
+
+            logger.info(new Date() + "\t报告单包含信息 responseMap：\t" + responseMap + "\treport为：" + report);
+
             if (report == null) {
                 String name = responseMap.get("patient_05");
                 String age = responseMap.get("patient_06");
@@ -164,7 +167,9 @@ public class HHDResponseHandler {
                 }
                 reportDAO.updateReport(uid, report.getReportId());
             } else {
-//                String checkDate = responseMap.get("patient_02");
+
+                logger.info(new Date() + "\t本地报告单存在 report：\t" + report + "\tresponseMap：" + responseMap);
+
                 String checkResult = responseMap.get("screening_result");
                 String pnorm = responseMap.get("screening_pnorm");
                 String points = responseMap.get("screening_nSpots");
@@ -177,6 +182,8 @@ public class HHDResponseHandler {
                 Float pnormValue = Float.parseFloat(pnorm);
 
                 reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid);
+
+                logger.info(new Date() + "\t本地报告单存在更新报告单成功 report：\t" + report + "\tresponseMap：" + responseMap);
 
                 if (!IS_CHECK_FINISH) {
                     logger.info(new Date() + "\t报告单已结束,发送exit命令，退出本次检查uid:\t" + uid);
