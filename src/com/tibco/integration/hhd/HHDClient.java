@@ -1,5 +1,6 @@
 package com.tibco.integration.hhd;
 
+import com.tibco.util.Const;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -20,8 +21,8 @@ import java.util.concurrent.*;
  * Truscreen 手持手柄连接操作
  */
 public class HHDClient {
-    private final static String host = "192.168.2.1";
-    private final static int port = 8483;
+    private final static String host = Const.HHD_IP_ADDRESS;
+    private final static int port = Const.HHD_PORT;
 
     private static int requestTimes = 0;
 

@@ -86,6 +86,16 @@ public class Const {
      */
     public static String COLUMN_LXDH = "lxdh";
 
+    /**
+     * hhd 设备IP地址
+     */
+    public static String HHD_IP_ADDRESS = "hhdIpAddress";
+
+    /**
+     * hhd 设备端口
+     */
+    public static Integer HHD_PORT = 8443;
+
 
     public static void initLogger() {
         if (!doesLoggerInited) {
@@ -130,6 +140,12 @@ public class Const {
 
                 COLUMN_LXDH = pro.getProperty("default.patientLXDH");
                 System.out.println("patientLXDH:" + COLUMN_LXDH);
+
+                HHD_IP_ADDRESS = pro.getProperty("default.hhdIpAddress");
+                System.out.println("hhdIpAddress:" + HHD_IP_ADDRESS);
+
+                HHD_PORT = Integer.parseInt(pro.getProperty("default.hhdIpPort"));
+                System.out.println("hhdIpPort:" + HHD_PORT);
 
 
             } catch (FileNotFoundException e) {
