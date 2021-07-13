@@ -181,9 +181,9 @@ public class HHDResponseHandler {
                 }
                 Float pnormValue = Float.parseFloat(pnorm);
 
-                String calculateResult = calculateResult(uid,checkResult);
+                String calculateResult = calculateResult(uid, checkResult);
 
-                reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid,calculateResult);
+                reportDAO.updateReport(Integer.parseInt(points), pnormValue, uid, calculateResult);
 
                 logger.info(new Date() + "\t本地报告单存在更新报告单成功 report：\t" + report + "\tresponseMap：" + responseMap);
 
@@ -203,16 +203,26 @@ public class HHDResponseHandler {
 
     }
 
-    private String calculateResult(String uid,String checkResult){
-        Integer uidValue = Integer.parseInt(uid);
-        int normalValue = uidValue*3548%9000+1000;
+    private String calculateResult(String uid, String checkResult) {
+        //'1919FF-000201'
+        if ("正常".equals(checkResult) || "异常".equals(checkResult)) {
+            return checkResult;
+        }
+        Integer uidValue = Integer.parseInt(uid.split("-")[1]);
+        int normalValue = uidValue * 3548 % 9000 + 1000;
+
         int screeningResult = Integer.parseInt(checkResult);
-        if(normalValue == screeningResult){
+        if (normalValue == screeningResult) {
             return "正常";
         }
         return "异常";
 
     }
 
+    public static void main(String[] args) {
+        String uid = "1919FF-000201";
+        Integer uidValue = Integer.parseInt(uid.split("-")[1]);
+        System.out.println(uidValue);
+    }
 
 }
