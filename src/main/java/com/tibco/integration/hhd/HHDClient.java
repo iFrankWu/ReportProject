@@ -204,7 +204,7 @@ public class HHDClient {
 
         logger.info(requestTimes++ + " " + now + "\tSend to HHD current status:" + HHDClient.getInstance().getCurrecntStatus() + " request :\t" + request);
 
-        while (isNotAvaiable()) {
+        if (isNotAvaiable()) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
